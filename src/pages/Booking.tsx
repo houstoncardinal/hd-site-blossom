@@ -4,6 +4,7 @@ import { format, addDays, startOfWeek, isSameDay, addWeeks, subWeeks } from 'dat
 import { ChevronLeft, ChevronRight, Clock, Check, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useBookAppointment } from '@/hooks/useBookAppointment';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import softGlamImage from '@/assets/service-soft-glam.jpg';
@@ -23,19 +24,14 @@ const timeSlots = [
   '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM',
 ];
 
-// Simulated booked slots (in production, this would come from a database)
-const bookedSlots: { [key: string]: string[] } = {
-  // Format: 'YYYY-MM-DD': ['time1', 'time2']
-};
-
 const Booking = () => {
   const { toast } = useToast();
+  const bookAppointment = useBookAppointment();
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -45,11 +41,6 @@ const Booking = () => {
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const today = new Date();
-
-  const isSlotBooked = (date: Date, time: string) => {
-    const dateKey = format(date, 'yyyy-MM-dd');
-    return bookedSlots[dateKey]?.includes(time) || false;
-  };
 
   const isPastDate = (date: Date) => {
     const now = new Date();
@@ -70,7 +61,7 @@ const Booking = () => {
   };
 
   const handleTimeSelect = (time: string) => {
-    if (selectedDate && !isSlotBooked(selectedDate, time)) {
+    if (selectedDate) {
       setSelectedTime(time);
       setStep(3);
     }
@@ -78,18 +69,35 @@ const Booking = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    
+    const selectedServiceData = services.find(s => s.id === selectedService);
+    if (!selectedServiceData || !selectedDate || !selectedTime) return;
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      await bookAppointment.mutateAsync({
+        clientName: formData.name,
+        clientEmail: formData.email,
+        clientPhone: formData.phone,
+        serviceName: selectedServiceData.name,
+        servicePrice: selectedServiceData.price,
+        appointmentDate: format(selectedDate, 'yyyy-MM-dd'),
+        appointmentTime: selectedTime,
+        notes: formData.notes || undefined,
+      });
 
-    toast({
-      title: "Booking Confirmed!",
-      description: `Your appointment has been scheduled for ${selectedDate ? format(selectedDate, 'MMMM d, yyyy') : ''} at ${selectedTime}.`,
-    });
+      toast({
+        title: "Booking Confirmed!",
+        description: `Your appointment has been scheduled. A confirmation email has been sent to ${formData.email}.`,
+      });
 
-    setIsSubmitting(false);
-    setStep(4);
+      setStep(4);
+    } catch (error) {
+      toast({
+        title: "Booking Failed",
+        description: "There was an error processing your booking. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const selectedServiceData = services.find(s => s.id === selectedService);
@@ -282,18 +290,14 @@ const Booking = () => {
                   </h3>
                   <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
                     {timeSlots.map((time) => {
-                      const isBooked = isSlotBooked(selectedDate, time);
                       const isSelected = selectedTime === time;
 
                       return (
                         <button
                           key={time}
                           onClick={() => handleTimeSelect(time)}
-                          disabled={isBooked}
                           className={`py-3 px-4 text-sm transition-all duration-200 ${
-                            isBooked
-                              ? 'bg-muted text-muted-foreground cursor-not-allowed line-through'
-                              : isSelected
+                            isSelected
                               ? 'bg-primary text-primary-foreground'
                               : 'border border-border hover:border-primary hover:text-primary'
                           }`}
@@ -402,9 +406,9 @@ const Booking = () => {
                     variant="hero"
                     size="xl"
                     className="w-full"
-                    disabled={isSubmitting}
+                    disabled={bookAppointment.isPending}
                   >
-                    {isSubmitting ? 'Confirming...' : 'Confirm Booking'}
+                    {bookAppointment.isPending ? 'Confirming...' : 'Confirm Booking'}
                   </Button>
                 </form>
               </div>

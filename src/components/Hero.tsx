@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-beauty.jpg';
 
@@ -59,12 +60,16 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Button variant="hero" size="xl">
-              Schedule Your Time
-            </Button>
-            <Button variant="heroOutline" size="xl">
-              Explore Services
-            </Button>
+            <Link to="/booking">
+              <Button variant="hero" size="xl">
+                Schedule Your Time
+              </Button>
+            </Link>
+            <Link to="/services">
+              <Button variant="heroOutline" size="xl">
+                Explore Services
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </div>

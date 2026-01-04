@@ -14,7 +14,137 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          appointment_date: string
+          appointment_time: string
+          client_email: string
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          service_name: string
+          service_price: number
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          appointment_date: string
+          appointment_time: string
+          client_email: string
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          service_name: string
+          service_price: number
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          appointment_date?: string
+          appointment_time?: string
+          client_email?: string
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          service_name?: string
+          service_price?: number
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          appointment_id: string | null
+          client_email: string
+          client_name: string
+          created_at: string
+          id: string
+          is_approved: boolean | null
+          rating: number
+          review_text: string | null
+          service_name: string | null
+        }
+        Insert: {
+          appointment_id?: string | null
+          client_email: string
+          client_name: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          rating: number
+          review_text?: string | null
+          service_name?: string | null
+        }
+        Update: {
+          appointment_id?: string | null
+          client_email?: string
+          client_name?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          rating?: number
+          review_text?: string | null
+          service_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_members: {
+        Row: {
+          bio: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          instagram_handle: string | null
+          is_active: boolean | null
+          name: string
+          role: string
+          specialties: string[] | null
+          updated_at: string
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          instagram_handle?: string | null
+          is_active?: boolean | null
+          name: string
+          role: string
+          specialties?: string[] | null
+          updated_at?: string
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          instagram_handle?: string | null
+          is_active?: boolean | null
+          name?: string
+          role?: string
+          specialties?: string[] | null
+          updated_at?: string
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

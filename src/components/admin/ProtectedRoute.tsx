@@ -9,8 +9,13 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, loading, isAdmin } = useAuth();
   const navigate = useNavigate();
+  
+  // Dev bypass - set to true to skip auth checks
+  const DEV_BYPASS = true;
 
   useEffect(() => {
+    if (DEV_BYPASS) return;
+    
     if (!loading) {
       if (!user) {
         navigate('/auth');
@@ -19,6 +24,10 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       }
     }
   }, [user, loading, isAdmin, navigate]);
+
+  if (DEV_BYPASS) {
+    return <>{children}</>;
+  }
 
   if (loading) {
     return (

@@ -1,28 +1,59 @@
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Link } from 'react-router-dom';
 
-const testimonials = [
+interface Review {
+  id: string;
+  client_name: string;
+  rating: number;
+  review_text: string | null;
+  service_name: string | null;
+}
+
+// Fallback testimonials for when database is empty
+const fallbackTestimonials = [
   {
-    name: 'Sarah Mitchell',
-    role: 'Bride',
-    content: 'HDA Studio made my wedding day absolutely magical. The bridal makeup was flawless and lasted all day. I felt like the most beautiful version of myself.',
+    id: 'fallback-1',
+    client_name: 'Sarah Mitchell',
     rating: 5,
+    review_text: 'HDA Studio made my wedding day absolutely magical. The bridal makeup was flawless and lasted all day. I felt like the most beautiful version of myself.',
+    service_name: 'Bridal',
   },
   {
-    name: 'Emily Chen',
-    role: 'Corporate Executive',
-    content: 'Professional, elegant, and always on point. I trust HDA for all my important events. Their soft glam look is perfection.',
+    id: 'fallback-2',
+    client_name: 'Emily Chen',
     rating: 5,
+    review_text: 'Professional, elegant, and always on point. I trust HDA for all my important events. Their soft glam look is perfection.',
+    service_name: 'Soft Glam',
   },
   {
-    name: 'Jessica Williams',
-    role: 'Model',
-    content: 'The attention to detail is incredible. They understand bone structure, lighting, and what looks best on camera. Truly artists.',
+    id: 'fallback-3',
+    client_name: 'Jessica Williams',
     rating: 5,
+    review_text: 'The attention to detail is incredible. They understand bone structure, lighting, and what looks best on camera. Truly artists.',
+    service_name: 'Editorial',
   },
 ];
 
 const Testimonials = () => {
+  const { data: reviews } = useQuery({
+    queryKey: ['testimonials'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(3);
+      
+      if (error) throw error;
+      return data as Review[];
+    },
+  });
+
+  const displayReviews = reviews && reviews.length > 0 ? reviews : fallbackTestimonials;
+
   return (
     <section className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-6">
@@ -44,9 +75,9 @@ const Testimonials = () => {
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {displayReviews.map((testimonial, index) => (
             <motion.article
-              key={testimonial.name}
+              key={testimonial.id}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -67,19 +98,35 @@ const Testimonials = () => {
 
               {/* Content */}
               <p className="text-foreground leading-relaxed mb-8 relative z-10">
-                "{testimonial.content}"
+                "{testimonial.review_text}"
               </p>
 
               {/* Author */}
               <div className="border-t border-border pt-6">
-                <p className="font-serif text-lg">{testimonial.name}</p>
+                <p className="font-serif text-lg">{testimonial.client_name}</p>
                 <p className="text-sm text-muted-foreground tracking-wider uppercase">
-                  {testimonial.role}
+                  {testimonial.service_name || 'Client'}
                 </p>
               </div>
             </motion.article>
           ))}
         </div>
+
+        {/* View All Link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-center mt-12"
+        >
+          <Link 
+            to="/reviews" 
+            className="text-primary hover:text-primary/80 transition-colors text-sm tracking-widest uppercase"
+          >
+            View All Reviews →
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

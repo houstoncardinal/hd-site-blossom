@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Mail } from 'lucide-react';
 
 const Footer = () => {
@@ -7,9 +8,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <a href="#home" className="text-3xl font-serif tracking-wider text-foreground block mb-4">
+            <Link to="/" className="text-3xl font-serif tracking-wider text-foreground block mb-4">
               HDA <span className="text-primary">Studio</span>
-            </a>
+            </Link>
             <p className="text-muted-foreground leading-relaxed max-w-sm mb-6">
               Luxury beauty services crafted with precision and artistry. 
               Transform your look with our expert makeup artists.
@@ -43,21 +44,18 @@ const Footer = () => {
           <div>
             <h4 className="font-serif text-lg mb-6">Quick Links</h4>
             <nav className="space-y-3">
-              <a href="#home" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link to="/" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Home
-              </a>
-              <a href="#services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              </Link>
+              <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Services
-              </a>
-              <a href="#about" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
-                About
-              </a>
-              <a href="#gallery" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              </Link>
+              <Link to="/gallery" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Gallery
-              </a>
-              <a href="#contact" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
-                Contact
-              </a>
+              </Link>
+              <Link to="/booking" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+                Book Now
+              </Link>
             </nav>
           </div>
 
@@ -65,18 +63,18 @@ const Footer = () => {
           <div>
             <h4 className="font-serif text-lg mb-6">Services</h4>
             <nav className="space-y-3">
-              <a href="#services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Soft Glam
-              </a>
-              <a href="#services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              </Link>
+              <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Bridal Beauty
-              </a>
-              <a href="#services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              </Link>
+              <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Evening Glam
-              </a>
-              <a href="#services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              </Link>
+              <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Natural Glow
-              </a>
+              </Link>
             </nav>
           </div>
         </div>

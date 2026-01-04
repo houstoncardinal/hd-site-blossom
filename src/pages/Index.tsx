@@ -4,6 +4,7 @@ import Services from '@/components/Services';
 import About from '@/components/About';
 import Testimonials from '@/components/Testimonials';
 import Gallery from '@/components/Gallery';
+import InstagramFeed from '@/components/InstagramFeed';
 import CTA from '@/components/CTA';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
@@ -17,6 +18,7 @@ const Index = () => {
       <About />
       <Gallery />
       <Testimonials />
+      <InstagramFeed />
       <CTA />
       <Contact />
       <Footer />

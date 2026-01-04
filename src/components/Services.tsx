@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import softGlamImage from '@/assets/service-soft-glam.jpg';
 import bridalImage from '@/assets/service-bridal.jpg';
 import glamImage from '@/assets/service-glam.jpg';
@@ -66,39 +67,57 @@ const Services = () => {
               transition={{ duration: 0.6, delay: index * 0.15 }}
               className="group cursor-pointer"
             >
-              {/* Image Container */}
-              <div className="relative overflow-hidden mb-6 aspect-[3/4]">
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                {/* Hover Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="inline-block bg-primary text-primary-foreground text-xs tracking-widest uppercase px-4 py-2">
-                    Book Now
+              <Link to="/booking">
+                {/* Image Container */}
+                <div className="relative overflow-hidden mb-6 aspect-[3/4]">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {/* Hover Overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                    <span className="inline-block bg-primary text-primary-foreground text-xs tracking-widest uppercase px-4 py-2">
+                      Book Now
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-serif">{service.title}</h3>
+                    <span className="text-primary font-sans text-lg">{service.price}</span>
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {service.description}
+                  </p>
+                  <span className="text-xs text-muted-foreground tracking-wider uppercase">
+                    {service.duration}
                   </span>
                 </div>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-serif">{service.title}</h3>
-                  <span className="text-primary font-sans text-lg">{service.price}</span>
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {service.description}
-                </p>
-                <span className="text-xs text-muted-foreground tracking-wider uppercase">
-                  {service.duration}
-                </span>
-              </div>
+              </Link>
             </motion.article>
           ))}
         </div>
+
+        {/* View All Services Link */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-center mt-12"
+        >
+          <Link
+            to="/services"
+            className="inline-block text-sm tracking-widest uppercase text-muted-foreground hover:text-primary transition-colors duration-300 border-b border-muted-foreground hover:border-primary pb-1"
+          >
+            View All Services
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

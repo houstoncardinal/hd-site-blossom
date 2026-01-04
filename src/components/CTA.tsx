@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const CTA = () => {
@@ -29,12 +30,16 @@ const CTA = () => {
             Let us help you feel confident and radiant.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="gold" size="xl">
-              Schedule Your Time
-            </Button>
-            <Button variant="heroOutline" size="xl">
-              Schedule Your Bundle
-            </Button>
+            <Link to="/booking">
+              <Button variant="gold" size="xl">
+                Schedule Your Time
+              </Button>
+            </Link>
+            <Link to="/services">
+              <Button variant="heroOutline" size="xl">
+                View All Services
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </div>

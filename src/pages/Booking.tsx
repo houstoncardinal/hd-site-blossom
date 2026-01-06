@@ -7,16 +7,14 @@ import { useToast } from '@/hooks/use-toast';
 import { useBookAppointment } from '@/hooks/useBookAppointment';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import softGlamImage from '@/assets/service-soft-glam.jpg';
-import bridalImage from '@/assets/service-bridal.jpg';
-import glamImage from '@/assets/service-glam.jpg';
-import naturalImage from '@/assets/service-natural.jpg';
+import SEOHead from '@/components/seo/SEOHead';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 const services = [
-  { id: 'soft-glam', name: 'Soft Glam', price: 100, duration: '60 min', image: softGlamImage },
-  { id: 'bridal', name: 'Bridal Beauty', price: 250, duration: '120 min', image: bridalImage },
-  { id: 'evening-glam', name: 'Evening Glam', price: 150, duration: '90 min', image: glamImage },
-  { id: 'natural-glow', name: 'Natural Glow', price: 80, duration: '45 min', image: naturalImage },
+  { id: 'basic-soft-glam', name: 'Basic Soft Glam', price: 90, duration: '45 min', image: '/IMG_8863.JPG' },
+  { id: 'soft-glam', name: 'Soft Glam', price: 108, duration: '60 min', image: '/IMG_8865.JPG' },
+  { id: 'standard-glam', name: 'Standard Glam', price: 144, duration: '75 min', image: '/IMG_8916.JPG' },
+  { id: 'signature-glam', name: 'Signature Glam', price: 180, duration: '90 min', image: '/IMG_8912.JPG' },
 ];
 
 const timeSlots = [
@@ -104,11 +102,20 @@ const Booking = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <SEOHead
+        title="Book Appointment - Schedule Your Glam Session"
+        description="Book your luxury makeup appointment at HDA Studio. Choose from Basic Soft Glam ($90), Soft Glam ($108), Standard Glam ($144), or Signature Glam ($180). Easy online booking with instant confirmation."
+        keywords="book makeup appointment, schedule beauty service, makeup booking, glam session, beauty appointment, HDA Studio booking, makeup artist appointment"
+        canonicalUrl="/booking"
+        ogImage="/IMG_8915.JPG"
+      />
+
       <Navbar />
-      
+
       {/* Hero Section */}
       <section className="pt-32 pb-12 bg-gradient-hero">
         <div className="container mx-auto px-6">
+          <Breadcrumbs items={[{ name: 'Booking', url: '/booking' }]} />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

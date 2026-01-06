@@ -1,0 +1,308 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Sparkles, Crown, Star, ChevronRight } from 'lucide-react';
+
+interface ServicesMegamenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const services = [
+  {
+    id: 'basic-soft-glam',
+    title: 'Basic Soft Glam',
+    description: 'Natural, polished look with soft definition',
+    price: '$90',
+    duration: '45 min',
+    image: '/IMG_8863.JPG',
+    icon: Sparkles,
+    popular: false,
+  },
+  {
+    id: 'soft-glam',
+    title: 'Soft Glam',
+    description: 'Enhanced everyday glam with gentle definition',
+    price: '$108',
+    duration: '60 min',
+    image: '/IMG_8865.JPG',
+    icon: Sparkles,
+    popular: false,
+  },
+  {
+    id: 'standard-glam',
+    title: 'Standard Glam',
+    description: 'Balanced, event-ready glam for special occasions',
+    price: '$144',
+    duration: '75 min',
+    image: '/IMG_8916.JPG',
+    icon: Star,
+    popular: true,
+  },
+  {
+    id: 'signature-glam',
+    title: 'Signature Glam',
+    description: 'Premium show-stopping glamour with intricate artistry',
+    price: '$180',
+    duration: '90 min',
+    image: '/IMG_8912.JPG',
+    icon: Crown,
+    popular: false,
+  },
+];
+
+const addOns = [
+  { name: 'Ombre Lips', price: '$18' },
+  { name: 'Winged Eyeliner / Lashes', price: '$18' },
+  { name: 'Scarf Setting', price: '$12-18' },
+  { name: 'Highlighter Upgrade', price: '$12' },
+  { name: 'Contour Upgrade', price: '$12' },
+  { name: 'Jewellery Setting', price: '$12-24' },
+];
+
+const bundles = [
+  {
+    name: 'Bridal Party Package',
+    description: 'Complete bridal party glam experience',
+    price: 'From $300',
+    highlight: 'Most Popular',
+  },
+  {
+    name: 'Glow Up Bundle',
+    description: '3 services at discounted rate',
+    price: '$324',
+    highlight: 'Best Value',
+  },
+  {
+    name: 'VIP Experience',
+    description: 'Premium luxury treatment',
+    price: '$480',
+    highlight: 'Exclusive',
+  },
+];
+
+const ServicesMegamenu = ({ isOpen, onClose }: ServicesMegamenuProps) => {
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.3,
+        when: 'afterChildren',
+      }
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        when: 'beforeChildren',
+        staggerChildren: 0.08,
+      }
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-background/60 backdrop-blur-sm z-40"
+            onClick={onClose}
+          />
+
+          {/* Megamenu Content */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className="absolute left-0 right-0 top-full mt-0 bg-card border-y border-border shadow-2xl z-50 overflow-hidden"
+          >
+            <div className="container mx-auto px-6 py-12">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+                {/* Main Services Section - 7 columns */}
+                <div className="lg:col-span-7">
+                  <motion.div variants={itemVariants}>
+                    <h3 className="text-xs tracking-[0.3em] uppercase text-primary mb-6 font-sans">
+                      Our Services
+                    </h3>
+                  </motion.div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {services.map((service) => {
+                      const Icon = service.icon;
+                      return (
+                        <motion.div
+                          key={service.id}
+                          variants={itemVariants}
+                        >
+                          <Link
+                            to="/booking"
+                            onClick={onClose}
+                            className="group block relative overflow-hidden rounded-lg border border-border hover:border-primary transition-all duration-300 bg-background/50 hover:bg-background"
+                          >
+                            {/* Popular Badge */}
+                            {service.popular && (
+                              <div className="absolute top-3 right-3 z-10">
+                                <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-full">
+                                  <Star size={12} fill="currentColor" />
+                                  Popular
+                                </span>
+                              </div>
+                            )}
+
+                            {/* Image */}
+                            <div className="relative h-32 overflow-hidden">
+                              <img
+                                src={service.image}
+                                alt={service.title}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                loading="lazy"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-4 space-y-2">
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                  <Icon size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                                  <h4 className="font-serif text-base leading-tight">
+                                    {service.title}
+                                  </h4>
+                                </div>
+                                <span className="text-primary font-semibold text-sm whitespace-nowrap">
+                                  {service.price}
+                                </span>
+                              </div>
+                              <p className="text-xs text-muted-foreground leading-relaxed">
+                                {service.description}
+                              </p>
+                              <div className="flex items-center justify-between pt-1">
+                                <span className="text-xs text-muted-foreground">
+                                  {service.duration}
+                                </span>
+                                <ChevronRight
+                                  size={14}
+                                  className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-300"
+                                />
+                              </div>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Sidebar - 5 columns */}
+                <div className="lg:col-span-5 space-y-8">
+                  {/* Add-Ons Section */}
+                  <motion.div variants={itemVariants}>
+                    <h3 className="text-xs tracking-[0.3em] uppercase text-primary mb-4 font-sans">
+                      Add-Ons
+                    </h3>
+                    <div className="bg-background/50 rounded-lg border border-border p-5 space-y-3">
+                      {addOns.map((addOn, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0 last:pb-0"
+                        >
+                          <span className="text-foreground">{addOn.name}</span>
+                          <span className="text-primary font-medium">{addOn.price}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Bundles Section */}
+                  <motion.div variants={itemVariants}>
+                    <h3 className="text-xs tracking-[0.3em] uppercase text-primary mb-4 font-sans">
+                      Package Bundles
+                    </h3>
+                    <div className="space-y-3">
+                      {bundles.map((bundle, index) => (
+                        <Link
+                          key={index}
+                          to="/booking"
+                          onClick={onClose}
+                          className="group block bg-background/50 hover:bg-background rounded-lg border border-border hover:border-primary transition-all duration-300 p-4"
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="font-serif text-sm leading-tight flex-1">
+                              {bundle.name}
+                            </h4>
+                            <span className="inline-block bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full ml-2">
+                              {bundle.highlight}
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mb-2">
+                            {bundle.description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-primary font-semibold text-sm">
+                              {bundle.price}
+                            </span>
+                            <ChevronRight
+                              size={14}
+                              className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-300"
+                            />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* CTA Section */}
+                  <motion.div variants={itemVariants}>
+                    <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg border border-primary/20 p-6 text-center">
+                      <Sparkles className="mx-auto mb-3 text-primary" size={24} />
+                      <h4 className="font-serif text-lg mb-2">Not Sure Which Service?</h4>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Our experts will help you choose the perfect glam experience
+                      </p>
+                      <Link
+                        to="/booking"
+                        onClick={onClose}
+                        className="inline-block w-full bg-primary text-primary-foreground text-sm tracking-widest uppercase px-6 py-3 rounded hover:bg-primary/90 transition-colors duration-300"
+                      >
+                        Book Consultation
+                      </Link>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* Bottom Link */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-8 pt-6 border-t border-border text-center"
+              >
+                <Link
+                  to="/services"
+                  onClick={onClose}
+                  className="inline-flex items-center gap-2 text-sm tracking-widest uppercase text-muted-foreground hover:text-primary transition-colors duration-300"
+                >
+                  View Full Service Menu
+                  <ChevronRight size={16} />
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default ServicesMegamenu;

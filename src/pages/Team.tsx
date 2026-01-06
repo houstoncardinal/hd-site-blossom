@@ -3,6 +3,8 @@ import { Instagram } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEOHead from '@/components/seo/SEOHead';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { supabase } from '@/integrations/supabase/client';
 
 interface TeamMember {
@@ -32,11 +34,20 @@ const Team = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <SEOHead
+        title="Meet Our Team - Professional Makeup Artists"
+        description="Meet the talented makeup artists at HDA Studio. Our team of experienced beauty professionals specializes in editorial, bridal, and event makeup artistry."
+        keywords="makeup artists, beauty team, professional makeup artists, bridal makeup artist, editorial makeup artist, HDA Studio team"
+        canonicalUrl="/team"
+        ogImage="/IMG_8915.JPG"
+      />
+
       <Navbar />
-      
+
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-hero">
         <div className="container mx-auto px-6">
+          <Breadcrumbs items={[{ name: 'Team', url: '/team' }]} />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

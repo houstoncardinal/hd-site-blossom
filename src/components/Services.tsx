@@ -1,38 +1,34 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import softGlamImage from '@/assets/service-soft-glam.jpg';
-import bridalImage from '@/assets/service-bridal.jpg';
-import glamImage from '@/assets/service-glam.jpg';
-import naturalImage from '@/assets/service-natural.jpg';
 
 const services = [
   {
+    title: 'Basic Soft Glam',
+    description: 'Natural, polished look with soft definition. Perfect for work, casual outings, or everyday elegance.',
+    price: '$90',
+    image: '/IMG_8863.JPG',
+    duration: '45 min',
+  },
+  {
     title: 'Soft Glam',
-    description: 'Enhance your natural beauty with a subtle, radiant glow perfect for everyday elegance.',
-    price: '$100',
-    image: softGlamImage,
+    description: 'Enhanced everyday glam with gentle definition and refined sophistication for any occasion.',
+    price: '$108',
+    image: '/IMG_8865.JPG',
     duration: '60 min',
   },
   {
-    title: 'Bridal Beauty',
-    description: 'Timeless, romantic looks designed to make you feel unforgettable on your special day.',
-    price: '$250',
-    image: bridalImage,
-    duration: '120 min',
+    title: 'Standard Glam',
+    description: 'Balanced, event-ready glam perfect for weddings, parties, and special occasions.',
+    price: '$144',
+    image: '/IMG_8916.JPG',
+    duration: '75 min',
   },
   {
-    title: 'Evening Glam',
-    description: 'Bold, dramatic makeup for galas, events, and nights when you want to make a statement.',
-    price: '$150',
-    image: glamImage,
+    title: 'Signature Glam',
+    description: 'Premium show-stopping glamour with intricate artistry for red carpet events and editorials.',
+    price: '$180',
+    image: '/IMG_8912.JPG',
     duration: '90 min',
-  },
-  {
-    title: 'Natural Glow',
-    description: 'Fresh, dewy looks that celebrate your natural beauty with minimal, refined touches.',
-    price: '$80',
-    image: naturalImage,
-    duration: '45 min',
   },
 ];
 

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import heroImage from '@/assets/hero-beauty.jpg';
+
+const heroImage = '/IMG_8900.JPG';
 
 const About = () => {
   return (

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Mail } from 'lucide-react';
+import { BUSINESS_CONFIG, getActiveSocialLinks } from '@/config/business';
 
 const Footer = () => {
   return (
@@ -16,24 +17,32 @@ const Footer = () => {
               Transform your look with our expert makeup artists.
             </p>
             <div className="flex gap-4">
+              {BUSINESS_CONFIG.social.instagram.enabled && (
+                <a
+                  href={BUSINESS_CONFIG.social.instagram.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors"
+                  aria-label={`Follow us on Instagram ${BUSINESS_CONFIG.social.instagram.handle}`}
+                >
+                  <Instagram size={18} />
+                </a>
+              )}
+              {BUSINESS_CONFIG.social.facebook.enabled && (
+                <a
+                  href={BUSINESS_CONFIG.social.facebook.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors"
+                  aria-label={`Follow us on Facebook`}
+                >
+                  <Facebook size={18} />
+                </a>
+              )}
               <a
-                href="#"
+                href={`mailto:${BUSINESS_CONFIG.contact.email.primary}`}
                 className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram size={18} />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook size={18} />
-              </a>
-              <a
-                href="mailto:hello@hdastudio.com"
-                className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors"
-                aria-label="Email"
+                aria-label={`Email us at ${BUSINESS_CONFIG.contact.email.primary}`}
               >
                 <Mail size={18} />
               </a>
@@ -61,6 +70,9 @@ const Footer = () => {
               </Link>
               <Link to="/booking" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Book Now
+              </Link>
+              <Link to="/faq" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+                FAQ
               </Link>
             </nav>
           </div>
@@ -91,12 +103,12 @@ const Footer = () => {
             © {new Date().getFullYear()} HDA Studio. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <Link to={BUSINESS_CONFIG.legal.privacyPolicyUrl} className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to={BUSINESS_CONFIG.legal.termsOfServiceUrl} className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Terms of Service
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,17 +1,43 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import softGlamImage from '@/assets/service-soft-glam.jpg';
-import bridalImage from '@/assets/service-bridal.jpg';
-import glamImage from '@/assets/service-glam.jpg';
-import naturalImage from '@/assets/service-natural.jpg';
+import ImageLightbox from './ImageLightbox';
 
 const galleryImages = [
-  { src: softGlamImage, alt: 'Soft Glam Makeup Look', span: 'col-span-1 row-span-2' },
-  { src: bridalImage, alt: 'Bridal Beauty', span: 'col-span-1 row-span-1' },
-  { src: glamImage, alt: 'Evening Glam', span: 'col-span-1 row-span-1' },
-  { src: naturalImage, alt: 'Natural Glow', span: 'col-span-1 row-span-2' },
+  { src: '/IMG_8915.JPG', alt: 'Evening Glam Runway Look', span: 'col-span-1 row-span-2' },
+  { src: '/IMG_8863.JPG', alt: 'Behind the Scenes Makeup Session', span: 'col-span-1 row-span-1' },
+  { src: '/IMG_8910.JPG', alt: 'Editorial Fashion Makeup', span: 'col-span-1 row-span-1' },
+  { src: '/IMG_8960.JPG', alt: 'High Fashion Editorial Look', span: 'col-span-1 row-span-2' },
+  { src: '/115A82F7-E04C-4A13-B50A-B919D9C20240.JPG', alt: 'Elegant Evening Glam', span: 'col-span-1 row-span-1' },
+  { src: '/IMG_8900.JPG', alt: 'Global Fashion Week Makeup', span: 'col-span-1 row-span-1' },
+  { src: '/IMG_8920.JPG', alt: 'Bold Editorial Makeup', span: 'col-span-1 row-span-2' },
+  { src: '/IMG_8865.JPG', alt: 'Professional Makeup Application', span: 'col-span-1 row-span-1' },
+  { src: '/IMG_8905.JPG', alt: 'Dramatic Runway Look', span: 'col-span-1 row-span-1' },
+  { src: '/IMG_8955.JPG', alt: 'Evening Glam Dark Tones', span: 'col-span-1 row-span-2' },
+  { src: '/13715236-067F-4BEC-BFAA-CAA183BFF0CD.JPG', alt: 'Bridal Party Glam', span: 'col-span-1 row-span-1' },
+  { src: '/IMG_8869.JPG', alt: 'Special Event Makeup', span: 'col-span-1 row-span-1' },
 ];
 
 const Gallery = () => {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const goToPrevious = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentImageIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <section id="gallery" className="py-24 md:py-32 bg-charcoal-light">
       <div className="container mx-auto px-6">
@@ -40,12 +66,25 @@ const Gallery = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               className={`relative overflow-hidden group cursor-pointer ${image.span}`}
+              onClick={() => openLightbox(index)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openLightbox(index);
+                }
+              }}
+              aria-label={`View ${image.alt}`}
             >
               <img
                 src={image.src}
                 alt={image.alt}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                 <span className="text-sm tracking-widest uppercase text-foreground">
@@ -56,6 +95,15 @@ const Gallery = () => {
           ))}
         </div>
       </div>
+
+      <ImageLightbox
+        images={galleryImages}
+        currentIndex={currentImageIndex}
+        isOpen={lightboxOpen}
+        onClose={closeLightbox}
+        onPrevious={goToPrevious}
+        onNext={goToNext}
+      />
     </section>
   );
 };

@@ -1,48 +1,78 @@
 import { motion } from 'framer-motion';
 import { Instagram, Heart, MessageCircle } from 'lucide-react';
-import softGlamImage from '@/assets/service-soft-glam.jpg';
-import bridalImage from '@/assets/service-bridal.jpg';
-import glamImage from '@/assets/service-glam.jpg';
-import naturalImage from '@/assets/service-natural.jpg';
-import specialEventImage from '@/assets/service-special-event.jpg';
-import editorialImage from '@/assets/service-editorial.jpg';
 
 const posts = [
   {
-    image: softGlamImage,
-    likes: 234,
-    comments: 18,
-    caption: 'Soft glam perfection ✨ #hdastudio #softglam',
-  },
-  {
-    image: bridalImage,
+    image: '/IMG_8915.JPG',
     likes: 456,
     comments: 32,
-    caption: 'Wedding day ready 💍 #bridalmakeup #hdastudio',
+    caption: 'Evening glam perfection ✨ #hdastudio #eveningglam',
   },
   {
-    image: glamImage,
-    likes: 321,
+    image: '/IMG_8910.JPG',
+    likes: 521,
+    comments: 41,
+    caption: 'Fashion week ready 💄 #fashionweek #editorialmakeup',
+  },
+  {
+    image: '/IMG_8863.JPG',
+    likes: 298,
     comments: 24,
-    caption: 'Bold and beautiful 💄 #eveningglam #makeup',
+    caption: 'Behind the scenes magic ✨ #makeupstudio #hdastudio',
   },
   {
-    image: naturalImage,
-    likes: 189,
-    comments: 15,
-    caption: 'Natural glow goals 🌟 #naturalmakeup #dewy',
-  },
-  {
-    image: specialEventImage,
-    likes: 278,
-    comments: 21,
-    caption: 'Gala ready ✨ #specialevent #glam',
-  },
-  {
-    image: editorialImage,
+    image: '/IMG_8900.JPG',
     likes: 412,
     comments: 29,
-    caption: 'Editorial vibes 📸 #editorialmakeup #creative',
+    caption: 'Global Fashion Week vibes 📸 #gfw #runway',
+  },
+  {
+    image: '/IMG_8905.JPG',
+    likes: 389,
+    comments: 31,
+    caption: 'Bold and beautiful 💋 #eveningglam #makeup',
+  },
+  {
+    image: '/IMG_8920.JPG',
+    likes: 467,
+    comments: 38,
+    caption: 'Editorial excellence 🌟 #editorialmakeup #creative',
+  },
+  {
+    image: '/IMG_8960.JPG',
+    likes: 534,
+    comments: 42,
+    caption: 'High fashion elegance ✨ #highfashion #runway',
+  },
+  {
+    image: '/IMG_8955.JPG',
+    likes: 445,
+    comments: 36,
+    caption: 'Dramatic glam goals 💎 #dramaticlook #eveningglam',
+  },
+  {
+    image: '/115A82F7-E04C-4A13-B50A-B919D9C20240.JPG',
+    likes: 398,
+    comments: 27,
+    caption: 'Elegant and timeless 👑 #elegance #hdastudio',
+  },
+  {
+    image: '/IMG_8865.JPG',
+    likes: 321,
+    comments: 25,
+    caption: 'Creating magic one brush at a time ✨ #makeupartist',
+  },
+  {
+    image: '/13715236-067F-4BEC-BFAA-CAA183BFF0CD.JPG',
+    likes: 402,
+    comments: 30,
+    caption: 'Wedding glam perfection 💍 #bridal #bridalmakeup',
+  },
+  {
+    image: '/IMG_8869.JPG',
+    likes: 356,
+    comments: 28,
+    caption: 'Special event ready 🎉 #specialevent #glam',
   },
 ];
 

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { BUSINESS_CONFIG } from '@/config/business';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -56,7 +57,14 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg mb-1">Location</h4>
-                  <p className="text-muted-foreground text-sm">123 Beauty Lane, Los Angeles, CA 90210</p>
+                  <a
+                    href={BUSINESS_CONFIG.contact.address.mapLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground text-sm hover:text-primary transition-colors"
+                  >
+                    {BUSINESS_CONFIG.contact.address.oneLine}
+                  </a>
                 </div>
               </div>
 
@@ -66,7 +74,12 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg mb-1">Phone</h4>
-                  <p className="text-muted-foreground text-sm">(310) 555-0123</p>
+                  <a
+                    href={`tel:${BUSINESS_CONFIG.contact.phone.raw}`}
+                    className="text-muted-foreground text-sm hover:text-primary transition-colors"
+                  >
+                    {BUSINESS_CONFIG.contact.phone.display}
+                  </a>
                 </div>
               </div>
 
@@ -76,7 +89,12 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg mb-1">Email</h4>
-                  <p className="text-muted-foreground text-sm">hello@hdastudio.com</p>
+                  <a
+                    href={`mailto:${BUSINESS_CONFIG.contact.email.primary}`}
+                    className="text-muted-foreground text-sm hover:text-primary transition-colors"
+                  >
+                    {BUSINESS_CONFIG.contact.email.primary}
+                  </a>
                 </div>
               </div>
 
@@ -86,8 +104,9 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg mb-1">Hours</h4>
-                  <p className="text-muted-foreground text-sm">Mon - Sat: 9AM - 7PM</p>
-                  <p className="text-muted-foreground text-sm">Sunday: By Appointment</p>
+                  <p className="text-muted-foreground text-sm">{BUSINESS_CONFIG.hours.display.weekdays}</p>
+                  <p className="text-muted-foreground text-sm">{BUSINESS_CONFIG.hours.display.saturday}</p>
+                  <p className="text-muted-foreground text-sm">{BUSINESS_CONFIG.hours.display.sunday}</p>
                 </div>
               </div>
             </div>

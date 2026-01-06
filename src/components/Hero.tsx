@@ -30,7 +30,7 @@ const Hero = () => {
         <motion.img
           src={heroImage}
           alt="Luxury makeup artistry at HDA Studio"
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover object-top opacity-70"
           loading="eager"
           style={{ opacity }}
         />

@@ -177,7 +177,7 @@ const Navbar = () => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="fixed right-0 top-0 bottom-0 w-full sm:w-80 bg-card border-l border-border z-40 md:hidden overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-40 md:hidden overflow-y-auto"
             >
               <div className="flex flex-col gap-2 p-6 pt-24">
                 {navLinks.map((link, index) => (

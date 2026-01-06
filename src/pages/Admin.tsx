@@ -1,25 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from '@/components/admin/ProtectedRoute';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import DashboardWidgets from '@/components/admin/DashboardWidgets';
 import AppointmentsManager from '@/components/admin/AppointmentsManager';
 import ReviewsManager from '@/components/admin/ReviewsManager';
 import TeamManager from '@/components/admin/TeamManager';
+import ServicesManager from '@/components/admin/ServicesManager';
 import AnalyticsView from '@/components/admin/AnalyticsView';
-import { MessagesView, NotificationsView, SettingsView } from '@/components/admin/PlaceholderViews';
-import { LogOut, ArrowLeft, Menu } from 'lucide-react';
+import BusinessSettings from '@/components/admin/BusinessSettings';
+import { NotificationsView, SettingsView } from '@/components/admin/PlaceholderViews';
+import { LogOut, ArrowLeft, Menu, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const AdminDashboardContent = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+
+  useEffect(() => {
+    fetchPendingCount();
+  }, [refreshKey]);
+
+  const fetchPendingCount = async () => {
+    const { count } = await supabase
+      .from('appointments')
+      .select('*', { count: 'exact', head: true })
+      .or('status.eq.pending,status.is.null');
+    setPendingCount(count || 0);
+  };
+
+  const handleRefresh = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -34,23 +55,25 @@ const AdminDashboardContent = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <DashboardWidgets onNavigate={handleTabChange} />;
+        return <DashboardWidgets key={refreshKey} onNavigate={handleTabChange} />;
       case 'appointments':
-        return <AppointmentsManager />;
+        return <AppointmentsManager key={refreshKey} />;
       case 'reviews':
-        return <ReviewsManager />;
+        return <ReviewsManager key={refreshKey} />;
       case 'team':
-        return <TeamManager />;
+        return <TeamManager key={refreshKey} />;
+      case 'services':
+        return <ServicesManager />;
       case 'analytics':
-        return <AnalyticsView />;
-      case 'messages':
-        return <MessagesView />;
+        return <AnalyticsView key={refreshKey} />;
+      case 'business':
+        return <BusinessSettings />;
       case 'notifications':
         return <NotificationsView />;
       case 'settings':
         return <SettingsView />;
       default:
-        return <DashboardWidgets onNavigate={handleTabChange} />;
+        return <DashboardWidgets key={refreshKey} onNavigate={handleTabChange} />;
     }
   };
 
@@ -63,6 +86,7 @@ const AdminDashboardContent = () => {
           onTabChange={handleTabChange}
           collapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          pendingCount={pendingCount}
         />
       </div>
 
@@ -84,6 +108,7 @@ const AdminDashboardContent = () => {
           onTabChange={handleTabChange}
           collapsed={false}
           onToggleCollapse={() => setMobileMenuOpen(false)}
+          pendingCount={pendingCount}
         />
       </div>
 
@@ -119,10 +144,20 @@ const AdminDashboardContent = () => {
                 <p className="text-sm text-muted-foreground hidden sm:block">{user?.email}</p>
               </div>
             </div>
-            <Button variant="outline" onClick={handleSignOut} className="gap-2">
-              <LogOut size={16} />
-              <span className="hidden sm:inline">Sign Out</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={handleRefresh}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <RefreshCw size={18} />
+              </Button>
+              <Button variant="outline" onClick={handleSignOut} className="gap-2">
+                <LogOut size={16} />
+                <span className="hidden sm:inline">Sign Out</span>
+              </Button>
+            </div>
           </div>
         </header>
 

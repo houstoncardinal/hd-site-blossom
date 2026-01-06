@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import {
-  MessageSquare,
   Bell,
   Settings,
   Mail,
@@ -14,48 +14,32 @@ import {
   Palette,
   Globe,
   Database,
-  Construction,
+  Calendar,
+  Star,
+  AlertCircle,
+  CheckCircle2,
 } from 'lucide-react';
-
-export const MessagesView = () => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-    >
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-serif font-light flex items-center gap-2">
-          <MessageSquare className="h-6 w-6" />
-          Messages
-        </h2>
-        <Badge variant="outline">Coming Soon</Badge>
-      </div>
-
-      <Card>
-        <CardContent className="py-12">
-          <div className="flex flex-col items-center justify-center text-center">
-            <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
-              <Construction className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-medium mb-2">Messages Feature Coming Soon</h3>
-            <p className="text-muted-foreground max-w-md">
-              Direct messaging with clients will be available in a future update. 
-              Stay tuned for seamless communication with your customers.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
+import { useToast } from '@/hooks/use-toast';
 
 export const NotificationsView = () => {
-  const notifications = [
-    { id: 1, type: 'appointment', message: 'New appointment booked for tomorrow', time: '2 hours ago', unread: true },
-    { id: 2, type: 'review', message: 'New 5-star review received', time: '5 hours ago', unread: true },
-    { id: 3, type: 'system', message: 'System maintenance scheduled', time: '1 day ago', unread: false },
-  ];
+  const { toast } = useToast();
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: 'appointment', message: 'New appointment request from Sarah M.', time: '2 hours ago', unread: true },
+    { id: 2, type: 'review', message: 'New 5-star review received!', time: '5 hours ago', unread: true },
+    { id: 3, type: 'appointment', message: 'Appointment confirmed for tomorrow', time: '1 day ago', unread: false },
+    { id: 4, type: 'system', message: 'Weekly analytics report ready', time: '2 days ago', unread: false },
+  ]);
+
+  const markAllRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, unread: false })));
+    toast({ title: 'All notifications marked as read' });
+  };
+
+  const markAsRead = (id: number) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, unread: false } : n
+    ));
+  };
 
   return (
     <motion.div
@@ -68,7 +52,14 @@ export const NotificationsView = () => {
           <Bell className="h-6 w-6" />
           Notifications
         </h2>
-        <Button variant="outline" size="sm">Mark All Read</Button>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-primary/10">
+            {notifications.filter(n => n.unread).length} unread
+          </Badge>
+          <Button variant="outline" size="sm" onClick={markAllRead}>
+            Mark All Read
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-3">
@@ -76,6 +67,7 @@ export const NotificationsView = () => {
           <Card 
             key={notif.id}
             className={`cursor-pointer transition-all hover:border-primary/30 ${notif.unread ? 'border-primary/50 bg-primary/5' : ''}`}
+            onClick={() => markAsRead(notif.id)}
           >
             <CardContent className="p-4">
               <div className="flex items-start gap-4">
@@ -83,20 +75,33 @@ export const NotificationsView = () => {
                   notif.type === 'appointment' ? 'bg-blue-500/10' : 
                   notif.type === 'review' ? 'bg-amber-500/10' : 'bg-muted'
                 }`}>
-                  {notif.type === 'appointment' ? <Mail className="h-5 w-5 text-blue-500" /> :
-                   notif.type === 'review' ? <Bell className="h-5 w-5 text-amber-500" /> :
+                  {notif.type === 'appointment' ? <Calendar className="h-5 w-5 text-blue-500" /> :
+                   notif.type === 'review' ? <Star className="h-5 w-5 text-amber-500" /> :
                    <Settings className="h-5 w-5 text-muted-foreground" />}
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium">{notif.message}</p>
                   <p className="text-xs text-muted-foreground mt-1">{notif.time}</p>
                 </div>
-                {notif.unread && <div className="h-2 w-2 rounded-full bg-primary" />}
+                {notif.unread ? (
+                  <div className="h-2 w-2 rounded-full bg-primary" />
+                ) : (
+                  <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                )}
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {notifications.length === 0 && (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-muted-foreground">No notifications yet</p>
+          </CardContent>
+        </Card>
+      )}
     </motion.div>
   );
 };

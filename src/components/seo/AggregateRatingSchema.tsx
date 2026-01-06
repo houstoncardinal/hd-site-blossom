@@ -24,7 +24,7 @@ const AggregateRatingSchema = ({
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': `${BUSINESS_CONFIG.website.url}/#organization`,
-    name: BUSINESS_CONFIG.name,
+    name: BUSINESS_CONFIG.name.full,
     image: `${BUSINESS_CONFIG.website.url}${BUSINESS_CONFIG.website.logo.main}`,
     url: BUSINESS_CONFIG.website.url,
     telephone: BUSINESS_CONFIG.contact.phone.raw,
@@ -49,7 +49,7 @@ const AggregateRatingSchema = ({
       bestRating: bestRating,
       worstRating: worstRating,
     },
-    priceRange: BUSINESS_CONFIG.business.priceRange,
+    priceRange: BUSINESS_CONFIG.details.priceRange,
   };
 
   return (

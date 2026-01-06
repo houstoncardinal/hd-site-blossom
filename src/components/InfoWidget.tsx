@@ -24,7 +24,7 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { BUSINESS_CONFIG } from '@/config/business';
+import { BUSINESS_CONFIG, getWhatsAppLink, isCurrentlyOpen } from '@/config/business';
 
 const services = [
   {
@@ -149,7 +149,7 @@ const InfoWidget = () => {
                 <div className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border px-6 py-4">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-serif text-lg font-medium">
-                      {BUSINESS_CONFIG.name}
+                      {BUSINESS_CONFIG.name.full}
                     </h3>
                     <button
                       onClick={toggleWidget}
@@ -300,7 +300,7 @@ const InfoWidget = () => {
 
                       {/* WhatsApp */}
                       <a
-                        href={BUSINESS_CONFIG.contact.getWhatsAppLink()}
+                        href={getWhatsAppLink()}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-start gap-3 p-3 bg-background rounded-lg border border-border hover:border-primary/30 transition-all duration-300 group"
@@ -408,18 +408,18 @@ const InfoWidget = () => {
                           <div className="flex items-center gap-2">
                             <div
                               className={`w-2 h-2 rounded-full ${
-                                BUSINESS_CONFIG.hours.isCurrentlyOpen()
+                                isCurrentlyOpen()
                                   ? 'bg-green-500'
                                   : 'bg-red-500'
                               }`}
                             />
                             <p className="text-sm font-semibold">
-                              {BUSINESS_CONFIG.hours.isCurrentlyOpen() ? 'Open Now' : 'Closed'}
+                              {isCurrentlyOpen() ? 'Open Now' : 'Closed'}
                             </p>
                           </div>
                         </div>
                         <p className="text-xs text-muted-foreground">
-                          {BUSINESS_CONFIG.hours.timezone}
+                          Pacific Time
                         </p>
                       </div>
 

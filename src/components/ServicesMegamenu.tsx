@@ -12,7 +12,8 @@ const services = [
     id: 'basic-soft-glam',
     title: 'Basic Soft Glam',
     description: 'Natural, polished look with soft definition',
-    price: '$90',
+    price: '$100',
+    originalPrice: '$125',
     duration: '45 min',
     image: '/IMG_8863.JPG',
     icon: Sparkles,
@@ -22,17 +23,19 @@ const services = [
     id: 'soft-glam',
     title: 'Soft Glam',
     description: 'Enhanced everyday glam with gentle definition',
-    price: '$108',
+    price: '$125',
+    originalPrice: '$150',
     duration: '60 min',
     image: '/IMG_8865.JPG',
     icon: Sparkles,
     popular: false,
   },
   {
-    id: 'standard-glam',
-    title: 'Standard Glam',
+    id: 'full-glam',
+    title: 'Full Glam',
     description: 'Balanced, event-ready glam for special occasions',
-    price: '$144',
+    price: '$150',
+    originalPrice: '$175',
     duration: '75 min',
     image: '/IMG_8916.JPG',
     icon: Star,
@@ -43,6 +46,7 @@ const services = [
     title: 'Signature Glam',
     description: 'Premium show-stopping glamour with intricate artistry',
     price: '$180',
+    originalPrice: '$205',
     duration: '90 min',
     image: '/IMG_8912.JPG',
     icon: Crown,
@@ -62,8 +66,8 @@ const addOns = [
 const bundles = [
   {
     name: 'Bridal Party Package',
-    description: 'Complete bridal party glam experience',
-    price: 'From $300',
+    description: 'Bride $200 + $100 per person',
+    price: 'From $200',
     highlight: 'Most Popular',
   },
   {
@@ -181,9 +185,14 @@ const ServicesMegamenu = ({ isOpen, onClose }: ServicesMegamenuProps) => {
                                     {service.title}
                                   </h4>
                                 </div>
-                                <span className="text-primary font-semibold text-sm whitespace-nowrap">
-                                  {service.price}
-                                </span>
+                                <div className="text-right whitespace-nowrap">
+                                  <span className="text-xs text-muted-foreground line-through mr-1">
+                                    {service.originalPrice}
+                                  </span>
+                                  <span className="text-primary font-semibold text-sm">
+                                    {service.price}
+                                  </span>
+                                </div>
                               </div>
                               <p className="text-xs text-muted-foreground leading-relaxed">
                                 {service.description}

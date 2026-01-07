@@ -14,9 +14,9 @@ const services = [
     title: 'Basic Soft Glam',
     tagline: 'Natural & Polished',
     description: 'Our essential everyday look featuring natural, polished beauty with soft definition. Perfect for work, casual outings, or any time you want to look effortlessly put together without appearing overdone.',
-    seoDescription: 'Natural makeup look with soft definition. Professional basic soft glam makeup service including skin prep, full coverage base, complimentary lashes, and lip color. Starting at $90.',
-    price: 90,
-    originalPrice: 112,
+    seoDescription: 'Natural makeup look with soft definition. Professional basic soft glam makeup service including skin prep, full coverage base, complimentary lashes, and lip color. Starting at $100.',
+    price: 100,
+    originalPrice: 125,
     duration: '45 min',
     image: '/IMG_8863.JPG',
     includes: [
@@ -36,9 +36,9 @@ const services = [
     title: 'Soft Glam',
     tagline: 'Enhanced Everyday Elegance',
     description: 'Elevated everyday glamour with gentle definition and refined sophistication. Ideal for brunch dates, professional photoshoots, or daytime events where you want to radiate confidence and grace.',
-    seoDescription: 'Enhanced soft glam makeup with gentle definition. Includes full coverage, soft contour, defined eyeshadow, complimentary lashes for elevated everyday beauty. Starting at $108.',
-    price: 108,
-    originalPrice: 135,
+    seoDescription: 'Enhanced soft glam makeup with gentle definition. Includes full coverage, soft contour, defined eyeshadow, complimentary lashes for elevated everyday beauty. Starting at $125.',
+    price: 125,
+    originalPrice: 150,
     duration: '60 min',
     image: '/IMG_8865.JPG',
     includes: [
@@ -54,13 +54,13 @@ const services = [
     keywords: 'soft glam makeup, enhanced makeup, everyday glam, contour makeup, defined eyes',
   },
   {
-    id: 'standard-glam',
-    title: 'Standard Glam',
+    id: 'full-glam',
+    title: 'Full Glam',
     tagline: 'Event-Ready Perfection',
     description: 'Balanced, camera-ready glamour designed for special occasions. The perfect choice for weddings (as a guest), parties, date nights, and formal events where you want to make a lasting impression.',
-    seoDescription: 'Event-ready glam makeup service with full coverage, contour, highlighter, and defined eye looks. Professional makeup for weddings, parties, and special occasions. Starting at $144.',
-    price: 144,
-    originalPrice: 180,
+    seoDescription: 'Event-ready glam makeup service with full coverage, contour, highlighter, and defined eye looks. Professional makeup for weddings, parties, and special occasions. Starting at $150.',
+    price: 150,
+    originalPrice: 175,
     duration: '75 min',
     image: '/IMG_8916.JPG',
     popular: true,
@@ -74,7 +74,7 @@ const services = [
       'Camera-ready finishing touches',
       'Long-wear formula setting',
     ],
-    keywords: 'standard glam, event makeup, party makeup, wedding guest makeup, camera ready makeup',
+    keywords: 'full glam, event makeup, party makeup, wedding guest makeup, camera ready makeup',
   },
   {
     id: 'signature-glam',
@@ -83,7 +83,7 @@ const services = [
     description: 'Our premium signature service featuring show-stopping glamour with intricate artistry. Perfect for galas, red carpet events, fashion shows, editorials, and moments when you want to be absolutely unforgettable.',
     seoDescription: 'Signature glam makeup with full contouring, enhanced eye makeup, glitter, cut crease, and premium finishing. Ultimate luxury makeup service for special occasions. Starting at $180.',
     price: 180,
-    originalPrice: 225,
+    originalPrice: 205,
     duration: '90 min',
     image: '/IMG_8912.JPG',
     includes: [
@@ -137,17 +137,17 @@ const addOns = [
 const bundles = [
   {
     name: 'Bridal Party Package',
-    description: 'Perfect for the bride and her squad. Includes bridal makeup plus discounted rates for bridesmaids.',
-    basePrice: 300,
-    additionalPrice: 90,
-    additionalLabel: 'per bridesmaid',
+    description: 'Perfect for the bride and her squad. Professional bridal makeup with flat-rate pricing for bridesmaids and family.',
+    basePrice: 200,
+    additionalPrice: 100,
+    additionalLabel: 'per person (bridesmaids/family)',
     features: [
-      'Bride receives Signature Glam service',
-      'Pre-wedding trial for bride included',
-      '25% discount on bridesmaid makeup',
+      'Bride receives premium bridal makeup',
+      'Pre-wedding trial NOT included (book separately)',
+      'Flat rate $100 for bridesmaids & family',
+      'Available for bride or groom\'s family members',
       'Group scheduling priority',
       'On-location service available',
-      'Complementary touch-up kit for bride',
     ],
   },
   {
@@ -166,11 +166,11 @@ const bundles = [
   },
   {
     name: 'VIP Experience',
-    description: 'The ultimate pampering session. Private studio, champagne, and a full glam transformation.',
+    description: 'The ultimate pampering session. Private studio with a full glam transformation and exclusive perks.',
     basePrice: 480,
     features: [
       'Private 2-hour exclusive session',
-      'Champagne & gourmet refreshments',
+      'Gourmet refreshments provided',
       'Signature Glam full application',
       'One-on-one makeup lesson included',
       'Premium product gift bag ($100 value)',
@@ -257,8 +257,12 @@ const ServicesCatalog = () => {
                       <h3 className="text-2xl font-serif">{service.title}</h3>
                     </div>
                     <div className="text-right">
-                      <span className="text-2xl font-serif text-primary">${service.price}</span>
-                      <div className="flex items-center gap-1 text-muted-foreground text-xs">
+                      <div className="flex items-center gap-2 justify-end">
+                        <span className="text-sm text-muted-foreground line-through">${service.originalPrice}</span>
+                        <span className="text-2xl font-serif text-primary">${service.price}</span>
+                      </div>
+                      <span className="text-xs text-green-500 font-medium">Save $25</span>
+                      <div className="flex items-center gap-1 text-muted-foreground text-xs mt-1">
                         <Clock size={12} />
                         {service.duration}
                       </div>

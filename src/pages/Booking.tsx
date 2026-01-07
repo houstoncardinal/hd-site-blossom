@@ -11,10 +11,10 @@ import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 const services = [
-  { id: 'basic-soft-glam', name: 'Basic Soft Glam', price: 90, duration: '45 min', image: '/IMG_8863.JPG' },
-  { id: 'soft-glam', name: 'Soft Glam', price: 108, duration: '60 min', image: '/IMG_8865.JPG' },
-  { id: 'standard-glam', name: 'Standard Glam', price: 144, duration: '75 min', image: '/IMG_8916.JPG' },
-  { id: 'signature-glam', name: 'Signature Glam', price: 180, duration: '90 min', image: '/IMG_8912.JPG' },
+  { id: 'basic-soft-glam', name: 'Basic Soft Glam', price: 100, originalPrice: 125, duration: '45 min', image: '/IMG_8863.JPG' },
+  { id: 'soft-glam', name: 'Soft Glam', price: 125, originalPrice: 150, duration: '60 min', image: '/IMG_8865.JPG' },
+  { id: 'full-glam', name: 'Full Glam', price: 150, originalPrice: 175, duration: '75 min', image: '/IMG_8916.JPG' },
+  { id: 'signature-glam', name: 'Signature Glam', price: 180, originalPrice: 205, duration: '90 min', image: '/IMG_8912.JPG' },
 ];
 
 const timeSlots = [
@@ -191,7 +191,11 @@ const Booking = () => {
                     <div className="p-4">
                       <h3 className="font-serif text-lg mb-1">{service.name}</h3>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-primary">${service.price}</span>
+                        <div>
+                          <span className="text-muted-foreground line-through text-xs mr-1">${service.originalPrice}</span>
+                          <span className="text-primary">${service.price}</span>
+                          <span className="text-green-500 text-xs ml-1">Save $25</span>
+                        </div>
                         <span className="text-muted-foreground flex items-center gap-1">
                           <Clock size={12} />
                           {service.duration}

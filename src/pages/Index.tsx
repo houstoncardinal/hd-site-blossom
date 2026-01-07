@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Services from '@/components/Services';
 import About from '@/components/About';
+import Sanitation from '@/components/Sanitation';
 import Testimonials from '@/components/Testimonials';
 import Gallery from '@/components/Gallery';
 import InstagramFeed from '@/components/InstagramFeed';
@@ -35,6 +36,7 @@ const Index = () => {
       <Hero />
       <Services />
       <About />
+      <Sanitation />
       <Gallery />
       <Testimonials />
       <InstagramFeed />

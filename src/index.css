@@ -160,6 +160,90 @@
   .font-sans {
     font-family: var(--font-sans);
   }
+
+  /* Gold shimmer animation for luxury text */
+  .text-shimmer-gold {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--gold)) 0%,
+      hsl(var(--gold-light)) 25%,
+      hsl(45 100% 80%) 50%,
+      hsl(var(--gold-light)) 75%,
+      hsl(var(--gold)) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s ease-in-out infinite;
+  }
+
+  /* Gold decorative frame */
+  .gold-frame {
+    position: relative;
+  }
+
+  .gold-frame::before {
+    content: '';
+    position: absolute;
+    inset: 1rem;
+    border: 1px solid hsl(var(--gold) / 0.3);
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .gold-frame::after {
+    content: '';
+    position: absolute;
+    inset: 1.5rem;
+    border: 1px solid hsl(var(--gold) / 0.15);
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  /* Gold corner accents */
+  .gold-corners {
+    position: relative;
+  }
+
+  .gold-corners::before,
+  .gold-corners::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid hsl(var(--gold) / 0.6);
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .gold-corners::before {
+    top: 2rem;
+    left: 2rem;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .gold-corners::after {
+    bottom: 2rem;
+    right: 2rem;
+    border-left: none;
+    border-top: none;
+  }
+
+  /* Shimmer accent line */
+  .shimmer-line {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--gold) / 0.4) 25%,
+      hsl(var(--gold-light)) 50%,
+      hsl(var(--gold) / 0.4) 75%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
 }
 
 @layer utilities {

@@ -20,7 +20,7 @@ const Hero = () => {
     <section
       ref={ref}
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero gold-frame gold-corners"
     >
       {/* Background Image with Parallax */}
       <motion.div
@@ -38,6 +38,10 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
       </motion.div>
 
+      {/* Additional corner accents - bottom left & top right */}
+      <div className="absolute top-8 right-8 w-16 h-16 border-t-2 border-r-2 border-primary/60 pointer-events-none z-20" />
+      <div className="absolute bottom-8 left-8 w-16 h-16 border-b-2 border-l-2 border-primary/60 pointer-events-none z-20" />
+
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 pt-24">
         <div className="max-w-3xl">
@@ -46,7 +50,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="inline-block text-primary text-sm tracking-[0.3em] uppercase mb-6 font-sans">
+            <span className="inline-block text-shimmer-gold text-sm tracking-[0.3em] uppercase mb-6 font-sans font-medium">
               Welcome to our Studio
             </span>
           </motion.div>
@@ -59,7 +63,7 @@ const Hero = () => {
           >
             Elevate Your
             <br />
-            <span className="italic text-primary">Natural Beauty</span>
+            <span className="italic text-shimmer-gold">Natural Beauty</span>
           </motion.h1>
 
           <motion.p
@@ -92,6 +96,14 @@ const Hero = () => {
         </div>
       </div>
 
+      {/* Decorative shimmer line */}
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 1.2, delay: 1 }}
+        className="absolute bottom-0 left-0 right-0 h-px shimmer-line"
+      />
+
       {/* Decorative Elements */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -101,7 +113,7 @@ const Hero = () => {
       >
         <div className="flex flex-col items-center gap-2 text-muted-foreground">
           <span className="text-xs tracking-[0.2em] uppercase">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-primary to-transparent" />
+          <div className="w-px h-12 shimmer-line" />
         </div>
       </motion.div>
     </section>

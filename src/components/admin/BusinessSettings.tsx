@@ -33,14 +33,14 @@ const BusinessSettings = () => {
   const { toast } = useToast();
   
   const [businessInfo, setBusinessInfo] = useState({
-    name: 'Glamour Studio',
+    name: 'HDA Studio',
     tagline: 'Professional Makeup Artistry',
-    email: 'hello@glamourstudio.com',
+    email: 'hello@hdastudio.com',
     phone: '+1 (555) 123-4567',
     address: '123 Beauty Lane, Suite 100',
-    city: 'Los Angeles, CA 90001',
-    website: 'https://glamourstudio.com',
-    instagram: '@glamourstudio',
+    city: 'Houston, TX 77001',
+    website: 'https://hdastudio.com',
+    instagram: '@hdastudio',
   });
 
   const [hours, setHours] = useState<BusinessHours[]>([

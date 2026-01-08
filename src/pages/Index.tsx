@@ -23,9 +23,9 @@ const Index = () => {
   return (
     <main className="min-h-screen">
       <SEOHead
-        title="Professional Makeup Artist Los Angeles | Luxury Glam Services"
-        description="Los Angeles' premier luxury makeup studio. Professional glam services from $90. Bridal, editorial & event makeup by expert artists. Transform your look today."
-        keywords="makeup artist Los Angeles, professional makeup artist LA, luxury makeup studio, bridal makeup artist Los Angeles, glam makeup services, event makeup LA, soft glam makeup, wedding makeup California, celebrity makeup artist, best makeup artist near me, makeup for photoshoot, red carpet makeup"
+        title="Professional Makeup Artist Houston TX | Luxury Glam Services"
+        description="Houston's premier luxury makeup studio. Professional glam services from $90. Bridal, editorial & event makeup by expert artists. Transform your look today."
+        keywords="makeup artist Houston, professional makeup artist Houston TX, luxury makeup studio, bridal makeup artist Houston, glam makeup services, event makeup Houston, soft glam makeup, wedding makeup Texas, best makeup artist near me, makeup for photoshoot, red carpet makeup"
         canonicalUrl="/"
         ogImage="/IMG_8915.JPG"
         pageType="website"

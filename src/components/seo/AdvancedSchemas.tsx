@@ -88,7 +88,7 @@ const AdvancedSchemas = () => {
       "name": region,
       "containedInPlace": {
         "@type": "State",
-        "name": "California"
+        "name": "Texas"
       }
     })),
     "foundingDate": BUSINESS_CONFIG.details.established.toString(),
@@ -207,7 +207,7 @@ const AdvancedSchemas = () => {
     "serviceType": "Makeup Artistry",
     "areaServed": {
       "@type": "State",
-      "name": "California",
+      "name": "Texas",
       "containedInPlace": {
         "@type": "Country",
         "name": "United States"

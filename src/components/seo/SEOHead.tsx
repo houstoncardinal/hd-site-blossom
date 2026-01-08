@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { BUSINESS_CONFIG } from '@/config/business';
 
 interface SEOHeadProps {
   title: string;
@@ -10,30 +11,39 @@ interface SEOHeadProps {
   twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
   noIndex?: boolean;
   structuredData?: object;
+  pageType?: 'website' | 'article' | 'service' | 'profile';
 }
 
 const SEOHead = ({
   title,
   description,
-  keywords = 'makeup artist, beauty services, glam makeup, professional makeup, bridal makeup, event makeup, luxury beauty, makeup studio',
+  keywords = 'makeup artist Los Angeles, professional makeup artist, luxury makeup studio, bridal makeup artist, glam makeup services, event makeup, soft glam makeup, wedding makeup Los Angeles, celebrity makeup artist, beauty studio',
   canonicalUrl,
   ogImage = '/IMG_8915.JPG',
   ogType = 'website',
   twitterCard = 'summary_large_image',
   noIndex = false,
   structuredData,
+  pageType = 'website',
 }: SEOHeadProps) => {
-  const fullTitle = `${title} | HDA Studio`;
-  const siteUrl = 'https://hdastudio.com';
+  const siteUrl = BUSINESS_CONFIG.website.url;
+  const fullTitle = title.length > 50 
+    ? title 
+    : `${title} | ${BUSINESS_CONFIG.name.full}`;
   const fullCanonicalUrl = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
   const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+  
+  // Enhanced description with call-to-action
+  const enhancedDescription = description.length < 140 
+    ? `${description} ⭐ ${BUSINESS_CONFIG.details.rating.value}/5 rating. Book your appointment today!`
+    : description;
 
   return (
     <Helmet>
-      {/* Primary Meta Tags */}
+      {/* Primary Meta Tags - Power optimized */}
       <title>{fullTitle}</title>
       <meta name="title" content={fullTitle} />
-      <meta name="description" content={description} />
+      <meta name="description" content={enhancedDescription} />
       <meta name="keywords" content={keywords} />
 
       {/* Canonical URL */}
@@ -46,38 +56,47 @@ const SEOHead = ({
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       )}
 
-      {/* Open Graph / Facebook */}
+      {/* Open Graph / Facebook - Enhanced for engagement */}
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={fullCanonicalUrl} />
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={enhancedDescription} />
       <meta property="og:image" content={fullOgImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="HDA Studio" />
+      <meta property="og:image:alt" content={`${BUSINESS_CONFIG.name.full} - Luxury Makeup Artistry`} />
+      <meta property="og:site_name" content={BUSINESS_CONFIG.name.full} />
       <meta property="og:locale" content="en_US" />
 
-      {/* Twitter */}
+      {/* Twitter - Optimized for shares */}
       <meta name="twitter:card" content={twitterCard} />
       <meta name="twitter:url" content={fullCanonicalUrl} />
       <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:description" content={enhancedDescription} />
       <meta name="twitter:image" content={fullOgImage} />
+      <meta name="twitter:image:alt" content={`${BUSINESS_CONFIG.name.full} - Professional Makeup Services`} />
       <meta name="twitter:creator" content="@hdastudio" />
       <meta name="twitter:site" content="@hdastudio" />
 
-      {/* Additional SEO Tags */}
-      <meta name="author" content="HDA Studio" />
-      <meta name="publisher" content="HDA Studio" />
+      {/* Additional Power SEO Tags */}
+      <meta name="author" content={BUSINESS_CONFIG.name.full} />
+      <meta name="publisher" content={BUSINESS_CONFIG.name.full} />
       <meta name="language" content="English" />
-      <meta name="revisit-after" content="7 days" />
+      <meta name="revisit-after" content="3 days" />
       <meta name="theme-color" content="#D4AF37" />
-
-      {/* Mobile Optimization */}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-      <meta name="format-detection" content="telephone=yes" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="rating" content="general" />
+      <meta name="distribution" content="global" />
+      <meta name="coverage" content="Worldwide" />
+      <meta name="target" content="all" />
+      <meta name="HandheldFriendly" content="True" />
+      
+      {/* Geographic targeting */}
+      <meta name="geo.region" content="US-CA" />
+      <meta name="geo.placename" content={BUSINESS_CONFIG.contact.address.city} />
+      
+      {/* Business specific */}
+      <meta name="classification" content="Beauty Services, Makeup Artist, Bridal Makeup" />
+      <meta name="category" content="Beauty & Personal Care" />
 
       {/* Structured Data */}
       {structuredData && (

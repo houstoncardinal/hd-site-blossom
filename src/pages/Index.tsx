@@ -15,7 +15,7 @@ import ContactButtons from '@/components/ContactButtons';
 import CookieConsent from '@/components/CookieConsent';
 import Analytics from '@/components/Analytics';
 import SEOHead from '@/components/seo/SEOHead';
-import OrganizationSchema from '@/components/seo/OrganizationSchema';
+import AdvancedSchemas from '@/components/seo/AdvancedSchemas';
 import VerticalGuidedNav from '@/components/VerticalGuidedNav';
 import InfoWidget from '@/components/InfoWidget';
 
@@ -23,13 +23,14 @@ const Index = () => {
   return (
     <main className="min-h-screen">
       <SEOHead
-        title="Luxury Makeup Artistry & Beauty Services"
-        description="Transform your look with expert makeup artists at HDA Studio. Professional glam services from natural soft glam ($90) to signature red carpet looks ($180). Book your appointment today."
-        keywords="luxury makeup artist, professional beauty services, glam makeup, bridal makeup, event makeup, soft glam, signature glam, makeup studio near me, professional makeup artist"
+        title="Professional Makeup Artist Los Angeles | Luxury Glam Services"
+        description="Los Angeles' premier luxury makeup studio. Professional glam services from $90. Bridal, editorial & event makeup by expert artists. Transform your look today."
+        keywords="makeup artist Los Angeles, professional makeup artist LA, luxury makeup studio, bridal makeup artist Los Angeles, glam makeup services, event makeup LA, soft glam makeup, wedding makeup California, celebrity makeup artist, best makeup artist near me, makeup for photoshoot, red carpet makeup"
         canonicalUrl="/"
         ogImage="/IMG_8915.JPG"
+        pageType="website"
       />
-      <OrganizationSchema />
+      <AdvancedSchemas />
       <Analytics />
       <ScrollProgress />
       <Navbar />

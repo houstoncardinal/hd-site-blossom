@@ -77,88 +77,102 @@ const Navbar = () => {
   };
 
   return (
-    <motion.header
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      style={{ backgroundColor }}
-      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${
-        scrolled ? 'border-border py-3' : 'border-border/50 py-4'
-      }`}
-    >
-      <nav className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="text-2xl md:text-3xl font-serif tracking-wider text-foreground">
-            HDA <span className="text-primary">Studio</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <div
-                key={link.name}
-                className="relative"
-                onMouseEnter={() => link.name === 'Services' && setMegamenuOpen(true)}
-                onMouseLeave={() => link.name === 'Services' && setMegamenuOpen(false)}
-              >
-                <Link
-                  to={link.href}
-                  className={`text-sm tracking-widest uppercase transition-colors duration-300 ${
-                    isActive(link.href) || (link.name === 'Services' && megamenuOpen)
-                      ? 'text-primary'
-                      : 'text-muted-foreground hover:text-primary'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              </div>
-            ))}
-          </div>
-
-          {/* Book Now Button */}
-          <div className="hidden md:block">
-            <Link to="/booking">
-              <Button variant="hero" size="lg">
-                Book Now
-              </Button>
+    <>
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        style={{ backgroundColor }}
+        className={`fixed top-0 left-0 right-0 z-[200] backdrop-blur-md border-b transition-all duration-300 ${
+          scrolled ? 'border-border py-3' : 'border-border/50 py-4'
+        }`}
+      >
+        <nav className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="text-2xl md:text-3xl font-serif tracking-wider text-foreground">
+              HDA <span className="text-primary">Studio</span>
             </Link>
-          </div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            onClick={() => setIsOpen(!isOpen)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="md:hidden text-foreground p-2 relative z-50"
-            aria-label="Toggle menu"
-          >
-            <AnimatePresence mode="wait">
-              {isOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <div
+                  key={link.name}
+                  className="relative"
+                  onMouseEnter={() => link.name === 'Services' && setMegamenuOpen(true)}
+                  onMouseLeave={() => link.name === 'Services' && setMegamenuOpen(false)}
                 >
-                  <X size={24} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu size={24} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+                  <Link
+                    to={link.href}
+                    className={`text-sm tracking-widest uppercase transition-colors duration-300 ${
+                      isActive(link.href) || (link.name === 'Services' && megamenuOpen)
+                        ? 'text-primary'
+                        : 'text-muted-foreground hover:text-primary'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+            {/* Book Now Button */}
+            <div className="hidden md:block">
+              <Link to="/booking">
+                <Button variant="hero" size="lg">
+                  Book Now
+                </Button>
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <motion.button
+              onClick={() => setIsOpen(!isOpen)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="md:hidden text-foreground p-2 relative z-[210]"
+              aria-label="Toggle menu"
+            >
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X size={24} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu size={24} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
+        </nav>
+
+        {/* Services Megamenu - Desktop Only */}
+        <div
+          className="hidden md:block"
+          onMouseEnter={() => setMegamenuOpen(true)}
+          onMouseLeave={() => setMegamenuOpen(false)}
+        >
+          <ServicesMegamenu
+            isOpen={megamenuOpen}
+            onClose={() => setMegamenuOpen(false)}
+          />
         </div>
-      </nav>
+      </motion.header>
 
       {/* Mobile Navigation - Full Screen Overlay */}
       <AnimatePresence>
@@ -169,7 +183,7 @@ const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-background/95 backdrop-blur-lg z-[60] md:hidden"
+              className="fixed inset-0 bg-background/95 backdrop-blur-lg z-[150] md:hidden"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -177,7 +191,7 @@ const Navbar = () => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-[70] md:hidden overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-[160] md:hidden overflow-y-auto"
             >
               <div className="flex flex-col gap-2 p-6 pt-24">
                 {navLinks.map((link, index) => (
@@ -207,19 +221,7 @@ const Navbar = () => {
           </>
         )}
       </AnimatePresence>
-
-      {/* Services Megamenu - Desktop Only */}
-      <div
-        className="hidden md:block"
-        onMouseEnter={() => setMegamenuOpen(true)}
-        onMouseLeave={() => setMegamenuOpen(false)}
-      >
-        <ServicesMegamenu
-          isOpen={megamenuOpen}
-          onClose={() => setMegamenuOpen(false)}
-        />
-      </div>
-    </motion.header>
+    </>
   );
 };
 

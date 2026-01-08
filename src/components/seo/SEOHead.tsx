@@ -91,9 +91,8 @@ const SEOHead = ({
       <meta name="HandheldFriendly" content="True" />
       
       {/* Geographic targeting */}
-      <meta name="geo.region" content="US-CA" />
+      <meta name="geo.region" content={`US-${BUSINESS_CONFIG.contact.address.state}`} />
       <meta name="geo.placename" content={BUSINESS_CONFIG.contact.address.city} />
-      
       {/* Business specific */}
       <meta name="classification" content="Beauty Services, Makeup Artist, Bridal Makeup" />
       <meta name="category" content="Beauty & Personal Care" />

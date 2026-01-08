@@ -33,32 +33,35 @@ export const BUSINESS_CONFIG = {
       bookings: 'Hdastudio143@gmail.com',
     },
 
-    // 🚨 REPLACE WITH REAL ADDRESS
+    // Service area-based location (no public street address)
     address: {
-      street: '123 Beauty Lane',
-      suite: 'Suite 100', // Optional
+      // Keep basic locality fields for consistency + structured data
+      street: 'Houston, TX',
+      suite: '', // Optional
       city: 'Houston',
       state: 'TX',
       stateFullName: 'Texas',
-      zip: '77001',
+      zip: '',
       country: 'United States',
       countryCode: 'US',
 
+      // Display copy
+      serviceArea: 'Houston, TX & surrounding areas',
+      vipTravel: 'VIP travel available',
+
       // Full formatted address for display
       get full() {
-        return this.suite
-          ? `${this.street}, ${this.suite}, ${this.city}, ${this.state} ${this.zip}`
-          : `${this.street}, ${this.city}, ${this.state} ${this.zip}`;
+        return `${this.serviceArea}. ${this.vipTravel}.`;
       },
 
       // One-line format
       get oneLine() {
-        return `${this.street}, ${this.city}, ${this.state} ${this.zip}`;
+        return `${this.serviceArea} • ${this.vipTravel}`;
       },
 
-      // Google Maps link
+      // Google Maps link (centered on service area)
       get mapLink() {
-        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(this.full)}`;
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(this.serviceArea)}`;
       },
     },
 
@@ -73,15 +76,15 @@ export const BUSINESS_CONFIG = {
   // BUSINESS HOURS
   // ========================================
   hours: {
-    // 🚨 UPDATE WITH REAL OPERATING HOURS
+    // On-call / by appointment
     regular: {
-      monday: { open: '09:00', close: '19:00', isOpen: true },
-      tuesday: { open: '09:00', close: '19:00', isOpen: true },
-      wednesday: { open: '09:00', close: '19:00', isOpen: true },
-      thursday: { open: '09:00', close: '19:00', isOpen: true },
-      friday: { open: '09:00', close: '19:00', isOpen: true },
-      saturday: { open: '10:00', close: '18:00', isOpen: true },
-      sunday: { open: null, close: null, isOpen: false },
+      monday: { open: '00:00', close: '23:59', isOpen: true },
+      tuesday: { open: '00:00', close: '23:59', isOpen: true },
+      wednesday: { open: '00:00', close: '23:59', isOpen: true },
+      thursday: { open: '00:00', close: '23:59', isOpen: true },
+      friday: { open: '00:00', close: '23:59', isOpen: true },
+      saturday: { open: '00:00', close: '23:59', isOpen: true },
+      sunday: { open: '00:00', close: '23:59', isOpen: true },
     },
 
     // Schema.org format for structured data
@@ -89,15 +92,17 @@ export const BUSINESS_CONFIG = {
       return [
         {
           '@type': 'OpeningHoursSpecification',
-          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-          opens: '09:00',
-          closes: '19:00',
-        },
-        {
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: 'Saturday',
-          opens: '10:00',
-          closes: '18:00',
+          dayOfWeek: [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+          ],
+          opens: '00:00',
+          closes: '23:59',
         },
       ];
     },
@@ -105,9 +110,9 @@ export const BUSINESS_CONFIG = {
     // Human-readable format
     get display() {
       return {
-        weekdays: 'Monday - Friday: 9:00 AM - 7:00 PM',
-        saturday: 'Saturday: 10:00 AM - 6:00 PM',
-        sunday: 'Sunday: Closed',
+        weekdays: 'On-call (by appointment)',
+        saturday: 'On-call (by appointment)',
+        sunday: 'On-call (by appointment)',
       };
     },
   },

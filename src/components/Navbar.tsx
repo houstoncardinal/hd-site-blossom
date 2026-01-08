@@ -83,7 +83,7 @@ const Navbar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
         style={{ backgroundColor }}
-        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-[200] backdrop-blur-md border-b transition-all duration-300 ${
           scrolled ? 'border-border py-3' : 'border-border/50 py-4'
         }`}
       >
@@ -131,7 +131,7 @@ const Navbar = () => {
               onClick={() => setIsOpen(!isOpen)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="md:hidden text-foreground p-2 relative z-[200]"
+              className="md:hidden text-foreground p-2 relative z-[210]"
               aria-label="Toggle menu"
             >
               <AnimatePresence mode="wait">
@@ -183,7 +183,7 @@ const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-background/98 backdrop-blur-xl z-[150] md:hidden"
+              className="fixed inset-0 bg-background/95 backdrop-blur-lg z-[150] md:hidden"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -191,7 +191,7 @@ const Navbar = () => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card shadow-2xl border-l-2 border-primary/30 z-[160] md:hidden overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-[160] md:hidden overflow-y-auto"
             >
               <div className="flex flex-col gap-2 p-6 pt-24">
                 {navLinks.map((link, index) => (

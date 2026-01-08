@@ -39,10 +39,10 @@ export const BUSINESS_CONFIG = {
     address: {
       street: '123 Beauty Lane',
       suite: 'Suite 100', // Optional
-      city: 'Los Angeles',
-      state: 'CA',
-      stateFullName: 'California',
-      zip: '90210',
+      city: 'Houston',
+      state: 'TX',
+      stateFullName: 'Texas',
+      zip: '77001',
       country: 'United States',
       countryCode: 'US',
 
@@ -66,8 +66,8 @@ export const BUSINESS_CONFIG = {
 
     // 🚨 REPLACE WITH REAL COORDINATES (Get from Google Maps)
     geo: {
-      latitude: 34.0522, // Los Angeles example
-      longitude: -118.2437,
+      latitude: 29.7604, // Houston, TX
+      longitude: -95.3698,
     },
   },
 
@@ -179,9 +179,9 @@ export const BUSINESS_CONFIG = {
 
     // Service area (for local SEO)
     serviceArea: {
-      primary: 'Los Angeles, CA',
+      primary: 'Houston, TX',
       radius: 25, // Miles
-      regions: ['Los Angeles', 'Beverly Hills', 'Santa Monica', 'West Hollywood'],
+      regions: ['Houston', 'The Woodlands', 'Sugar Land', 'Katy', 'Pearland'],
     },
 
     // Ratings (update with real data)

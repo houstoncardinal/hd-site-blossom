@@ -17,7 +17,7 @@ interface SEOHeadProps {
 const SEOHead = ({
   title,
   description,
-  keywords = 'makeup artist Los Angeles, professional makeup artist, luxury makeup studio, bridal makeup artist, glam makeup services, event makeup, soft glam makeup, wedding makeup Los Angeles, celebrity makeup artist, beauty studio',
+  keywords = 'makeup artist Houston, professional makeup artist Houston TX, luxury makeup studio, bridal makeup artist Houston, glam makeup services, event makeup, soft glam makeup, wedding makeup Houston, Texas makeup artist, beauty studio',
   canonicalUrl,
   ogImage = '/IMG_8915.JPG',
   ogType = 'website',

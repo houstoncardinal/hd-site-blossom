@@ -91,27 +91,18 @@ const Team = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group"
                 >
-                  {/* Image */}
-                  <div className="aspect-[3/4] overflow-hidden mb-6 relative">
-                    <img
-                      src={member.image_url || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400'}
-                      alt={member.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    {/* Instagram Link */}
-                    {member.instagram_handle && (
-                      <a
-                        href={`https://instagram.com/${member.instagram_handle.replace('@', '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="absolute bottom-4 right-4 w-10 h-10 bg-primary/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary"
-                      >
-                        <Instagram size={18} className="text-primary-foreground" />
-                      </a>
-                    )}
-                  </div>
+                  {/* Instagram Link */}
+                  {member.instagram_handle && (
+                    <a
+                      href={`https://instagram.com/${member.instagram_handle.replace('@', '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-4"
+                    >
+                      <Instagram size={16} />
+                      <span className="text-sm">{member.instagram_handle}</span>
+                    </a>
+                  )}
 
                   {/* Info */}
                   <div className="space-y-4">

@@ -2,38 +2,10 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import BeforeAfterSlider from '@/components/BeforeAfterSlider';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import ImageLightbox from '@/components/ImageLightbox';
 import { Filter } from 'lucide-react';
-
-// Real transformations using actual photos from the collection
-const transformations = [
-  {
-    before: '/IMG_8863.JPG', // Behind the scenes - shows natural starting point
-    after: '/IMG_8916.JPG', // Blue evening gown - polished result
-    title: 'Evening Glam Transformation',
-    description: 'From natural beauty to stunning evening elegance',
-    service: 'Standard Glam',
-    category: 'Evening Glam',
-  },
-  {
-    before: '/IMG_8865.JPG', // Behind the scenes makeup application
-    after: '/IMG_8912.JPG', // Black sequined dramatic look
-    title: 'Dramatic Glam Transformation',
-    description: 'Bold transformation with full contour and drama',
-    service: 'Signature Glam',
-    category: 'Editorial',
-  },
-  {
-    before: '/IMG_8869.JPG', // Client with makeup artist
-    after: '/115A82F7-E04C-4A13-B50A-B919D9C20240.JPG', // Blue and gold evening look
-    title: 'Bridal Party Glam',
-    description: 'Sophisticated bridal party perfection',
-    service: 'Soft Glam',
-    category: 'Bridal',
-  },
-];
 
 const galleryImages = [
   { src: '/IMG_8915.JPG', category: 'Editorial' },
@@ -61,53 +33,51 @@ const galleryImages = [
   { src: '/IMG_8918.JPG', category: 'Editorial' },
   { src: '/IMG_8919.JPG', category: 'Evening Glam' },
   { src: '/IMG_8949.JPG', category: 'Editorial' },
-  { src: '/IMG_8950.JPG', category: 'Evening Glam' },
-  { src: '/IMG_8951.JPG', category: 'Bridal' },
-  { src: '/IMG_8952.JPG', category: 'Editorial' },
-  { src: '/IMG_8953.JPG', category: 'Evening Glam' },
-  { src: '/IMG_8954.JPG', category: 'Editorial' },
-  { src: '/IMG_8956.JPG', category: 'Evening Glam' },
-  { src: '/IMG_8957.JPG', category: 'Editorial' },
-  { src: '/IMG_8958.JPG', category: 'Evening Glam' },
-  { src: '/IMG_8959.JPG', category: 'Editorial' },
-  { src: '/IMG_8963.JPG', category: 'Evening Glam' },
-  { src: '/IMG_8964.JPG', category: 'Editorial' },
-  { src: '/IMG_8965.JPG', category: 'Evening Glam' },
-  { src: '/IMG_8966.JPG', category: 'Editorial' },
-  { src: '/IMG_8968.JPG', category: 'Evening Glam' },
-  { src: '/IMG_9166.jpg', category: 'Editorial' },
+  { src: '/IMG_8950.JPG', category: 'Editorial' },
+  { src: '/IMG_8951.JPG', category: 'Evening Glam' },
+  { src: '/IMG_8952.JPG', category: 'Special Event' },
+  { src: '/IMG_8953.JPG', category: 'Editorial' },
+  { src: '/IMG_8954.JPG', category: 'Evening Glam' },
+  { src: '/IMG_8956.JPG', category: 'Editorial' },
+  { src: '/IMG_8957.JPG', category: 'Evening Glam' },
+  { src: '/IMG_8958.JPG', category: 'Editorial' },
+  { src: '/IMG_8959.JPG', category: 'Evening Glam' },
+  { src: '/IMG_8963.JPG', category: 'Editorial' },
+  { src: '/IMG_8964.JPG', category: 'Evening Glam' },
+  { src: '/IMG_8965.JPG', category: 'Editorial' },
+  { src: '/IMG_8966.JPG', category: 'Special Event' },
+  { src: '/IMG_8968.JPG', category: 'Editorial' },
+  { src: '/IMG_9166.jpg', category: 'Evening Glam' },
   { src: '/IMG_9167.jpg', category: 'Evening Glam' },
-  { src: '/image0.jpeg', category: 'Evening Glam' },
-  { src: '/image1.jpeg', category: 'Editorial' },
-  { src: '/image2.jpeg', category: 'Bridal' },
-  { src: '/image3.jpeg', category: 'Editorial' },
-  { src: '/image4.jpeg', category: 'Special Event' },
+  { src: '/image0.jpeg', category: 'Editorial' },
+  { src: '/image1.jpeg', category: 'Evening Glam' },
+  { src: '/image2.jpeg', category: 'Editorial' },
+  { src: '/image3.jpeg', category: 'Evening Glam' },
+  { src: '/image4.jpeg', category: 'Editorial' },
   { src: '/image6.jpeg', category: 'Evening Glam' },
   { src: '/image7.jpeg', category: 'Editorial' },
-  { src: '/image8.jpeg', category: 'Evening Glam' },
-  { src: '/image9.jpeg', category: 'Editorial' },
-  { src: '/image10.jpeg', category: 'Bridal' },
-  { src: '/image11.jpeg', category: 'Special Event' },
-  { src: '/image12.jpeg', category: 'Evening Glam' },
-  { src: '/image12 (1).jpeg', category: 'Evening Glam' },
-  { src: '/image13.jpeg', category: 'Editorial' },
-  { src: '/image14.jpeg', category: 'Evening Glam' },
-  { src: '/image15.jpeg', category: 'Bridal' },
+  { src: '/image8.jpeg', category: 'Special Event' },
+  { src: '/image9.jpeg', category: 'Evening Glam' },
+  { src: '/image10.jpeg', category: 'Editorial' },
+  { src: '/image11.jpeg', category: 'Evening Glam' },
+  { src: '/image12.jpeg', category: 'Editorial' },
+  { src: '/image13.jpeg', category: 'Evening Glam' },
+  { src: '/image14.jpeg', category: 'Editorial' },
+  { src: '/image15.jpeg', category: 'Evening Glam' },
   { src: '/image16.jpeg', category: 'Editorial' },
-  { src: '/image16 (1).jpeg', category: 'Editorial' },
   { src: '/image17.jpeg', category: 'Evening Glam' },
-  { src: '/image17 (1).jpeg', category: 'Evening Glam' },
-  { src: '/image18.jpeg', category: 'Special Event' },
-  { src: '/image19.jpeg', category: 'Editorial' },
-  { src: '/image19 (1).jpeg', category: 'Editorial' },
+  { src: '/image18.jpeg', category: 'Editorial' },
+  { src: '/image19.jpeg', category: 'Special Event' },
   { src: '/image20.jpeg', category: 'Evening Glam' },
-  { src: '/image21.jpeg', category: 'Bridal' },
-  { src: '/image22.jpeg', category: 'Editorial' },
-  { src: '/image23.jpeg', category: 'Evening Glam' },
+  { src: '/image21.jpeg', category: 'Editorial' },
+  { src: '/image22.jpeg', category: 'Evening Glam' },
+  { src: '/image23.jpeg', category: 'Editorial' },
 ];
 
 const TransformationsGallery = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const categories = ['All', 'Editorial', 'Evening Glam', 'Bridal', 'Behind the Scenes', 'Special Event'];
 
@@ -115,12 +85,17 @@ const TransformationsGallery = () => {
     ? galleryImages
     : galleryImages.filter(img => img.category === selectedCategory);
 
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   return (
     <main className="min-h-screen bg-background">
       <SEOHead
-        title="Makeup Gallery - Before & After Transformations | HDA Studio"
-        description="Explore HDA Studio's portfolio of stunning makeup transformations. View before and after photos of our editorial, bridal, and evening glam work. Professional makeup artistry showcased with real client results."
-        keywords="makeup gallery, before after makeup, makeup transformation, beauty portfolio, editorial makeup, bridal makeup, evening glam, makeup artist portfolio, professional makeup results, glam transformation, beauty before after"
+        title="Makeup Gallery | HDA Studio"
+        description="Explore HDA Studio's portfolio of stunning makeup artistry. View our editorial, bridal, and evening glam work. Professional makeup showcased with real client results."
+        keywords="makeup gallery, beauty portfolio, editorial makeup, bridal makeup, evening glam, makeup artist portfolio, professional makeup, glam makeup, beauty"
         canonicalUrl="/gallery"
         ogImage="/IMG_8915.JPG"
       />
@@ -141,81 +116,18 @@ const TransformationsGallery = () => {
               Our Portfolio
             </span>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-light mb-6">
-              Transformations <span className="italic">Gallery</span>
+              <span className="italic">Gallery</span>
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Witness the artistry of makeup transformation. Drag the slider to see 
-              the before and after of our stunning work.
+              Browse our collection of stunning makeup artistry and transformations.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Before/After Section */}
+      {/* Gallery Grid */}
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <span className="text-primary text-sm tracking-[0.3em] uppercase mb-4 block font-sans">
-              Interactive
-            </span>
-            <h2 className="text-4xl md:text-5xl font-serif font-light">
-              Before & <span className="italic">After</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-            {transformations.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                className="group"
-              >
-                <BeforeAfterSlider
-                  beforeImage={item.before}
-                  afterImage={item.after}
-                />
-                <div className="mt-4">
-                  <span className="text-primary text-xs tracking-widest uppercase">
-                    {item.service}
-                  </span>
-                  <h3 className="text-xl font-serif mt-1">{item.title}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {item.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Grid */}
-      <section className="py-20 bg-charcoal-light">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <span className="text-primary text-sm tracking-[0.3em] uppercase mb-4 block font-sans">
-              Portfolio
-            </span>
-            <h2 className="text-4xl md:text-5xl font-serif font-light">
-              Our <span className="italic">Work</span>
-            </h2>
-          </motion.div>
-
           {/* Category Filter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -245,23 +157,22 @@ const TransformationsGallery = () => {
             ))}
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredImages.map((image, index) => (
               <motion.div
-                key={index}
+                key={image.src}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
                 className="relative aspect-square overflow-hidden group cursor-pointer"
+                onClick={() => openLightbox(index)}
               >
                 <img
                   src={image.src}
-                  alt={image.category}
+                  alt={`${image.category} makeup look`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  loading={index < 12 ? "eager" : "lazy"}
-                  decoding={index < 12 ? "sync" : "async"}
-                  fetchPriority={index < 6 ? "high" : "auto"}
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-background/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                   <span className="text-sm tracking-widest uppercase">
@@ -273,6 +184,16 @@ const TransformationsGallery = () => {
           </div>
         </div>
       </section>
+
+      {/* Lightbox */}
+      <ImageLightbox
+        images={filteredImages.map(img => ({ src: img.src, alt: `${img.category} makeup look` }))}
+        currentIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onPrevious={() => setLightboxIndex((prev) => (prev > 0 ? prev - 1 : filteredImages.length - 1))}
+        onNext={() => setLightboxIndex((prev) => (prev < filteredImages.length - 1 ? prev + 1 : 0))}
+      />
 
       <Footer />
     </main>

@@ -161,7 +161,7 @@ export const HAIR_SERVICES: ServiceConfig[] = [
     remainingBalance: 37.50,
     duration: '45 min',
     image: '/IMG_8949.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQNeEmDDtU2eufw1aFZFG9',
     category: 'hair',
     includes: [
       'Hair consultation',
@@ -182,7 +182,7 @@ export const HAIR_SERVICES: ServiceConfig[] = [
     remainingBalance: 60,
     duration: '60 min',
     image: '/IMG_8950.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQNrEmDDtU2eufE8slJIan',
     category: 'hair',
     popular: true,
     includes: [
@@ -204,7 +204,7 @@ export const HAIR_SERVICES: ServiceConfig[] = [
     remainingBalance: 47.50,
     duration: '50 min',
     image: '/IMG_8951.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQOXEmDDtU2eufi5AlsH5c',
     category: 'hair',
     includes: [
       'Style consultation',
@@ -224,7 +224,7 @@ export const HAIR_SERVICES: ServiceConfig[] = [
     remainingBalance: 55,
     duration: '60 min',
     image: '/IMG_8952.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQSKEmDDtU2eufEoosl2Pp',
     category: 'hair',
     includes: [
       'Braid style consultation',
@@ -245,7 +245,7 @@ export const HAIR_SERVICES: ServiceConfig[] = [
     remainingBalance: 65,
     duration: '70 min',
     image: '/IMG_8953.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQeIEmDDtU2eufutgoWyau',
     category: 'hair',
     includes: [
       'Hair preparation & heat protection',
@@ -271,7 +271,7 @@ export const COMBO_PACKAGES: ServiceConfig[] = [
     remainingBalance: 80,
     duration: '90 min',
     image: '/IMG_8954.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQglEmDDtU2eufo8gsFqZs',
     category: 'combo',
     includes: [
       'Basic Soft Glam makeup application',
@@ -291,7 +291,7 @@ export const COMBO_PACKAGES: ServiceConfig[] = [
     remainingBalance: 122.50,
     duration: '2 hours 15 min',
     image: '/IMG_8955.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQoHEmDDtU2eufW6YbCIAM',
     category: 'combo',
     popular: true,
     includes: [
@@ -312,7 +312,7 @@ export const COMBO_PACKAGES: ServiceConfig[] = [
     remainingBalance: 140,
     duration: '2 hours 40 min',
     image: '/IMG_8956.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQqaEmDDtU2eufz8x8UrqQ',
     category: 'combo',
     includes: [
       'Signature Glam makeup artistry',
@@ -360,7 +360,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 75,
     duration: '90 min',
     image: '/IMG_8957.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQqwEmDDtU2eufnce6rtbW',
     category: 'bridal',
     eventTypes: ['wedding'],
     includes: [
@@ -402,7 +402,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 87.50,
     duration: '75 min',
     image: '/IMG_8958.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQrDEmDDtU2eufVOqngoOF',
     category: 'bridal',
     eventTypes: ['wedding'],
     includes: [
@@ -423,7 +423,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 240,
     duration: 'Multiple sessions',
     image: '/IMG_8959.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnQrVEmDDtU2eufgWgMRdus',
     category: 'bridal',
     popular: true,
     eventTypes: ['wedding'],
@@ -447,7 +447,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 112.50,
     duration: '2 hours',
     image: '/IMG_8960.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnRDoEmDDtU2eufV5iUI5q2',
     category: 'event',
     eventTypes: ['quinceanera'],
     includes: [
@@ -469,7 +469,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 42.50,
     duration: '45 min',
     image: '/IMG_8963.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnREeEmDDtU2eufnSuZPcs9',
     category: 'event',
     eventTypes: ['quinceanera'],
     includes: [
@@ -489,7 +489,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 87.50,
     duration: '90 min',
     image: '/IMG_8964.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnRFCEmDDtU2eufzumKTlj4',
     category: 'event',
     eventTypes: ['prom', 'homecoming'],
     includes: [
@@ -510,7 +510,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 55,
     duration: '60 min',
     image: '/IMG_8965.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnRFvEmDDtU2eufQVrZe6be',
     category: 'event',
     eventTypes: ['senior portraits', 'photoshoot'],
     includes: [
@@ -530,7 +530,7 @@ export const EVENT_PACKAGES: ServiceConfig[] = [
     remainingBalance: 62.50,
     duration: '60 min',
     image: '/IMG_8966.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnRKlEmDDtU2eufeLomTOHn',
     category: 'event',
     eventTypes: ['maternity', 'photoshoot'],
     includes: [
@@ -599,7 +599,7 @@ export const BUNDLES: ServiceConfig[] = [
     remainingBalance: 180,
     duration: '3 hours',
     image: '/IMG_8968.JPG',
-    stripePriceId: '', // To be created
+    stripePriceId: 'price_1SnRLLEmDDtU2eufgKLBwN7h',
     category: 'bundle',
     includes: [
       '4 Soft Glam makeup applications',

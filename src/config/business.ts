@@ -21,18 +21,16 @@ export const BUSINESS_CONFIG = {
   // CONTACT INFORMATION
   // ========================================
   contact: {
-    // 🚨 REPLACE WITH REAL PHONE NUMBER
     phone: {
-      display: '(555) 123-4567', // Format for display: (555) 123-4567
-      raw: '+15551234567', // E.164 format for tel: links and Schema
-      whatsapp: '15551234567', // WhatsApp format (no + or spaces)
+      display: '(832) 907-0199',
+      raw: '+18329070199', // E.164 format for tel: links and Schema
+      whatsapp: '18329070199', // WhatsApp format (no + or spaces)
     },
 
-    // 🚨 REPLACE WITH REAL EMAIL
     email: {
-      primary: 'hello@hdastudio.com',
-      info: 'info@hdastudio.com',
-      bookings: 'bookings@hdastudio.com',
+      primary: 'Hdastudio143@gmail.com',
+      info: 'Hdastudio143@gmail.com',
+      bookings: 'Hdastudio143@gmail.com',
     },
 
     // 🚨 REPLACE WITH REAL ADDRESS

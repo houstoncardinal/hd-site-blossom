@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Services from "./pages/Services";
 import TransformationsGallery from "./pages/TransformationsGallery";
 import Booking from "./pages/Booking";
+import BookingSuccess from "./pages/BookingSuccess";
 import Team from "./pages/Team";
 import Reviews from "./pages/Reviews";
 import FAQ from "./pages/FAQ";
@@ -16,6 +17,7 @@ import TermsOfService from "./pages/TermsOfService";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -26,11 +28,13 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />
             <Route path="/gallery" element={<TransformationsGallery />} />
             <Route path="/booking" element={<Booking />} />
+            <Route path="/booking-success" element={<BookingSuccess />} />
             <Route path="/team" element={<Team />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/faq" element={<FAQ />} />

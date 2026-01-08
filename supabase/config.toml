@@ -1,1 +1,7 @@
 project_id = "rkvzzzgyoulifccnfcpv"
+
+[functions.send-booking-confirmation]
+verify_jwt = false
+
+[functions.create-deposit-checkout]
+verify_jwt = false

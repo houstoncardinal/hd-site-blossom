@@ -1,21 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { format, addDays, startOfWeek, isSameDay, addWeeks, subWeeks } from 'date-fns';
-import { ChevronLeft, ChevronRight, Clock, Check, CalendarDays } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, Check, CalendarDays, CreditCard, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { useBookAppointment } from '@/hooks/useBookAppointment';
+import { useDepositCheckout } from '@/hooks/useDepositCheckout';
+import { useSearchParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
-
-const services = [
-  { id: 'basic-soft-glam', name: 'Basic Soft Glam', price: 100, originalPrice: 125, duration: '45 min', image: '/IMG_8863.JPG' },
-  { id: 'soft-glam', name: 'Soft Glam', price: 125, originalPrice: 150, duration: '60 min', image: '/IMG_8865.JPG' },
-  { id: 'full-glam', name: 'Full Glam', price: 150, originalPrice: 175, duration: '75 min', image: '/IMG_8916.JPG' },
-  { id: 'signature-glam', name: 'Signature Glam', price: 180, originalPrice: 205, duration: '90 min', image: '/IMG_8912.JPG' },
-];
+import { SERVICES, ServiceConfig, formatCurrency } from '@/config/services';
 
 const timeSlots = [
   '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
@@ -24,9 +19,10 @@ const timeSlots = [
 
 const Booking = () => {
   const { toast } = useToast();
-  const bookAppointment = useBookAppointment();
+  const [searchParams] = useSearchParams();
+  const { initiateCheckout, isLoading: isCheckoutLoading } = useDepositCheckout();
   const [step, setStep] = useState(1);
-  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<ServiceConfig | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
@@ -37,6 +33,17 @@ const Booking = () => {
     notes: '',
   });
 
+  // Check for canceled booking
+  useEffect(() => {
+    if (searchParams.get('canceled') === 'true') {
+      toast({
+        title: "Payment Canceled",
+        description: "Your booking was not completed. Feel free to try again when you're ready.",
+        variant: "destructive",
+      });
+    }
+  }, [searchParams, toast]);
+
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const today = new Date();
 
@@ -46,8 +53,8 @@ const Booking = () => {
     return date < now;
   };
 
-  const handleServiceSelect = (serviceId: string) => {
-    setSelectedService(serviceId);
+  const handleServiceSelect = (service: ServiceConfig) => {
+    setSelectedService(service);
     setStep(2);
   };
 
@@ -68,43 +75,37 @@ const Booking = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const selectedServiceData = services.find(s => s.id === selectedService);
-    if (!selectedServiceData || !selectedDate || !selectedTime) return;
+    if (!selectedService || !selectedDate || !selectedTime) return;
 
-    try {
-      await bookAppointment.mutateAsync({
-        clientName: formData.name,
-        clientEmail: formData.email,
-        clientPhone: formData.phone,
-        serviceName: selectedServiceData.name,
-        servicePrice: selectedServiceData.price,
-        appointmentDate: format(selectedDate, 'yyyy-MM-dd'),
-        appointmentTime: selectedTime,
-        notes: formData.notes || undefined,
-      });
+    const result = await initiateCheckout({
+      service: selectedService,
+      customerEmail: formData.email,
+      customerName: formData.name,
+      customerPhone: formData.phone || undefined,
+      appointmentDate: format(selectedDate, 'yyyy-MM-dd'),
+      appointmentTime: selectedTime,
+      notes: formData.notes || undefined,
+    });
 
+    if (result.success) {
       toast({
-        title: "Booking Confirmed!",
-        description: `Your appointment has been scheduled. A confirmation email has been sent to ${formData.email}.`,
+        title: "Redirecting to Payment",
+        description: "A new tab has opened for secure payment. Complete the deposit to confirm your booking.",
       });
-
-      setStep(4);
-    } catch (error) {
+    } else {
       toast({
-        title: "Booking Failed",
-        description: "There was an error processing your booking. Please try again.",
+        title: "Payment Error",
+        description: result.error || "There was an error processing your payment. Please try again.",
         variant: "destructive",
       });
     }
   };
 
-  const selectedServiceData = services.find(s => s.id === selectedService);
-
   return (
     <main className="min-h-screen bg-background">
       <SEOHead
         title="Book Appointment - Schedule Your Glam Session"
-        description="Book your luxury makeup appointment at HDA Studio. Choose from Basic Soft Glam ($90), Soft Glam ($108), Standard Glam ($144), or Signature Glam ($180). Easy online booking with instant confirmation."
+        description="Book your luxury makeup appointment at HDA Studio. 50% deposit required to secure your booking, remaining balance due in person. Easy online booking with instant confirmation."
         keywords="book makeup appointment, schedule beauty service, makeup booking, glam session, beauty appointment, HDA Studio booking, makeup artist appointment"
         canonicalUrl="/booking"
         ogImage="/IMG_8915.JPG"
@@ -128,6 +129,9 @@ const Booking = () => {
             <h1 className="text-4xl md:text-6xl font-serif font-light mb-6">
               Schedule Your <span className="italic">Appointment</span>
             </h1>
+            <p className="text-muted-foreground">
+              Secure your spot with a 50% deposit. Remaining balance due in person.
+            </p>
           </motion.div>
         </div>
       </section>
@@ -136,7 +140,7 @@ const Booking = () => {
       <section className="py-8 border-b border-border">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-center gap-4 md:gap-8">
-            {['Select Service', 'Choose Date & Time', 'Your Details', 'Confirmation'].map((label, index) => (
+            {['Select Service', 'Choose Date & Time', 'Pay Deposit'].map((label, index) => (
               <div key={label} className="flex items-center gap-2">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
@@ -152,7 +156,7 @@ const Booking = () => {
                 <span className={`hidden md:block text-sm ${step === index + 1 ? 'text-foreground' : 'text-muted-foreground'}`}>
                   {label}
                 </span>
-                {index < 3 && <div className="w-8 md:w-16 h-px bg-border" />}
+                {index < 2 && <div className="w-8 md:w-16 h-px bg-border" />}
               </div>
             ))}
           </div>
@@ -173,12 +177,12 @@ const Booking = () => {
                 Select a Service
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                {services.map((service) => (
+                {SERVICES.map((service) => (
                   <button
                     key={service.id}
-                    onClick={() => handleServiceSelect(service.id)}
+                    onClick={() => handleServiceSelect(service)}
                     className={`group text-left bg-card border transition-all duration-300 hover:border-primary/50 ${
-                      selectedService === service.id ? 'border-primary' : 'border-border'
+                      selectedService?.id === service.id ? 'border-primary' : 'border-border'
                     }`}
                   >
                     <div className="aspect-square overflow-hidden">
@@ -190,16 +194,22 @@ const Booking = () => {
                     </div>
                     <div className="p-4">
                       <h3 className="font-serif text-lg mb-1">{service.name}</h3>
-                      <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center justify-between text-sm mb-2">
                         <div>
-                          <span className="text-muted-foreground line-through text-xs mr-1">${service.originalPrice}</span>
-                          <span className="text-primary">${service.price}</span>
-                          <span className="text-green-500 text-xs ml-1">Save $25</span>
+                          <span className="text-muted-foreground line-through text-xs mr-1">
+                            {formatCurrency(service.originalPrice)}
+                          </span>
+                          <span className="text-primary">{formatCurrency(service.price)}</span>
                         </div>
                         <span className="text-muted-foreground flex items-center gap-1">
                           <Clock size={12} />
                           {service.duration}
                         </span>
+                      </div>
+                      {/* Deposit Info */}
+                      <div className="bg-primary/10 rounded px-2 py-1 text-xs text-primary">
+                        <CreditCard size={10} className="inline mr-1" />
+                        {formatCurrency(service.deposit)} deposit
                       </div>
                     </div>
                   </button>
@@ -225,9 +235,9 @@ const Booking = () => {
                 </button>
                 <div className="text-center">
                   <h2 className="text-2xl md:text-3xl font-serif">Choose Date & Time</h2>
-                  {selectedServiceData && (
+                  {selectedService && (
                     <p className="text-muted-foreground text-sm mt-1">
-                      {selectedServiceData.name} - ${selectedServiceData.price}
+                      {selectedService.name} - {formatCurrency(selectedService.price)}
                     </p>
                   )}
                 </div>
@@ -323,7 +333,7 @@ const Booking = () => {
             </motion.div>
           )}
 
-          {/* Step 3: Contact Details */}
+          {/* Step 3: Contact Details & Payment */}
           {step === 3 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -339,21 +349,55 @@ const Booking = () => {
               </button>
 
               <div className="bg-card border border-border p-8">
-                <h2 className="text-2xl font-serif mb-2">Your Details</h2>
+                <h2 className="text-2xl font-serif mb-2">Complete Your Booking</h2>
                 <p className="text-muted-foreground text-sm mb-8">
-                  Almost there! Please provide your contact information.
+                  Enter your details and pay your deposit to confirm.
                 </p>
 
                 {/* Booking Summary */}
-                <div className="bg-muted p-4 mb-8">
+                <div className="bg-muted p-4 mb-6">
                   <h4 className="text-sm tracking-widest uppercase text-muted-foreground mb-2">
                     Booking Summary
                   </h4>
-                  <p className="font-serif text-lg">{selectedServiceData?.name}</p>
+                  <p className="font-serif text-lg">{selectedService?.name}</p>
                   <p className="text-sm text-muted-foreground">
                     {selectedDate && format(selectedDate, 'EEEE, MMMM d, yyyy')} at {selectedTime}
                   </p>
-                  <p className="text-primary mt-2">${selectedServiceData?.price}</p>
+                </div>
+
+                {/* Payment Breakdown */}
+                <div className="bg-primary/5 border border-primary/20 p-4 mb-8 rounded">
+                  <div className="flex items-center gap-2 mb-3">
+                    <CreditCard size={18} className="text-primary" />
+                    <h4 className="font-medium">Payment Breakdown</h4>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Service Total</span>
+                      <span>{formatCurrency(selectedService?.price || 0)}</span>
+                    </div>
+                    <div className="flex justify-between text-primary font-medium">
+                      <span>50% Deposit (Due Now)</span>
+                      <span>{formatCurrency(selectedService?.deposit || 0)}</span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground border-t border-border pt-2 mt-2">
+                      <span>Remaining Balance (Due In Person)</span>
+                      <span>{formatCurrency(selectedService?.remainingBalance || 0)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Notice */}
+                <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 p-4 rounded mb-8">
+                  <AlertCircle size={20} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium text-amber-500 mb-1">Deposit Policy</p>
+                    <p className="text-muted-foreground">
+                      A 50% deposit is required to secure your booking. The remaining balance 
+                      will be collected in person at your appointment. Deposits are non-refundable 
+                      for cancellations within 24 hours.
+                    </p>
+                  </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -417,62 +461,20 @@ const Booking = () => {
                     variant="hero"
                     size="xl"
                     className="w-full"
-                    disabled={bookAppointment.isPending}
+                    disabled={isCheckoutLoading}
                   >
-                    {bookAppointment.isPending ? 'Confirming...' : 'Confirm Booking'}
+                    <CreditCard size={18} className="mr-2" />
+                    {isCheckoutLoading 
+                      ? 'Processing...' 
+                      : `Pay ${formatCurrency(selectedService?.deposit || 0)} Deposit`
+                    }
                   </Button>
+
+                  <p className="text-xs text-center text-muted-foreground">
+                    Secure payment powered by Stripe. You'll be redirected to complete payment.
+                  </p>
                 </form>
               </div>
-            </motion.div>
-          )}
-
-          {/* Step 4: Confirmation */}
-          {step === 4 && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="max-w-xl mx-auto text-center"
-            >
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-8">
-                <Check size={40} className="text-primary-foreground" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-serif mb-4">
-                Booking Confirmed!
-              </h2>
-              <p className="text-muted-foreground mb-8">
-                Thank you for booking with HDA Studio. We've sent a confirmation 
-                email to {formData.email} with all the details.
-              </p>
-
-              <div className="bg-card border border-border p-6 mb-8 text-left">
-                <h4 className="text-sm tracking-widest uppercase text-muted-foreground mb-4">
-                  Appointment Details
-                </h4>
-                <div className="space-y-2">
-                  <p><span className="text-muted-foreground">Service:</span> {selectedServiceData?.name}</p>
-                  <p><span className="text-muted-foreground">Date:</span> {selectedDate && format(selectedDate, 'EEEE, MMMM d, yyyy')}</p>
-                  <p><span className="text-muted-foreground">Time:</span> {selectedTime}</p>
-                  <p><span className="text-muted-foreground">Duration:</span> {selectedServiceData?.duration}</p>
-                  <p className="text-primary font-medium pt-2 border-t border-border mt-4">
-                    Total: ${selectedServiceData?.price}
-                  </p>
-                </div>
-              </div>
-
-              <Button
-                variant="hero"
-                size="lg"
-                onClick={() => {
-                  setStep(1);
-                  setSelectedService(null);
-                  setSelectedDate(null);
-                  setSelectedTime(null);
-                  setFormData({ name: '', email: '', phone: '', notes: '' });
-                }}
-              >
-                Book Another Appointment
-              </Button>
             </motion.div>
           )}
         </div>

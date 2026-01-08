@@ -1,197 +1,152 @@
 import { motion } from 'framer-motion';
-import { Check, Clock, Sparkles } from 'lucide-react';
+import { Check, Clock, Sparkles, Scissors, Palette, Heart, Star, Users, MapPin, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ServiceSchema from '@/components/ServiceSchema';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import {
+  MAKEUP_SERVICES,
+  HAIR_SERVICES,
+  COMBO_PACKAGES,
+  EVENT_PACKAGES,
+  BUNDLES,
+  ADDONS,
+  formatCurrency,
+  calculateSavings,
+  type ServiceConfig,
+} from '@/config/services';
 
-const services = [
-  {
-    id: 'basic-soft-glam',
-    title: 'Basic Soft Glam',
-    tagline: 'Natural & Polished',
-    description: 'Our essential everyday look featuring natural, polished beauty with soft definition. Perfect for work, casual outings, or any time you want to look effortlessly put together without appearing overdone.',
-    seoDescription: 'Natural makeup look with soft definition. Professional basic soft glam makeup service including skin prep, full coverage base, complimentary lashes, and lip color. Starting at $100.',
-    price: 100,
-    originalPrice: 125,
-    duration: '45 min',
-    image: '/IMG_8863.JPG',
-    includes: [
-      'Professional skin preparation',
-      'Full coverage base application',
-      'Soft blush for natural flush',
-      'Expert brow grooming & shaping',
-      'Subtle eye makeup enhancement',
-      'Complimentary lash application',
-      'Coordinating lip color',
-      'Long-lasting setting spray',
-    ],
-    keywords: 'basic makeup, soft glam, natural makeup, everyday makeup, polished look',
-  },
-  {
-    id: 'soft-glam',
-    title: 'Soft Glam',
-    tagline: 'Enhanced Everyday Elegance',
-    description: 'Elevated everyday glamour with gentle definition and refined sophistication. Ideal for brunch dates, professional photoshoots, or daytime events where you want to radiate confidence and grace.',
-    seoDescription: 'Enhanced soft glam makeup with gentle definition. Includes full coverage, soft contour, defined eyeshadow, complimentary lashes for elevated everyday beauty. Starting at $125.',
-    price: 125,
-    originalPrice: 150,
-    duration: '60 min',
-    image: '/IMG_8865.JPG',
-    includes: [
-      'Full coverage base with skin perfection',
-      'Soft contour or bronzer application',
-      'Blush placement for dimension',
-      'Defined eyeshadow with blending',
-      'Brow enhancement & definition',
-      'Complimentary lash application',
-      'Perfectly matched lip color',
-      'Professional finishing & setting',
-    ],
-    keywords: 'soft glam makeup, enhanced makeup, everyday glam, contour makeup, defined eyes',
-  },
-  {
-    id: 'full-glam',
-    title: 'Full Glam',
-    tagline: 'Event-Ready Perfection',
-    description: 'Balanced, camera-ready glamour designed for special occasions. The perfect choice for weddings (as a guest), parties, date nights, and formal events where you want to make a lasting impression.',
-    seoDescription: 'Event-ready glam makeup service with full coverage, contour, highlighter, and defined eye looks. Professional makeup for weddings, parties, and special occasions. Starting at $150.',
-    price: 150,
-    originalPrice: 175,
-    duration: '75 min',
-    image: '/IMG_8916.JPG',
-    popular: true,
-    includes: [
-      'Flawless full coverage base',
-      'Professional contour & blush sculpting',
-      'Strategic highlighter placement',
-      'Defined eye look with dimension',
-      'Premium complimentary lash application',
-      'Expert lip color coordination',
-      'Camera-ready finishing touches',
-      'Long-wear formula setting',
-    ],
-    keywords: 'full glam, event makeup, party makeup, wedding guest makeup, camera ready makeup',
-  },
-  {
-    id: 'signature-glam',
-    title: 'Signature Glam',
-    tagline: 'Bold Statement Beauty',
-    description: 'Our premium signature service featuring show-stopping glamour with intricate artistry. Perfect for galas, red carpet events, fashion shows, editorials, and moments when you want to be absolutely unforgettable.',
-    seoDescription: 'Signature glam makeup with full contouring, enhanced eye makeup, glitter, cut crease, and premium finishing. Ultimate luxury makeup service for special occasions. Starting at $180.',
-    price: 180,
-    originalPrice: 205,
-    duration: '90 min',
-    image: '/IMG_8912.JPG',
-    includes: [
-      'High-coverage flawless base',
-      'Full facial contouring & sculpting',
-      'Enhanced eye makeup artistry',
-      'Glitter or cut crease eye design',
-      'Precision highlighter balance',
-      'Premium complimentary lash application',
-      'Statement lip color application',
-      'Professional photo-ready finishing',
-      'Touch-up kit included',
-    ],
-    keywords: 'signature glam, premium makeup, glitter makeup, cut crease, editorial makeup, luxury makeup service',
-  },
-];
+const ServiceCard = ({ service, index }: { service: ServiceConfig; index: number }) => {
+  const savings = calculateSavings(service.originalPrice, service.price);
+  
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="group bg-card border border-border hover:border-primary/30 transition-all duration-500"
+    >
+      {/* Image */}
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img
+          src={service.image}
+          alt={service.name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        {service.popular && (
+          <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs tracking-widest uppercase px-3 py-1 flex items-center gap-1">
+            <Sparkles size={12} />
+            Most Popular
+          </div>
+        )}
+        {savings > 50 && (
+          <div className="absolute top-4 left-4 bg-green-600 text-white text-xs tracking-widest uppercase px-3 py-1">
+            Save {formatCurrency(savings)}
+          </div>
+        )}
+      </div>
 
-const addOns = [
-  {
-    name: 'Ombre Lips',
-    price: 18,
-    description: 'Gradient lip color technique for dimension and fullness',
-  },
-  {
-    name: 'Winged Eyeliner / Lashes',
-    price: 18,
-    description: 'Precision winged eyeliner with enhanced lash application',
-  },
-  {
-    name: 'Scarf Setting',
-    price: '12-18',
-    description: 'Traditional scarf wrapping technique for flawless, long-lasting makeup',
-  },
-  {
-    name: 'Highlighter Upgrade',
-    price: 12,
-    description: 'Premium highlighter application for enhanced glow (available for any glam level)',
-  },
-  {
-    name: 'Contour Upgrade',
-    price: 12,
-    description: 'Advanced contouring techniques for superior definition (available for any glam level)',
-  },
-  {
-    name: 'Jewellery Setting',
-    price: '12-24',
-    description: 'Expert application of face jewels, gems, or embellishments',
-  },
-];
+      {/* Content */}
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <p className="text-primary text-xs tracking-widest uppercase mb-1">
+              {service.category === 'makeup' && 'Makeup Service'}
+              {service.category === 'hair' && 'Hair Service'}
+              {service.category === 'combo' && 'Hair + Makeup'}
+              {service.category === 'bridal' && 'Bridal'}
+              {service.category === 'event' && 'Special Event'}
+              {service.category === 'bundle' && 'Package'}
+            </p>
+            <h3 className="text-2xl font-serif">{service.name}</h3>
+          </div>
+          <div className="text-right">
+            <div className="flex items-center gap-2 justify-end">
+              <span className="text-sm text-muted-foreground line-through">
+                {formatCurrency(service.originalPrice)}
+              </span>
+              <span className="text-2xl font-serif text-primary">
+                {formatCurrency(service.price)}
+              </span>
+            </div>
+            {savings > 0 && (
+              <span className="text-xs text-green-500 font-medium">
+                Save {formatCurrency(savings)}
+              </span>
+            )}
+            <div className="flex items-center gap-1 text-muted-foreground text-xs mt-1">
+              <Clock size={12} />
+              {service.duration}
+            </div>
+          </div>
+        </div>
 
-const bundles = [
-  {
-    name: 'Bridal Party Package',
-    description: 'Perfect for the bride and her squad. Professional bridal makeup with flat-rate pricing for bridesmaids and family.',
-    basePrice: 200,
-    additionalPrice: 100,
-    additionalLabel: 'per person (bridesmaids/family)',
-    features: [
-      'Bride receives premium bridal makeup',
-      'Pre-wedding trial NOT included (book separately)',
-      'Flat rate $100 for bridesmaids & family',
-      'Available for bride or groom\'s family members',
-      'Group scheduling priority',
-      'On-location service available',
-    ],
-  },
-  {
-    name: 'Glow Up Bundle',
-    description: 'Book 3 services and save. Perfect for those with multiple events coming up.',
-    basePrice: 324,
-    savings: 96,
-    features: [
-      'Any 3 makeup services',
-      'Valid for 6 months from purchase',
-      'Transferable to a friend',
-      'Priority booking access',
-      'Free professional touch-up kit',
-      'Flexible scheduling options',
-    ],
-  },
-  {
-    name: 'VIP Experience',
-    description: 'The ultimate pampering session. Private studio with a full glam transformation and exclusive perks.',
-    basePrice: 480,
-    features: [
-      'Private 2-hour exclusive session',
-      'Gourmet refreshments provided',
-      'Signature Glam full application',
-      'One-on-one makeup lesson included',
-      'Premium product gift bag ($100 value)',
-      'Professional photography session',
-      'Luxury studio experience',
-    ],
-  },
-];
+        <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+          {service.description}
+        </p>
+
+        {/* Includes */}
+        {service.includes && (
+          <div className="border-t border-border pt-4 mb-6">
+            <p className="text-xs tracking-widest uppercase text-muted-foreground mb-3">
+              Includes:
+            </p>
+            <ul className="space-y-2">
+              {service.includes.slice(0, 5).map((item, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-foreground/80">
+                  <Check size={14} className="text-primary flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+              {service.includes.length > 5 && (
+                <li className="text-xs text-muted-foreground italic">
+                  +{service.includes.length - 5} more included
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+
+        <Link to="/booking">
+          <Button variant="hero" className="w-full">
+            Book Now • {formatCurrency(service.deposit)} deposit
+          </Button>
+        </Link>
+      </div>
+    </motion.article>
+  );
+};
 
 const ServicesCatalog = () => {
+  // Combine services for SEO schema
+  const allServicesForSchema = [...MAKEUP_SERVICES, ...HAIR_SERVICES, ...COMBO_PACKAGES].map(s => ({
+    id: s.id,
+    title: s.name,
+    description: s.description,
+    price: s.price,
+    image: s.image,
+    duration: s.duration,
+    keywords: s.category,
+    seoDescription: s.description,
+    includes: s.includes || [],
+  }));
+
   return (
     <main className="min-h-screen bg-background">
       <SEOHead
-        title="Professional Makeup Services - Glam Makeup Artist"
-        description="Luxury makeup services from $90. Basic Soft Glam, Soft Glam, Standard Glam, and Signature Glam. Expert makeup artistry for all occasions. Premium service packages available. Book your appointment today."
-        keywords="makeup artist, glam makeup, professional makeup, bridal makeup, event makeup, soft glam, signature glam, makeup services, beauty services, luxury makeup, makeup packages, wedding makeup, party makeup"
+        title="Hair & Makeup Services - Professional Beauty Artist"
+        description="Complete beauty services including professional makeup, hair styling, bridal packages, and event glam. Prices from $75. Quinceañera, Prom, Senior Portraits & more. Book today!"
+        keywords="makeup artist, hair stylist, bridal makeup, bridal hair, wedding makeup, prom makeup, quinceañera makeup, senior portraits makeup, event makeup, soft glam, airbrush makeup, formal updo, hair styling"
         canonicalUrl="/services"
         ogImage="/IMG_8900.JPG"
       />
 
-      <ServiceSchema services={services} />
+      <ServiceSchema services={allServicesForSchema} />
 
       <Navbar />
 
@@ -203,105 +158,232 @@ const ServicesCatalog = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto"
           >
             <span className="text-primary text-sm tracking-[0.3em] uppercase mb-4 block font-sans">
-              Our Services
+              Complete Beauty Services
             </span>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-light mb-6">
-              Beauty <span className="italic">Services</span>
+              Hair & Makeup <span className="italic">Artistry</span>
             </h1>
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              From subtle everyday elegance to show-stopping glamour, discover the perfect 
-              service for your unique beauty needs.
+            <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl mx-auto">
+              From natural everyday beauty to show-stopping glamour. Professional makeup, 
+              stunning hair styling, and complete transformation packages for every occasion.
             </p>
+            
+            {/* Quick Stats */}
+            <div className="flex flex-wrap justify-center gap-8 mt-10">
+              <div className="text-center">
+                <Palette className="w-8 h-8 text-primary mx-auto mb-2" />
+                <p className="text-2xl font-serif">{MAKEUP_SERVICES.length}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider">Makeup Looks</p>
+              </div>
+              <div className="text-center">
+                <Scissors className="w-8 h-8 text-primary mx-auto mb-2" />
+                <p className="text-2xl font-serif">{HAIR_SERVICES.length}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider">Hair Styles</p>
+              </div>
+              <div className="text-center">
+                <Heart className="w-8 h-8 text-primary mx-auto mb-2" />
+                <p className="text-2xl font-serif">{EVENT_PACKAGES.length}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider">Event Packages</p>
+              </div>
+              <div className="text-center">
+                <Star className="w-8 h-8 text-primary mx-auto mb-2" />
+                <p className="text-2xl font-serif">315+</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider">5-Star Reviews</p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* Main Services Tabs */}
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.article
-                key={service.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group bg-card border border-border hover:border-primary/30 transition-all duration-500"
+          <Tabs defaultValue="makeup" className="w-full">
+            <TabsList className="flex flex-wrap justify-center gap-2 mb-12 bg-transparent h-auto">
+              <TabsTrigger 
+                value="makeup" 
+                className="px-6 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border"
               >
-                {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {service.popular && (
-                    <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs tracking-widest uppercase px-3 py-1 flex items-center gap-1">
-                      <Sparkles size={12} />
-                      Most Popular
-                    </div>
-                  )}
-                </div>
+                <Palette size={16} className="mr-2" />
+                Makeup
+              </TabsTrigger>
+              <TabsTrigger 
+                value="hair"
+                className="px-6 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border"
+              >
+                <Scissors size={16} className="mr-2" />
+                Hair
+              </TabsTrigger>
+              <TabsTrigger 
+                value="combos"
+                className="px-6 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border"
+              >
+                <Sparkles size={16} className="mr-2" />
+                Hair + Makeup
+              </TabsTrigger>
+              <TabsTrigger 
+                value="bridal"
+                className="px-6 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border"
+              >
+                <Heart size={16} className="mr-2" />
+                Bridal
+              </TabsTrigger>
+              <TabsTrigger 
+                value="events"
+                className="px-6 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border"
+              >
+                <Crown size={16} className="mr-2" />
+                Events
+              </TabsTrigger>
+              <TabsTrigger 
+                value="bundles"
+                className="px-6 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border"
+              >
+                <Users size={16} className="mr-2" />
+                Packages
+              </TabsTrigger>
+            </TabsList>
 
-                {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <p className="text-primary text-xs tracking-widest uppercase mb-1">
-                        {service.tagline}
-                      </p>
-                      <h3 className="text-2xl font-serif">{service.title}</h3>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-2 justify-end">
-                        <span className="text-sm text-muted-foreground line-through">${service.originalPrice}</span>
-                        <span className="text-2xl font-serif text-primary">${service.price}</span>
-                      </div>
-                      <span className="text-xs text-green-500 font-medium">Save $25</span>
-                      <div className="flex items-center gap-1 text-muted-foreground text-xs mt-1">
-                        <Clock size={12} />
-                        {service.duration}
-                      </div>
-                    </div>
-                  </div>
+            {/* Makeup Services */}
+            <TabsContent value="makeup">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-12"
+              >
+                <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
+                  Makeup <span className="italic">Services</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  From natural soft glam to show-stopping editorial looks. All services include 
+                  complimentary lash application and long-lasting setting spray.
+                </p>
+              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {MAKEUP_SERVICES.map((service, index) => (
+                  <ServiceCard key={service.id} service={service} index={index} />
+                ))}
+              </div>
+            </TabsContent>
 
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                    {service.description}
-                  </p>
+            {/* Hair Services */}
+            <TabsContent value="hair">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-12"
+              >
+                <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
+                  Hair <span className="italic">Styling</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Professional hair styling for every occasion. From sleek blowouts to 
+                  intricate updos and Hollywood-inspired waves.
+                </p>
+              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {HAIR_SERVICES.map((service, index) => (
+                  <ServiceCard key={service.id} service={service} index={index} />
+                ))}
+              </div>
+            </TabsContent>
 
-                  {/* Includes */}
-                  <div className="border-t border-border pt-4 mb-6">
-                    <p className="text-xs tracking-widest uppercase text-muted-foreground mb-3">
-                      Includes:
-                    </p>
-                    <ul className="space-y-2">
-                      {service.includes.map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-foreground/80">
-                          <Check size={14} className="text-primary flex-shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+            {/* Combo Packages */}
+            <TabsContent value="combos">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-12"
+              >
+                <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
+                  Hair + Makeup <span className="italic">Combos</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Complete transformations at discounted package rates. Save up to $80 
+                  when you book hair and makeup together.
+                </p>
+              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {COMBO_PACKAGES.map((service, index) => (
+                  <ServiceCard key={service.id} service={service} index={index} />
+                ))}
+              </div>
+            </TabsContent>
 
-                  <Link to="/booking">
-                    <Button variant="hero" className="w-full">
-                      Book Now
-                    </Button>
-                  </Link>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+            {/* Bridal Services */}
+            <TabsContent value="bridal">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-12"
+              >
+                <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
+                  Bridal <span className="italic">Services</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Make your wedding day unforgettable. From bridal trials to complete 
+                  packages for you and your entire party.
+                </p>
+              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {EVENT_PACKAGES.filter(s => s.category === 'bridal').map((service, index) => (
+                  <ServiceCard key={service.id} service={service} index={index} />
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* Event Services */}
+            <TabsContent value="events">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-12"
+              >
+                <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
+                  Special <span className="italic">Events</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Quinceañera, Prom, Senior Portraits, Maternity sessions, and more. 
+                  Look stunning for life's milestone moments.
+                </p>
+              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {EVENT_PACKAGES.filter(s => s.category === 'event').map((service, index) => (
+                  <ServiceCard key={service.id} service={service} index={index} />
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* Bundles */}
+            <TabsContent value="bundles">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-12"
+              >
+                <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
+                  Package <span className="italic">Deals</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Save big with our multi-service bundles. Perfect for group events, 
+                  VIP experiences, or multiple occasions.
+                </p>
+              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {BUNDLES.map((service, index) => (
+                  <ServiceCard key={service.id} service={service} index={index} />
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 
       {/* Add-Ons Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-charcoal-light">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -314,118 +396,117 @@ const ServicesCatalog = () => {
               Enhance Your Look
             </span>
             <h2 className="text-4xl md:text-5xl font-serif font-light">
-              Makeup <span className="italic">Add-Ons</span>
+              Add-On <span className="italic">Services</span>
             </h2>
             <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-              Customize your service with premium enhancements. Available with any glam level.
+              Customize your service with premium enhancements. Available with any booking.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {addOns.map((addon, index) => (
-              <motion.div
-                key={addon.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-card border border-border p-6 hover:border-primary/30 transition-all duration-300"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-serif">{addon.name}</h3>
-                  <span className="text-primary font-serif text-xl">
-                    {typeof addon.price === 'number' ? `$${addon.price}` : `$${addon.price}`}
-                  </span>
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {addon.description}
-                </p>
-              </motion.div>
-            ))}
+          {/* Add-ons by category */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Makeup Add-Ons */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-card border border-border p-6"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Palette className="text-primary" size={24} />
+                <h3 className="text-xl font-serif">Makeup Upgrades</h3>
+              </div>
+              <div className="space-y-4">
+                {ADDONS.filter(a => a.category === 'makeup').map((addon) => (
+                  <div key={addon.id} className="flex items-start justify-between pb-4 border-b border-border last:border-0">
+                    <div>
+                      <h4 className="font-medium text-sm">{addon.name}</h4>
+                      <p className="text-xs text-muted-foreground mt-1">{addon.description}</p>
+                    </div>
+                    <span className="text-primary font-serif whitespace-nowrap ml-4">
+                      {addon.priceRange || formatCurrency(addon.price)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Hair Add-Ons */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-card border border-border p-6"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Scissors className="text-primary" size={24} />
+                <h3 className="text-xl font-serif">Hair Upgrades</h3>
+              </div>
+              <div className="space-y-4">
+                {ADDONS.filter(a => a.category === 'hair').map((addon) => (
+                  <div key={addon.id} className="flex items-start justify-between pb-4 border-b border-border last:border-0">
+                    <div>
+                      <h4 className="font-medium text-sm">{addon.name}</h4>
+                      <p className="text-xs text-muted-foreground mt-1">{addon.description}</p>
+                    </div>
+                    <span className="text-primary font-serif whitespace-nowrap ml-4">
+                      {addon.priceRange || formatCurrency(addon.price)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* General Add-Ons */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-card border border-border p-6"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <MapPin className="text-primary" size={24} />
+                <h3 className="text-xl font-serif">Travel & Extras</h3>
+              </div>
+              <div className="space-y-4">
+                {ADDONS.filter(a => a.category === 'general').map((addon) => (
+                  <div key={addon.id} className="flex items-start justify-between pb-4 border-b border-border last:border-0">
+                    <div>
+                      <h4 className="font-medium text-sm">{addon.name}</h4>
+                      <p className="text-xs text-muted-foreground mt-1">{addon.description}</p>
+                    </div>
+                    <span className="text-primary font-serif whitespace-nowrap ml-4">
+                      {addon.priceRange || formatCurrency(addon.price)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
 
+          {/* Airbrush callout */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-center mt-12"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-12 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 p-8 text-center"
           >
-            <p className="text-sm text-muted-foreground italic">
-              All services include full coverage base, complimentary lashes, and lip color
+            <Sparkles className="w-10 h-10 text-primary mx-auto mb-4" />
+            <h3 className="text-2xl font-serif mb-2">Upgrade to Airbrush Makeup</h3>
+            <p className="text-muted-foreground max-w-xl mx-auto mb-4">
+              Experience flawless, long-lasting coverage with our airbrush makeup upgrade. 
+              Perfect for photography, weddings, and all-day events.
             </p>
+            <p className="text-primary text-xl font-serif">+$35 to any makeup service</p>
           </motion.div>
         </div>
       </section>
 
-      {/* Bundles Section */}
-      <section className="py-20 bg-charcoal-light">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <span className="text-primary text-sm tracking-[0.3em] uppercase mb-4 block font-sans">
-              Save More
-            </span>
-            <h2 className="text-4xl md:text-5xl font-serif font-light">
-              Package <span className="italic">Bundles</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {bundles.map((bundle, index) => (
-              <motion.div
-                key={bundle.name}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                className="bg-card border border-border p-8 hover:border-primary/30 transition-all duration-500"
-              >
-                <h3 className="text-2xl font-serif mb-2">{bundle.name}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                  {bundle.description}
-                </p>
-
-                <div className="mb-6">
-                  <span className="text-4xl font-serif text-primary">${bundle.basePrice}</span>
-                  {bundle.additionalPrice && (
-                    <span className="text-muted-foreground text-sm ml-2">
-                      + ${bundle.additionalPrice} {bundle.additionalLabel}
-                    </span>
-                  )}
-                  {bundle.savings && (
-                    <span className="block text-sm text-gold mt-1">
-                      Save ${bundle.savings}
-                    </span>
-                  )}
-                </div>
-
-                <ul className="space-y-3 mb-8">
-                  {bundle.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-foreground/80">
-                      <Check size={14} className="text-primary flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link to="/booking">
-                  <Button variant="elegant" className="w-full">
-                    Book Package
-                  </Button>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
+      {/* CTA Section */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-6 text-center">
           <motion.div
@@ -440,13 +521,20 @@ const ServicesCatalog = () => {
             </h2>
             <p className="text-muted-foreground mb-8">
               Book a free consultation and we'll help you choose the perfect look 
-              for your occasion.
+              for your occasion. We work with all skin tones and ethnicities.
             </p>
-            <Link to="/booking">
-              <Button variant="gold" size="xl">
-                Book Free Consultation
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/booking">
+                <Button variant="gold" size="xl">
+                  Book Free Consultation
+                </Button>
+              </Link>
+              <Link to="/#contact">
+                <Button variant="elegant" size="xl">
+                  Send Inquiry
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

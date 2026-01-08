@@ -18,6 +18,9 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import QuinceaneraServices from "./pages/QuinceaneraServices";
+import PromServices from "./pages/PromServices";
+import BridalServices from "./pages/BridalServices";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +45,9 @@ const App = () => (
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/quinceanera" element={<QuinceaneraServices />} />
+            <Route path="/prom" element={<PromServices />} />
+            <Route path="/bridal" element={<BridalServices />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

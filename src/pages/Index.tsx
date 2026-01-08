@@ -5,6 +5,7 @@ import About from '@/components/About';
 import Sanitation from '@/components/Sanitation';
 import Testimonials from '@/components/Testimonials';
 import Gallery from '@/components/Gallery';
+import VideoReviews from '@/components/VideoReviews';
 import InstagramFeed from '@/components/InstagramFeed';
 import CTA from '@/components/CTA';
 import Contact from '@/components/Contact';
@@ -39,6 +40,7 @@ const Index = () => {
       <About />
       <Sanitation />
       <Gallery />
+      <VideoReviews />
       <Testimonials />
       <InstagramFeed />
       <CTA />

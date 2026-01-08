@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Instagram, Heart, MessageCircle } from 'lucide-react';
+import { BUSINESS_CONFIG } from '@/config/business';
 
 const posts = [
   {
@@ -91,7 +92,7 @@ const InstagramFeed = () => {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Instagram size={20} className="text-primary" />
             <span className="text-primary text-sm tracking-[0.3em] uppercase font-sans">
-              @hdastudio
+              {BUSINESS_CONFIG.social.instagram.handle}
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light">
@@ -104,7 +105,7 @@ const InstagramFeed = () => {
           {posts.map((post, index) => (
             <motion.a
               key={index}
-              href="https://instagram.com"
+              href={BUSINESS_CONFIG.social.instagram.url}
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -145,14 +146,14 @@ const InstagramFeed = () => {
           className="text-center mt-10"
         >
           <a
-            href="https://instagram.com"
+            href={BUSINESS_CONFIG.social.instagram.url}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-300"
           >
             <Instagram size={16} />
             <span className="text-sm tracking-widest uppercase">
-              Follow @hdastudio for more
+              Follow {BUSINESS_CONFIG.social.instagram.handle} for more
             </span>
           </a>
         </motion.div>

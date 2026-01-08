@@ -123,8 +123,8 @@ export const BUSINESS_CONFIG = {
   social: {
     // 🚨 REPLACE WITH REAL SOCIAL MEDIA HANDLES/URLS
     instagram: {
-      handle: '@hdastudio',
-      url: 'https://www.instagram.com/hdastudio',
+      handle: '@hda_studio',
+      url: 'https://www.instagram.com/hda_studio/',
       enabled: true, // Set to false to hide if not active
     },
     facebook: {

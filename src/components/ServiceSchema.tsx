@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { BUSINESS_CONFIG } from '@/config/business';
 
 interface Service {
   id: string;
@@ -60,7 +61,7 @@ const ServiceSchema = ({ services }: ServiceSchemaProps) => {
     "url": "https://hdastudio.com",
     "logo": "https://hdastudio.com/logo.png",
     "sameAs": [
-      "https://instagram.com/hdastudio"
+      BUSINESS_CONFIG.social.instagram.url
     ],
     "contactPoint": {
       "@type": "ContactPoint",

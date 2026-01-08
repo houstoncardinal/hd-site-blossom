@@ -105,7 +105,7 @@ const Gallery = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.5) }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`relative overflow-hidden group cursor-pointer ${image.span}`}
@@ -124,7 +124,9 @@ const Gallery = () => {
                 src={image.src}
                 alt={image.alt}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
+                loading={index < 8 ? "eager" : "lazy"}
+                decoding={index < 8 ? "sync" : "async"}
+                fetchPriority={index < 4 ? "high" : "auto"}
               />
               <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                 <span className="text-sm tracking-widest uppercase text-foreground">

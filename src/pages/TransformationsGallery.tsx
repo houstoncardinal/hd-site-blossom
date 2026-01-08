@@ -252,13 +252,16 @@ const TransformationsGallery = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
                 className="relative aspect-square overflow-hidden group cursor-pointer"
               >
                 <img
                   src={image.src}
                   alt={image.category}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading={index < 12 ? "eager" : "lazy"}
+                  decoding={index < 12 ? "sync" : "async"}
+                  fetchPriority={index < 6 ? "high" : "auto"}
                 />
                 <div className="absolute inset-0 bg-background/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                   <span className="text-sm tracking-widest uppercase">

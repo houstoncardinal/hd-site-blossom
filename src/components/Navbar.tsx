@@ -169,7 +169,7 @@ const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-background/95 backdrop-blur-lg z-40 md:hidden"
+              className="fixed inset-0 bg-background/95 backdrop-blur-lg z-[60] md:hidden"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -177,7 +177,7 @@ const Navbar = () => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-40 md:hidden overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-[70] md:hidden overflow-y-auto"
             >
               <div className="flex flex-col gap-2 p-6 pt-24">
                 {navLinks.map((link, index) => (

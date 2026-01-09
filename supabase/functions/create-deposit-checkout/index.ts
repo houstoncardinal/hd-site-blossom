@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,6 +12,11 @@ const logStep = (step: string, details?: Record<string, unknown>) => {
   const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
   console.log(`[CREATE-DEPOSIT-CHECKOUT] ${step}${detailsStr}`);
 };
+
+interface AddOnItem {
+  name: string;
+  price: number;
+}
 
 interface CheckoutRequest {
   priceId: string;
@@ -24,6 +30,7 @@ interface CheckoutRequest {
   appointmentDate?: string;
   appointmentTime?: string;
   notes?: string;
+  addOns?: AddOnItem[];
 }
 
 serve(async (req) => {
@@ -41,11 +48,21 @@ serve(async (req) => {
     }
     logStep("Stripe key verified");
 
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error("Supabase configuration missing");
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
     const body: CheckoutRequest = await req.json();
     logStep("Request body received", { 
       priceId: body.priceId, 
       serviceName: body.serviceName,
-      depositAmount: body.depositAmount 
+      depositAmount: body.depositAmount,
+      addOnsCount: body.addOns?.length || 0
     });
 
     const {
@@ -60,11 +77,12 @@ serve(async (req) => {
       appointmentDate,
       appointmentTime,
       notes,
+      addOns = [],
     } = body;
 
     // Validate required fields
-    if (!priceId || !serviceName || !customerEmail || !customerName) {
-      throw new Error("Missing required fields: priceId, serviceName, customerEmail, customerName");
+    if (!serviceName || !customerEmail || !customerName || depositAmount <= 0) {
+      throw new Error("Missing required fields: serviceName, customerEmail, customerName, depositAmount");
     }
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
@@ -91,6 +109,13 @@ serve(async (req) => {
       logStep("Created new customer", { customerId });
     }
 
+    // Build description with add-ons
+    let serviceDescription = serviceName;
+    if (addOns.length > 0) {
+      const addOnNames = addOns.map(a => a.name).join(', ');
+      serviceDescription += ` + ${addOnNames}`;
+    }
+
     // Build metadata for the session
     const metadata: Record<string, string> = {
       service_name: serviceName,
@@ -105,16 +130,29 @@ serve(async (req) => {
     if (appointmentDate) metadata.appointment_date = appointmentDate;
     if (appointmentTime) metadata.appointment_time = appointmentTime;
     if (notes) metadata.notes = notes;
+    if (addOns.length > 0) {
+      metadata.add_ons = JSON.stringify(addOns);
+    }
 
-    // Create checkout session for 50% deposit
-    logStep("Creating checkout session");
+    // Create checkout session with dynamic deposit pricing
+    logStep("Creating checkout session with dynamic pricing");
     const origin = req.headers.get("origin") || "https://hdastudio.com";
+    
+    // Convert deposit to cents for Stripe
+    const depositInCents = Math.round(depositAmount * 100);
     
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [
         {
-          price: priceId,
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `50% Deposit - ${serviceDescription}`,
+              description: `Remaining balance of $${remainingBalance.toFixed(2)} due in person at your appointment.`,
+            },
+            unit_amount: depositInCents,
+          },
           quantity: 1,
         },
       ],
@@ -124,7 +162,7 @@ serve(async (req) => {
       metadata,
       payment_intent_data: {
         metadata,
-        description: `50% Deposit for ${serviceName} - Remaining $${remainingBalance.toFixed(2)} due in person`,
+        description: `50% Deposit for ${serviceDescription} - Remaining $${remainingBalance.toFixed(2)} due in person`,
       },
       custom_text: {
         submit: {
@@ -137,6 +175,33 @@ serve(async (req) => {
       sessionId: session.id, 
       url: session.url 
     });
+
+    // Create appointment record in database (pending status)
+    if (appointmentDate && appointmentTime) {
+      try {
+        const { error: dbError } = await supabase
+          .from('appointments')
+          .insert({
+            client_name: customerName,
+            client_email: customerEmail,
+            client_phone: customerPhone || null,
+            service_name: serviceDescription,
+            service_price: fullPrice,
+            appointment_date: appointmentDate,
+            appointment_time: appointmentTime,
+            notes: notes || null,
+            status: 'pending_payment',
+          });
+
+        if (dbError) {
+          logStep("Warning: Failed to create appointment record", { error: dbError.message });
+        } else {
+          logStep("Appointment record created with pending_payment status");
+        }
+      } catch (dbErr) {
+        logStep("Warning: Database operation failed", { error: String(dbErr) });
+      }
+    }
 
     return new Response(
       JSON.stringify({ 

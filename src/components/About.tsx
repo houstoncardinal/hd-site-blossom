@@ -71,7 +71,7 @@ const About = () => {
                 personal expression.
               </p>
               <p>
-                Founded by Huda Javed, our team of licensed cosmetologists and senior makeup artists 
+                Founded by Huda Javed, our team of licensed cosmetologists and expert makeup artists 
                 brings years of experience in bridal, editorial, and everyday glam. We're dedicated 
                 to creating looks that enhance your natural features while making you feel confident 
                 and radiant.
@@ -82,13 +82,12 @@ const About = () => {
               </p>
             </div>
 
-            {/* Meet the Team Link */}
             <div className="mt-8">
               <Link
-                to="/team"
+                to="/about"
                 className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors text-sm tracking-wider uppercase"
               >
-                Meet Our Team →
+                Meet Our Expert Team →
               </Link>
             </div>
 

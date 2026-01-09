@@ -40,10 +40,10 @@ const Team = () => {
   return (
     <main className="min-h-screen bg-background">
       <SEOHead
-        title="Meet Our Team - Professional Makeup Artists"
+        title="About Us - Meet Our Expert Team"
         description="Meet the talented makeup artists at HDA Studio. Our team of experienced beauty professionals specializes in editorial, bridal, and event makeup artistry."
-        keywords="makeup artists, beauty team, professional makeup artists, bridal makeup artist, editorial makeup artist, HDA Studio team"
-        canonicalUrl="/team"
+        keywords="makeup artists, beauty team, professional makeup artists, bridal makeup artist, editorial makeup artist, HDA Studio team, about HDA Studio"
+        canonicalUrl="/about"
         ogImage="/IMG_8915.JPG"
       />
 
@@ -52,7 +52,7 @@ const Team = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-hero">
         <div className="container mx-auto px-6">
-          <Breadcrumbs items={[{ name: 'Team', url: '/team' }]} />
+          <Breadcrumbs items={[{ name: 'About', url: '/about' }]} />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -163,7 +163,7 @@ const Team = () => {
           <div className="text-center mb-12">
             <span className="inline-flex items-center gap-2 text-primary text-sm tracking-[0.2em] uppercase mb-4">
               <Award size={16} />
-              Senior Artists
+              The Team
             </span>
             <h2 className="text-2xl md:text-3xl font-serif">Our Expert Team</h2>
           </div>

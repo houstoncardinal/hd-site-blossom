@@ -41,6 +41,27 @@ export const useAuth = () => {
 
   const checkAdminRole = async (userId: string) => {
     try {
+      // Check if this is the default admin user
+      if (userId === 'dcb25cb5-9a53-4e80-be27-111fe63be517') {
+        setIsAdmin(true);
+
+        // Ensure the user has admin role in database
+        const { error: upsertError } = await supabase
+          .from('user_roles')
+          .upsert({
+            user_id: userId,
+            role: 'admin'
+          }, {
+            onConflict: 'user_id,role'
+          });
+
+        if (upsertError) {
+          console.warn('Could not update admin role in database:', upsertError);
+        }
+
+        return;
+      }
+
       const { data, error } = await supabase
         .from('user_roles')
         .select('role')

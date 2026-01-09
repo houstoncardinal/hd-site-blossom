@@ -10,6 +10,7 @@ import DashboardWidgets from '@/components/admin/DashboardWidgets';
 import AppointmentsManager from '@/components/admin/AppointmentsManager';
 import ReviewsManager from '@/components/admin/ReviewsManager';
 import TeamManager from '@/components/admin/TeamManager';
+import { GalleryManager } from '@/components/admin/gallery/GalleryManager';
 import ServicesManager from '@/components/admin/ServicesManager';
 import AnalyticsView from '@/components/admin/AnalyticsView';
 import BusinessSettings from '@/components/admin/BusinessSettings';
@@ -62,8 +63,14 @@ const AdminDashboardContent = () => {
         return <ReviewsManager key={refreshKey} />;
       case 'team':
         return <TeamManager key={refreshKey} />;
+      case 'gallery':
+        return <GalleryManager key={refreshKey} />;
       case 'services':
         return <ServicesManager />;
+      case 'packages':
+        return <div className="p-8 text-center text-muted-foreground">Packages Manager - Coming in Phase 5</div>;
+      case 'pricing':
+        return <div className="p-8 text-center text-muted-foreground">Pricing Manager - Coming in Phase 6</div>;
       case 'analytics':
         return <AnalyticsView key={refreshKey} />;
       case 'business':

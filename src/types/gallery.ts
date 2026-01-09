@@ -196,6 +196,12 @@ export const GALLERY_CATEGORY_LABELS: Record<GalleryCategory, string> = {
 
 // Helper Functions
 export function getImageUrl(storagePath: string): string {
+  // For fallback images in public folder, use relative URL
+  if (storagePath.startsWith('IMG_') || storagePath.startsWith('image') || storagePath.includes('.jpg') || storagePath.includes('.jpeg')) {
+    return `/${storagePath}`;
+  }
+
+  // For Supabase storage images
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   return `${supabaseUrl}/storage/v1/object/public/gallery-images/${storagePath}`;
 }

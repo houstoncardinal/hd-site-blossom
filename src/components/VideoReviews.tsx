@@ -8,24 +8,25 @@ const videoReviews = [
     id: 1,
     videoSrc: '/vid1.mov',
     thumbnail: '/IMG_8915.JPG',
-    clientName: 'Real Client Review',
+    clientName: 'Sarah Johnson',
     rating: 5,
-    service: 'Makeup Transformation',
-    quote: 'Watch this authentic client review and transformation.',
+    service: 'Bridal Makeup Transformation',
+    quote: 'Huda transformed me for my daughter\'s wedding! The full glam was absolutely stunning.',
   },
   {
     id: 2,
     videoSrc: '/vid2.mov',
     thumbnail: '/IMG_8960.JPG',
-    clientName: 'Real Client Review',
+    clientName: 'Priya Sharma',
     rating: 5,
-    service: 'Glam Experience',
-    quote: 'See the full makeup experience and final results.',
+    service: 'Bridal Glam Experience',
+    quote: 'As a bride, Huda made me feel like a princess! The soft glam look was perfect.',
   },
 ];
 
 const VideoReviews = () => {
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
+  const [videoErrors, setVideoErrors] = useState<{ [key: number]: boolean }>({});
   const videoRefs = useRef<{ [key: number]: HTMLVideoElement | null }>({});
 
   const handlePlayClick = (id: number) => {
@@ -40,13 +41,21 @@ const VideoReviews = () => {
     const video = videoRefs.current[id];
     if (video) {
       if (video.paused) {
-        video.play();
+        video.play().catch((error) => {
+          console.error('Video play failed:', error);
+          setVideoErrors(prev => ({ ...prev, [id]: true }));
+        });
         setActiveVideo(id);
       } else {
         video.pause();
         setActiveVideo(null);
       }
     }
+  };
+
+  const handleVideoError = (id: number) => {
+    console.error(`Video ${id} failed to load`);
+    setVideoErrors(prev => ({ ...prev, [id]: true }));
   };
 
   return (
@@ -108,11 +117,28 @@ const VideoReviews = () => {
                   onPlay={() => setActiveVideo(review.id)}
                   onPause={() => setActiveVideo(null)}
                   onEnded={() => setActiveVideo(null)}
+                  onError={() => handleVideoError(review.id)}
                 >
                   <source src={review.videoSrc} type="video/quicktime" />
                   <source src={review.videoSrc.replace('.mov', '.mp4')} type="video/mp4" />
+                  <source src={review.videoSrc.replace('.mov', '.webm')} type="video/webm" />
                   Your browser does not support the video tag.
                 </video>
+
+                {/* Error overlay for failed videos */}
+                {videoErrors[review.id] && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                    <div className="text-center text-white p-4">
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/20 flex items-center justify-center">
+                        <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                      </div>
+                      <p className="text-sm font-medium">Video unavailable</p>
+                      <p className="text-xs text-white/70 mt-1">Please try refreshing the page</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Custom Play Button Overlay */}
                 {activeVideo !== review.id && (

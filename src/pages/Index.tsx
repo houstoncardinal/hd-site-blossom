@@ -6,7 +6,7 @@ import Sanitation from '@/components/Sanitation';
 import Testimonials from '@/components/Testimonials';
 import Gallery from '@/components/Gallery';
 import VideoReviews from '@/components/VideoReviews';
-import InstagramFeed from '@/components/InstagramFeed';
+import SocialMediaFeeds from '@/components/SocialMediaFeeds';
 import CTA from '@/components/CTA';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
@@ -42,7 +42,7 @@ const Index = () => {
       <Gallery />
       <VideoReviews />
       <Testimonials />
-      <InstagramFeed />
+      <SocialMediaFeeds />
       <CTA />
       <Contact />
       <Footer />

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { format, addDays, startOfWeek, isSameDay, addWeeks, subWeeks } from 'date-fns';
-import { ChevronLeft, ChevronRight, Clock, Check, CalendarDays, CreditCard, AlertCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, Check, CalendarDays, CreditCard, AlertCircle, Plus, Minus, Sparkles, Scissors, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useDepositCheckout } from '@/hooks/useDepositCheckout';
@@ -10,7 +10,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { SERVICES, ServiceConfig, formatCurrency } from '@/config/services';
+import { getAllServices, ADDONS, ServiceConfig, AddOnService, formatCurrency } from '@/config/services';
 
 const timeSlots = [
   '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
@@ -23,6 +23,7 @@ const Booking = () => {
   const { initiateCheckout, isLoading: isCheckoutLoading } = useDepositCheckout();
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState<ServiceConfig | null>(null);
+  const [selectedAddOns, setSelectedAddOns] = useState<AddOnService[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
@@ -32,6 +33,8 @@ const Booking = () => {
     phone: '',
     notes: '',
   });
+
+  const allServices = getAllServices();
 
   // Check for canceled booking
   useEffect(() => {
@@ -53,9 +56,27 @@ const Booking = () => {
     return date < now;
   };
 
+  // Calculate totals with add-ons
+  const addOnsTotal = selectedAddOns.reduce((sum, addon) => sum + addon.price, 0);
+  const serviceTotal = (selectedService?.price || 0) + addOnsTotal;
+  const depositTotal = (selectedService?.deposit || 0) + (addOnsTotal * 0.5);
+  const remainingBalance = serviceTotal - depositTotal;
+
   const handleServiceSelect = (service: ServiceConfig) => {
     setSelectedService(service);
+    setSelectedAddOns([]); // Reset add-ons when changing service
     setStep(2);
+  };
+
+  const handleAddOnToggle = (addon: AddOnService) => {
+    setSelectedAddOns(prev => {
+      const isSelected = prev.some(a => a.id === addon.id);
+      if (isSelected) {
+        return prev.filter(a => a.id !== addon.id);
+      } else {
+        return [...prev, addon];
+      }
+    });
   };
 
   const handleDateSelect = (date: Date) => {
@@ -79,6 +100,7 @@ const Booking = () => {
 
     const result = await initiateCheckout({
       service: selectedService,
+      addOns: selectedAddOns,
       customerEmail: formData.email,
       customerName: formData.name,
       customerPhone: formData.phone || undefined,
@@ -100,6 +122,11 @@ const Booking = () => {
       });
     }
   };
+
+  // Group add-ons by category
+  const makeupAddOns = ADDONS.filter(a => a.category === 'makeup');
+  const hairAddOns = ADDONS.filter(a => a.category === 'hair');
+  const generalAddOns = ADDONS.filter(a => a.category === 'general');
 
   return (
     <main className="min-h-screen bg-background">
@@ -176,8 +203,8 @@ const Booking = () => {
               <h2 className="text-2xl md:text-3xl font-serif text-center mb-10">
                 Select a Service
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                {SERVICES.map((service) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                {allServices.map((service) => (
                   <button
                     key={service.id}
                     onClick={() => handleServiceSelect(service)}
@@ -218,13 +245,13 @@ const Booking = () => {
             </motion.div>
           )}
 
-          {/* Step 2: Select Date & Time */}
+          {/* Step 2: Select Date, Time & Add-ons */}
           {step === 2 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="max-w-4xl mx-auto"
+              className="max-w-5xl mx-auto"
             >
               <div className="flex items-center justify-between mb-8">
                 <button
@@ -234,7 +261,7 @@ const Booking = () => {
                   ← Back to Services
                 </button>
                 <div className="text-center">
-                  <h2 className="text-2xl md:text-3xl font-serif">Choose Date & Time</h2>
+                  <h2 className="text-2xl md:text-3xl font-serif">Customize Your Booking</h2>
                   {selectedService && (
                     <p className="text-muted-foreground text-sm mt-1">
                       {selectedService.name} - {formatCurrency(selectedService.price)}
@@ -244,92 +271,249 @@ const Booking = () => {
                 <div className="w-24" />
               </div>
 
-              {/* Calendar */}
-              <div className="bg-card border border-border p-6 mb-8">
-                <div className="flex items-center justify-between mb-6">
-                  <button
-                    onClick={() => setWeekStart(subWeeks(weekStart, 1))}
-                    className="p-2 hover:bg-muted rounded transition-colors"
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-                  <h3 className="font-serif text-lg">
-                    {format(weekStart, 'MMMM yyyy')}
-                  </h3>
-                  <button
-                    onClick={() => setWeekStart(addWeeks(weekStart, 1))}
-                    className="p-2 hover:bg-muted rounded transition-colors"
-                  >
-                    <ChevronRight size={20} />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-7 gap-2 mb-4">
-                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                    <div key={day} className="text-center text-xs text-muted-foreground uppercase tracking-wider py-2">
-                      {day}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-7 gap-2">
-                  {weekDays.map((date) => {
-                    const isSelected = selectedDate && isSameDay(date, selectedDate);
-                    const isPast = isPastDate(date);
-                    const isToday = isSameDay(date, today);
-
-                    return (
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Left Column: Calendar & Time */}
+                <div className="lg:col-span-2 space-y-6">
+                  {/* Calendar */}
+                  <div className="bg-card border border-border p-6">
+                    <div className="flex items-center justify-between mb-6">
                       <button
-                        key={date.toISOString()}
-                        onClick={() => handleDateSelect(date)}
-                        disabled={isPast}
-                        className={`p-4 text-center transition-all duration-200 ${
-                          isPast
-                            ? 'opacity-30 cursor-not-allowed'
-                            : isSelected
-                            ? 'bg-primary text-primary-foreground'
-                            : 'hover:bg-muted'
-                        } ${isToday && !isSelected ? 'ring-1 ring-primary' : ''}`}
+                        onClick={() => setWeekStart(subWeeks(weekStart, 1))}
+                        className="p-2 hover:bg-muted rounded transition-colors"
                       >
-                        <span className="text-lg font-medium">{format(date, 'd')}</span>
+                        <ChevronLeft size={20} />
                       </button>
-                    );
-                  })}
+                      <h3 className="font-serif text-lg">
+                        {format(weekStart, 'MMMM yyyy')}
+                      </h3>
+                      <button
+                        onClick={() => setWeekStart(addWeeks(weekStart, 1))}
+                        className="p-2 hover:bg-muted rounded transition-colors"
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-2 mb-4">
+                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
+                        <div key={day} className="text-center text-xs text-muted-foreground uppercase tracking-wider py-2">
+                          {day}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-2">
+                      {weekDays.map((date) => {
+                        const isSelected = selectedDate && isSameDay(date, selectedDate);
+                        const isPast = isPastDate(date);
+                        const isToday = isSameDay(date, today);
+
+                        return (
+                          <button
+                            key={date.toISOString()}
+                            onClick={() => handleDateSelect(date)}
+                            disabled={isPast}
+                            className={`p-4 text-center transition-all duration-200 ${
+                              isPast
+                                ? 'opacity-30 cursor-not-allowed'
+                                : isSelected
+                                ? 'bg-primary text-primary-foreground'
+                                : 'hover:bg-muted'
+                            } ${isToday && !isSelected ? 'ring-1 ring-primary' : ''}`}
+                          >
+                            <span className="text-lg font-medium">{format(date, 'd')}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Time Slots */}
+                  {selectedDate && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-card border border-border p-6"
+                    >
+                      <h3 className="font-serif text-lg mb-4 flex items-center gap-2">
+                        <CalendarDays size={18} className="text-primary" />
+                        Available Times for {format(selectedDate, 'EEEE, MMMM d')}
+                      </h3>
+                      <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                        {timeSlots.map((time) => {
+                          const isSelected = selectedTime === time;
+
+                          return (
+                            <button
+                              key={time}
+                              onClick={() => handleTimeSelect(time)}
+                              className={`py-3 px-4 text-sm transition-all duration-200 ${
+                                isSelected
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'border border-border hover:border-primary hover:text-primary'
+                              }`}
+                            >
+                              {time}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+
+                {/* Right Column: Add-ons */}
+                <div className="space-y-6">
+                  <div className="bg-card border border-border p-6">
+                    <h3 className="font-serif text-lg mb-4">Enhance Your Experience</h3>
+                    <p className="text-muted-foreground text-sm mb-6">Add extras to customize your look</p>
+
+                    {/* Makeup Add-ons */}
+                    <div className="mb-6">
+                      <h4 className="text-sm font-medium flex items-center gap-2 mb-3 text-primary">
+                        <Sparkles size={14} />
+                        Makeup Add-ons
+                      </h4>
+                      <div className="space-y-2">
+                        {makeupAddOns.map((addon) => {
+                          const isSelected = selectedAddOns.some(a => a.id === addon.id);
+                          return (
+                            <button
+                              key={addon.id}
+                              onClick={() => handleAddOnToggle(addon)}
+                              className={`w-full flex items-center justify-between p-3 rounded border transition-all ${
+                                isSelected
+                                  ? 'border-primary bg-primary/5'
+                                  : 'border-border hover:border-primary/50'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded border flex items-center justify-center ${
+                                  isSelected ? 'bg-primary border-primary' : 'border-muted-foreground'
+                                }`}>
+                                  {isSelected && <Check size={12} className="text-primary-foreground" />}
+                                </div>
+                                <div className="text-left">
+                                  <span className="text-sm font-medium">{addon.name}</span>
+                                  <p className="text-xs text-muted-foreground">{addon.description}</p>
+                                </div>
+                              </div>
+                              <span className="text-sm font-medium text-primary">
+                                +{formatCurrency(addon.price)}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Hair Add-ons */}
+                    <div className="mb-6">
+                      <h4 className="text-sm font-medium flex items-center gap-2 mb-3 text-primary">
+                        <Scissors size={14} />
+                        Hair Add-ons
+                      </h4>
+                      <div className="space-y-2">
+                        {hairAddOns.map((addon) => {
+                          const isSelected = selectedAddOns.some(a => a.id === addon.id);
+                          return (
+                            <button
+                              key={addon.id}
+                              onClick={() => handleAddOnToggle(addon)}
+                              className={`w-full flex items-center justify-between p-3 rounded border transition-all ${
+                                isSelected
+                                  ? 'border-primary bg-primary/5'
+                                  : 'border-border hover:border-primary/50'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded border flex items-center justify-center ${
+                                  isSelected ? 'bg-primary border-primary' : 'border-muted-foreground'
+                                }`}>
+                                  {isSelected && <Check size={12} className="text-primary-foreground" />}
+                                </div>
+                                <div className="text-left">
+                                  <span className="text-sm font-medium">{addon.name}</span>
+                                  <p className="text-xs text-muted-foreground">{addon.description}</p>
+                                </div>
+                              </div>
+                              <span className="text-sm font-medium text-primary">
+                                +{formatCurrency(addon.price)}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* General Add-ons */}
+                    <div>
+                      <h4 className="text-sm font-medium flex items-center gap-2 mb-3 text-primary">
+                        <MapPin size={14} />
+                        Travel & Extras
+                      </h4>
+                      <div className="space-y-2">
+                        {generalAddOns.map((addon) => {
+                          const isSelected = selectedAddOns.some(a => a.id === addon.id);
+                          return (
+                            <button
+                              key={addon.id}
+                              onClick={() => handleAddOnToggle(addon)}
+                              className={`w-full flex items-center justify-between p-3 rounded border transition-all ${
+                                isSelected
+                                  ? 'border-primary bg-primary/5'
+                                  : 'border-border hover:border-primary/50'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded border flex items-center justify-center ${
+                                  isSelected ? 'bg-primary border-primary' : 'border-muted-foreground'
+                                }`}>
+                                  {isSelected && <Check size={12} className="text-primary-foreground" />}
+                                </div>
+                                <div className="text-left">
+                                  <span className="text-sm font-medium">{addon.name}</span>
+                                  <p className="text-xs text-muted-foreground">{addon.description}</p>
+                                </div>
+                              </div>
+                              <span className="text-sm font-medium text-primary">
+                                +{formatCurrency(addon.price)}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Running Total */}
+                  <div className="bg-primary/5 border border-primary/20 p-4 rounded">
+                    <h4 className="font-medium mb-3">Your Selection</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>{selectedService?.name}</span>
+                        <span>{formatCurrency(selectedService?.price || 0)}</span>
+                      </div>
+                      {selectedAddOns.map(addon => (
+                        <div key={addon.id} className="flex justify-between text-muted-foreground">
+                          <span>+ {addon.name}</span>
+                          <span>{formatCurrency(addon.price)}</span>
+                        </div>
+                      ))}
+                      <div className="border-t border-border pt-2 mt-2">
+                        <div className="flex justify-between font-medium">
+                          <span>Total</span>
+                          <span>{formatCurrency(serviceTotal)}</span>
+                        </div>
+                        <div className="flex justify-between text-primary">
+                          <span>Deposit (50%)</span>
+                          <span>{formatCurrency(depositTotal)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              {/* Time Slots */}
-              {selectedDate && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-card border border-border p-6"
-                >
-                  <h3 className="font-serif text-lg mb-4 flex items-center gap-2">
-                    <CalendarDays size={18} className="text-primary" />
-                    Available Times for {format(selectedDate, 'EEEE, MMMM d')}
-                  </h3>
-                  <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
-                    {timeSlots.map((time) => {
-                      const isSelected = selectedTime === time;
-
-                      return (
-                        <button
-                          key={time}
-                          onClick={() => handleTimeSelect(time)}
-                          className={`py-3 px-4 text-sm transition-all duration-200 ${
-                            isSelected
-                              ? 'bg-primary text-primary-foreground'
-                              : 'border border-border hover:border-primary hover:text-primary'
-                          }`}
-                        >
-                          {time}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              )}
             </motion.div>
           )}
 
@@ -360,7 +544,12 @@ const Booking = () => {
                     Booking Summary
                   </h4>
                   <p className="font-serif text-lg">{selectedService?.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  {selectedAddOns.length > 0 && (
+                    <p className="text-sm text-muted-foreground">
+                      + {selectedAddOns.map(a => a.name).join(', ')}
+                    </p>
+                  )}
+                  <p className="text-sm text-muted-foreground mt-1">
                     {selectedDate && format(selectedDate, 'EEEE, MMMM d, yyyy')} at {selectedTime}
                   </p>
                 </div>
@@ -373,16 +562,28 @@ const Booking = () => {
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>Service Total</span>
+                      <span>{selectedService?.name}</span>
                       <span>{formatCurrency(selectedService?.price || 0)}</span>
+                    </div>
+                    {selectedAddOns.map(addon => (
+                      <div key={addon.id} className="flex justify-between text-muted-foreground">
+                        <span>+ {addon.name}</span>
+                        <span>{formatCurrency(addon.price)}</span>
+                      </div>
+                    ))}
+                    <div className="border-t border-border pt-2 mt-2">
+                      <div className="flex justify-between">
+                        <span>Service Total</span>
+                        <span>{formatCurrency(serviceTotal)}</span>
+                      </div>
                     </div>
                     <div className="flex justify-between text-primary font-medium">
                       <span>50% Deposit (Due Now)</span>
-                      <span>{formatCurrency(selectedService?.deposit || 0)}</span>
+                      <span>{formatCurrency(depositTotal)}</span>
                     </div>
                     <div className="flex justify-between text-muted-foreground border-t border-border pt-2 mt-2">
                       <span>Remaining Balance (Due In Person)</span>
-                      <span>{formatCurrency(selectedService?.remainingBalance || 0)}</span>
+                      <span>{formatCurrency(remainingBalance)}</span>
                     </div>
                   </div>
                 </div>
@@ -417,7 +618,7 @@ const Booking = () => {
 
                   <div>
                     <label className="text-sm text-muted-foreground block mb-2">
-                      Email *
+                      Email Address *
                     </label>
                     <input
                       type="email"
@@ -431,11 +632,10 @@ const Booking = () => {
 
                   <div>
                     <label className="text-sm text-muted-foreground block mb-2">
-                      Phone *
+                      Phone Number
                     </label>
                     <input
                       type="tel"
-                      required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full h-11 bg-muted border border-border px-4 focus:border-primary focus:outline-none transition-colors"
@@ -445,34 +645,30 @@ const Booking = () => {
 
                   <div>
                     <label className="text-sm text-muted-foreground block mb-2">
-                      Special Requests (Optional)
+                      Special Requests or Notes
                     </label>
                     <textarea
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      rows={3}
-                      className="w-full bg-muted border border-border px-4 py-3 focus:border-primary focus:outline-none transition-colors resize-none"
-                      placeholder="Any specific requests or allergies..."
+                      className="w-full h-24 bg-muted border border-border px-4 py-3 focus:border-primary focus:outline-none transition-colors resize-none"
+                      placeholder="Any allergies, preferences, or special requests..."
                     />
                   </div>
 
                   <Button
                     type="submit"
-                    variant="hero"
-                    size="xl"
-                    className="w-full"
                     disabled={isCheckoutLoading}
+                    className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
-                    <CreditCard size={18} className="mr-2" />
-                    {isCheckoutLoading 
-                      ? 'Processing...' 
-                      : `Pay ${formatCurrency(selectedService?.deposit || 0)} Deposit`
-                    }
+                    {isCheckoutLoading ? (
+                      'Processing...'
+                    ) : (
+                      <>
+                        <CreditCard size={18} className="mr-2" />
+                        Pay {formatCurrency(depositTotal)} Deposit
+                      </>
+                    )}
                   </Button>
-
-                  <p className="text-xs text-center text-muted-foreground">
-                    Secure payment powered by Stripe. You'll be redirected to complete payment.
-                  </p>
                 </form>
               </div>
             </motion.div>

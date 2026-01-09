@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { ServiceConfig } from '@/config/services';
+import { ServiceConfig, AddOnService } from '@/config/services';
 
 interface CheckoutData {
   service: ServiceConfig;
+  addOns?: AddOnService[];
   customerEmail: string;
   customerName: string;
   customerPhone?: string;
@@ -21,21 +22,28 @@ export const useDepositCheckout = () => {
     setError(null);
 
     try {
+      // Calculate totals with add-ons
+      const addOnsTotal = data.addOns?.reduce((sum, addon) => sum + addon.price, 0) || 0;
+      const fullPrice = data.service.price + addOnsTotal;
+      const depositAmount = data.service.deposit + (addOnsTotal * 0.5);
+      const remainingBalance = fullPrice - depositAmount;
+
       const { data: response, error: functionError } = await supabase.functions.invoke(
         'create-deposit-checkout',
         {
           body: {
             priceId: data.service.stripePriceId,
             serviceName: data.service.name,
-            fullPrice: data.service.price,
-            depositAmount: data.service.deposit,
-            remainingBalance: data.service.remainingBalance,
+            fullPrice,
+            depositAmount,
+            remainingBalance,
             customerEmail: data.customerEmail,
             customerName: data.customerName,
             customerPhone: data.customerPhone,
             appointmentDate: data.appointmentDate,
             appointmentTime: data.appointmentTime,
             notes: data.notes,
+            addOns: data.addOns?.map(a => ({ name: a.name, price: a.price })),
           },
         }
       );
@@ -45,7 +53,6 @@ export const useDepositCheckout = () => {
       }
 
       if (response?.url) {
-        // Open Stripe checkout in new tab
         window.open(response.url, '_blank');
         return { success: true, url: response.url };
       } else {

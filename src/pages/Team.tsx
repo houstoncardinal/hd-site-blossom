@@ -93,16 +93,16 @@ const Team = () => {
               <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
                 {/* Founder Image */}
                 {founder.image_url && (
-                  <div className="w-48 h-48 md:w-64 md:h-64 flex-shrink-0">
-                    <div className="relative w-full h-full">
-                      <img
-                        src={founder.image_url}
-                        alt={founder.name}
-                        className="w-full h-full object-cover rounded-full border-4 border-primary/30"
-                      />
-                      <div className="absolute -bottom-2 -right-2 bg-primary rounded-full p-2">
-                        <Crown size={20} className="text-primary-foreground" />
+                  <div className="w-64 md:w-80 flex-shrink-0">
+                    <div className="relative">
+                      <div className="aspect-[3/4] overflow-hidden">
+                        <img
+                          src={founder.image_url}
+                          alt={founder.name}
+                          className="w-full h-full object-cover border border-primary/30"
+                        />
                       </div>
+                      <div className="absolute -bottom-3 -right-3 w-full h-full border border-primary/30 -z-10" />
                     </div>
                   </div>
                 )}

@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import PersonSchema from '@/components/seo/PersonSchema';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import { supabase } from '@/integrations/supabase/client';
 
 interface TeamMember {
@@ -46,6 +48,27 @@ const Team = () => {
         canonicalUrl="/about"
         ogImage="/IMG_8915.JPG"
       />
+
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'About', url: '/about' }
+        ]}
+      />
+
+      {teamMembers && teamMembers.length > 0 && (
+        <PersonSchema
+          people={teamMembers.map(member => ({
+            name: member.name,
+            jobTitle: member.role,
+            description: member.bio || `Professional makeup artist specializing in ${member.specialties?.join(', ') || 'beauty services'}`,
+            image: member.image_url || '/IMG_8915.JPG',
+            ...(member.instagram_handle && {
+              sameAs: [`https://instagram.com/${member.instagram_handle.replace('@', '')}`]
+            })
+          }))}
+        />
+      )}
 
       <Navbar />
 

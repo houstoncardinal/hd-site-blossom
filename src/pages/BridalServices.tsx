@@ -6,6 +6,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import HowToSchema from '@/components/seo/HowToSchema';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
+import ItemListSchema from '@/components/seo/ItemListSchema';
 import { getServicesForEvent, formatCurrency, ADDONS } from '@/config/services';
 
 const BridalServices = () => {
@@ -53,6 +56,56 @@ const BridalServices = () => {
         keywords="bridal makeup Houston, wedding makeup artist, bridal hair styling, bridesmaid makeup, wedding day glam, bridal party makeup"
         canonicalUrl="/bridal"
         ogImage="/IMG_8900.JPG"
+      />
+
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Services', url: '/services' },
+          { name: 'Bridal', url: '/bridal' }
+        ]}
+      />
+
+      <HowToSchema
+        name="How to Book Your Bridal Makeup Trial"
+        description="Step-by-step guide to booking and preparing for your bridal makeup trial at HDA Studio"
+        totalTime="PT2H"
+        estimatedCost={{
+          currency: "USD",
+          value: "480"
+        }}
+        steps={[
+          {
+            name: "Initial Consultation",
+            text: "Contact HDA Studio to discuss your wedding date, venue location, and makeup preferences. Share inspiration photos and discuss your bridal vision.",
+            image: "/IMG_8900.JPG"
+          },
+          {
+            name: "Schedule Your Trial",
+            text: "Book a trial session 2-3 months before your wedding date. This allows time for any adjustments and ensures your preferred date is available.",
+            image: "/IMG_8901.JPG"
+          },
+          {
+            name: "Prepare for Your Trial",
+            text: "Arrive with a clean, moisturized face. Bring inspiration photos, your dress or a similar colored top, and any accessories you plan to wear.",
+            image: "/IMG_8957.JPG"
+          },
+          {
+            name: "Wedding Day Application",
+            text: "On your wedding day, relax and enjoy professional makeup application. The artist will recreate your trial look with long-lasting products designed for all-day wear.",
+            image: "/IMG_8958.JPG"
+          }
+        ]}
+      />
+
+      <ItemListSchema
+        name="HDA Studio Bridal Packages"
+        description="Comprehensive bridal makeup and beauty packages for your wedding day"
+        items={bridalServices.map(service => ({
+          name: service.name,
+          description: service.seoDescription,
+          image: "/IMG_8900.JPG"
+        }))}
       />
 
       <Navbar />

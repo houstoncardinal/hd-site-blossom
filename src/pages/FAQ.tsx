@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import FAQSchema from '@/components/seo/FAQSchema';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -138,6 +139,13 @@ const FAQ = () => {
       />
 
       <FAQSchema faqs={allFAQs} />
+
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'FAQ', url: '/faq' }
+        ]}
+      />
 
       <Navbar />
 

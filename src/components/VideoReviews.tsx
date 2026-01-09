@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Play, Star } from 'lucide-react';
 import { useState, useRef } from 'react';
+import VideoObjectSchema from './seo/VideoObjectSchema';
 
 const videoReviews = [
   {
@@ -49,9 +50,20 @@ const VideoReviews = () => {
   };
 
   return (
-    <section className="py-24 md:py-32 bg-gradient-hero relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background opacity-50" />
+    <>
+      <VideoObjectSchema
+        videos={videoReviews.map((review) => ({
+          name: `${review.clientName} - ${review.service}`,
+          description: review.quote,
+          thumbnailUrl: review.thumbnail,
+          contentUrl: review.videoSrc,
+          uploadDate: "2024-12-01",
+          duration: "PT30S"
+        }))}
+      />
+      <section className="py-24 md:py-32 bg-gradient-hero relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background opacity-50" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
@@ -165,6 +177,7 @@ const VideoReviews = () => {
         </motion.div>
       </div>
     </section>
+    </>
   );
 };
 

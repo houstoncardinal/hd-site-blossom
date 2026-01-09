@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import ServiceSchema from '@/components/ServiceSchema';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import {
   MAKEUP_SERVICES,
   HAIR_SERVICES,
@@ -147,6 +148,13 @@ const ServicesCatalog = () => {
       />
 
       <ServiceSchema services={allServicesForSchema} />
+
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Services', url: '/services' }
+        ]}
+      />
 
       <Navbar />
 

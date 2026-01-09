@@ -8,6 +8,9 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import SEOHead from '@/components/seo/SEOHead';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
+import AggregateRatingSchema from '@/components/seo/AggregateRatingSchema';
 
 interface Review {
   id: string;
@@ -110,8 +113,41 @@ const Reviews = () => {
     submitReviewMutation.mutate(result.data);
   };
 
+  // Calculate aggregate rating from reviews
+  const aggregateRating = reviews && reviews.length > 0
+    ? {
+        ratingValue: (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1),
+        reviewCount: reviews.length,
+        bestRating: 5,
+        worstRating: 1
+      }
+    : null;
+
   return (
     <main className="min-h-screen bg-background">
+      <SEOHead
+        title="Client Reviews & Testimonials | HDA Studio"
+        description="Read what our clients say about HDA Studio's professional makeup services. Real reviews from satisfied clients for bridal, editorial, and event makeup in Houston."
+        keywords="makeup artist reviews, client testimonials, HDA Studio reviews, bridal makeup reviews, Houston makeup artist reviews, beauty testimonials"
+        canonicalUrl="/reviews"
+        ogImage="/IMG_8915.JPG"
+      />
+
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Reviews', url: '/reviews' }
+        ]}
+      />
+
+      {aggregateRating && (
+        <AggregateRatingSchema
+          itemName="HDA Studio Makeup Services"
+          ratingValue={parseFloat(aggregateRating.ratingValue)}
+          reviewCount={aggregateRating.reviewCount}
+        />
+      )}
+
       <Navbar />
       
       {/* Hero Section */}

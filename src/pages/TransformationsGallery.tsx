@@ -5,6 +5,9 @@ import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ImageLightbox from '@/components/ImageLightbox';
+import ImageGallerySchema from '@/components/seo/ImageGallerySchema';
+import ItemListSchema from '@/components/seo/ItemListSchema';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import { Filter } from 'lucide-react';
 
 const galleryImages = [
@@ -98,6 +101,31 @@ const TransformationsGallery = () => {
         keywords="makeup gallery, beauty portfolio, editorial makeup, bridal makeup, evening glam, makeup artist portfolio, professional makeup, glam makeup, beauty"
         canonicalUrl="/gallery"
         ogImage="/IMG_8915.JPG"
+      />
+
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Gallery', url: '/gallery' }
+        ]}
+      />
+
+      <ImageGallerySchema
+        images={galleryImages.map(img => ({
+          url: img.src,
+          caption: `${img.category} makeup look`,
+          description: `Professional ${img.category.toLowerCase()} makeup artistry by HDA Studio`
+        }))}
+      />
+
+      <ItemListSchema
+        name="HDA Studio Makeup Gallery"
+        description="Collection of professional makeup artistry showcasing editorial, bridal, evening glam, and special event looks"
+        items={galleryImages.map(img => ({
+          name: `${img.category} Makeup Look`,
+          image: img.src,
+          description: `Professional ${img.category.toLowerCase()} makeup by HDA Studio Houston`
+        }))}
       />
 
       <Navbar />

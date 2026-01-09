@@ -1,9 +1,17 @@
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import ServicesMegamenu from '@/components/ServicesMegamenu';
+import { useAuth } from '@/hooks/useAuth';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -19,6 +27,8 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [megamenuOpen, setMegamenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, signOut } = useAuth();
   const { scrollY } = useScroll();
   const backgroundColor = useTransform(
     scrollY,
@@ -49,6 +59,11 @@ const Navbar = () => {
   const isActive = (href: string) => {
     if (href === '/') return location.pathname === '/';
     return location.pathname.startsWith(href);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
   };
 
   const menuVariants = {
@@ -117,8 +132,47 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Book Now Button */}
-            <div className="hidden md:block">
+            {/* Right Side Actions */}
+            <div className="hidden md:flex items-center gap-4">
+              {/* User Menu */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                      <User size={20} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+                    <div className="px-3 py-2">
+                      <p className="text-sm font-medium truncate">{user.email}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {isAdmin ? 'Administrator' : 'Member'}
+                      </p>
+                    </div>
+                    <DropdownMenuSeparator />
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin" className="cursor-pointer">
+                          <Settings size={14} className="mr-2" />
+                          Admin Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
+                      <LogOut size={14} className="mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link to="/auth">
+                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
+
+              {/* Book Now Button */}
               <Link to="/booking">
                 <Button variant="hero" size="lg">
                   Book Now
@@ -194,7 +248,24 @@ const Navbar = () => {
               className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-[160] md:hidden overflow-y-auto"
             >
               <div className="flex flex-col gap-2 p-6 pt-24">
-                {navLinks.map((link, index) => (
+                {/* User Info for Mobile */}
+                {user && (
+                  <motion.div variants={itemVariants} className="mb-4 pb-4 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <User size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium truncate">{user.email}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {isAdmin ? 'Administrator' : 'Member'}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {navLinks.map((link) => (
                   <motion.div key={link.name} variants={itemVariants}>
                     <Link
                       to={link.href}
@@ -209,12 +280,48 @@ const Navbar = () => {
                     </Link>
                   </motion.div>
                 ))}
-                <motion.div variants={itemVariants} className="mt-6">
+
+                {/* Admin Link for Mobile */}
+                {isAdmin && (
+                  <motion.div variants={itemVariants}>
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsOpen(false)}
+                      className="block text-base tracking-widest uppercase transition-all duration-300 py-4 px-4 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/5"
+                    >
+                      Admin Dashboard
+                    </Link>
+                  </motion.div>
+                )}
+
+                <motion.div variants={itemVariants} className="mt-6 space-y-3">
                   <Link to="/booking" onClick={() => setIsOpen(false)}>
                     <Button variant="hero" size="lg" className="w-full">
                       Book Now
                     </Button>
                   </Link>
+                  
+                  {user ? (
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full"
+                      onClick={() => {
+                        handleSignOut();
+                        setIsOpen(false);
+                      }}
+                    >
+                      <LogOut size={16} className="mr-2" />
+                      Sign Out
+                    </Button>
+                  ) : (
+                    <Link to="/auth" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" size="lg" className="w-full">
+                        <User size={16} className="mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                  )}
                 </motion.div>
               </div>
             </motion.div>

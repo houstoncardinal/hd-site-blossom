@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const heroImage = '/IMG_8900.JPG';
+const founderImage = '/IMG_8869.JPG';
 
 const About = () => {
   return (
@@ -24,6 +26,27 @@ const About = () => {
             </div>
             {/* Decorative Frame */}
             <div className="absolute -bottom-6 -right-6 w-full h-full border border-primary/30 -z-10" />
+            
+            {/* Founder Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="absolute -bottom-4 -right-4 md:bottom-8 md:-right-8 bg-card border border-primary/30 p-4 shadow-lg"
+            >
+              <div className="flex items-center gap-3">
+                <img
+                  src={founderImage}
+                  alt="Huda Javed - Founder"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+                />
+                <div>
+                  <p className="font-serif text-sm">Huda Javed</p>
+                  <p className="text-primary text-xs tracking-wider uppercase">Founder</p>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Content */}
@@ -48,14 +71,25 @@ const About = () => {
                 personal expression.
               </p>
               <p>
-                With years of experience in bridal, editorial, and everyday glam, our talented 
-                artists are dedicated to creating looks that enhance your natural features while 
-                making you feel confident and radiant.
+                Founded by Huda Javed, our team of licensed cosmetologists and senior makeup artists 
+                brings years of experience in bridal, editorial, and everyday glam. We're dedicated 
+                to creating looks that enhance your natural features while making you feel confident 
+                and radiant.
               </p>
               <p>
                 Every appointment is a personalized experience. We take time to understand your 
                 vision, skin type, and preferences to deliver results that exceed your expectations.
               </p>
+            </div>
+
+            {/* Meet the Team Link */}
+            <div className="mt-8">
+              <Link
+                to="/team"
+                className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors text-sm tracking-wider uppercase"
+              >
+                Meet Our Team →
+              </Link>
             </div>
 
             {/* Stats */}

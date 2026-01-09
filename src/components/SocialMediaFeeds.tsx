@@ -3,15 +3,42 @@ import { Instagram, Facebook, Share2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BUSINESS_CONFIG } from '@/config/business';
 import InstagramFeed from './InstagramFeed';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Unified Social Media Feeds Component
  * Displays Instagram and Facebook feeds in a tabbed interface
+ * Optimized: Defers Facebook SDK loading until component is in viewport
  */
 const SocialMediaFeeds = () => {
+  const [shouldLoadSDK, setShouldLoadSDK] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
-    // Load Facebook SDK
+    // Only load Facebook SDK when component is in viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoadSDK(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: '200px' } // Start loading 200px before visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadSDK) return;
+
+    // Load Facebook SDK only when needed
     const loadFacebookSDK = () => {
       if (window.FB) {
         window.FB.XFBML.parse();
@@ -36,11 +63,13 @@ const SocialMediaFeeds = () => {
       document.body.appendChild(script);
     };
 
-    loadFacebookSDK();
-  }, []);
+    // Delay SDK load by 100ms to prioritize main content
+    const timer = setTimeout(loadFacebookSDK, 100);
+    return () => clearTimeout(timer);
+  }, [shouldLoadSDK]);
 
   return (
-    <section className="py-24 md:py-32 bg-gradient-to-b from-background via-charcoal-light to-background">
+    <section ref={sectionRef} className="py-24 md:py-32 bg-gradient-to-b from-background via-charcoal-light to-background">
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <motion.div

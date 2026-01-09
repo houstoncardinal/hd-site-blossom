@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
-import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, User, Shield } from 'lucide-react';
 import { z } from 'zod';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
 
 const Auth = () => {
+  const [searchParams] = useSearchParams();
+  const isAdminLogin = searchParams.get('admin') === 'true';
+  
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,13 +25,17 @@ const Auth = () => {
   
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, loading, signIn, signUp } = useAuth();
+  const { user, loading, signIn, signUp, isAdmin } = useAuth();
 
   useEffect(() => {
     if (!loading && user) {
-      navigate('/admin');
+      if (isAdminLogin && isAdmin) {
+        navigate('/admin');
+      } else if (!isAdminLogin) {
+        navigate('/');
+      }
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, isAdminLogin, isAdmin]);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -96,9 +103,10 @@ const Auth = () => {
         } else {
           toast({
             title: 'Account created!',
-            description: 'You can now log in with your credentials.',
+            description: 'Welcome to HDA Studio! You can now book appointments and more.',
           });
-          setIsLogin(true);
+          // Auto-login after signup
+          navigate('/');
         }
       }
     } finally {
@@ -132,14 +140,32 @@ const Auth = () => {
         </Button>
 
         <div className="bg-card border border-border rounded-lg p-8 shadow-lg">
+          {/* Mode Indicator */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            {isAdminLogin ? (
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                <Shield size={14} />
+                Admin Access
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm">
+                <User size={14} />
+                Client Account
+              </div>
+            )}
+          </div>
+
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-serif font-light text-foreground mb-2">
-              {isLogin ? 'Admin Login' : 'Create Account'}
+            <Link to="/" className="text-2xl font-serif tracking-wider text-foreground inline-block mb-4">
+              HDA <span className="text-primary">Studio</span>
+            </Link>
+            <h1 className="text-2xl font-serif font-light text-foreground mb-2">
+              {isLogin ? 'Welcome Back' : 'Create Account'}
             </h1>
             <p className="text-muted-foreground text-sm">
               {isLogin
-                ? 'Sign in to access the admin dashboard'
-                : 'Create an account to get started'}
+                ? isAdminLogin ? 'Sign in to access the admin dashboard' : 'Sign in to your account'
+                : 'Join HDA Studio to book appointments and more'}
             </p>
           </div>
 
@@ -154,7 +180,7 @@ const Auth = () => {
                   setEmail(e.target.value);
                   setErrors((prev) => ({ ...prev, email: undefined }));
                 }}
-                placeholder="admin@example.com"
+                placeholder="your@email.com"
                 className={errors.email ? 'border-destructive' : ''}
                 disabled={isSubmitting}
               />
@@ -196,7 +222,7 @@ const Auth = () => {
               className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Please wait...' : isLogin ? 'Sign In' : 'Sign Up'}
+              {isSubmitting ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
             </Button>
           </form>
 
@@ -214,6 +240,19 @@ const Auth = () => {
                 : 'Already have an account? Sign in'}
             </button>
           </div>
+
+          {/* Admin login link for regular auth page */}
+          {!isAdminLogin && isLogin && (
+            <div className="mt-4 pt-4 border-t border-border text-center">
+              <Link
+                to="/auth?admin=true"
+                className="text-xs text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+              >
+                <Shield size={12} />
+                Admin Login
+              </Link>
+            </div>
+          )}
         </div>
       </motion.div>
     </div>

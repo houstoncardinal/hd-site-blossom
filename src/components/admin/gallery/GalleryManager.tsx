@@ -3,14 +3,25 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageUploader } from './ImageUploader';
 import { ImageGrid } from './ImageGrid';
 import { CategoryFilter } from './CategoryFilter';
+import { CollectionManager } from './CollectionManager';
+import { AITaggingPanel } from './AITaggingPanel';
 import { useGalleryImages } from './hooks/useGalleryImages';
-import { Image, Upload, Search, RefreshCw, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Image, Upload, Search, RefreshCw, Trash2, Eye, EyeOff, Tag, Star, Folder, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { GALLERY_CATEGORY_LABELS, type GalleryCategory } from '@/types/gallery';
 
 export const GalleryManager = () => {
+  const [activeTab, setActiveTab] = useState('images');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
@@ -66,6 +77,36 @@ export const GalleryManager = () => {
     });
   };
 
+  const handleBulkCategorize = async (category: GalleryCategory) => {
+    if (selectedImages.length === 0) return;
+
+    let successCount = 0;
+    for (const imageId of selectedImages) {
+      const success = await updateImage(imageId, { category });
+      if (success) successCount++;
+    }
+
+    toast({
+      title: 'Bulk Categorize Complete',
+      description: `Successfully categorized ${successCount} of ${selectedImages.length} image(s) as ${GALLERY_CATEGORY_LABELS[category]}`,
+    });
+  };
+
+  const handleBulkFeature = async (featured: boolean) => {
+    if (selectedImages.length === 0) return;
+
+    let successCount = 0;
+    for (const imageId of selectedImages) {
+      const success = await updateImage(imageId, { is_featured: featured });
+      if (success) successCount++;
+    }
+
+    toast({
+      title: `Bulk ${featured ? 'Feature' : 'Unfeature'} Complete`,
+      description: `Successfully ${featured ? 'featured' : 'unfeatured'} ${successCount} of ${selectedImages.length} image(s)`,
+    });
+  };
+
   const handleSelectAll = () => {
     if (selectedImages.length === images.length) {
       setSelectedImages([]);
@@ -91,11 +132,33 @@ export const GalleryManager = () => {
             Manage your gallery images with AI tagging and drag & drop
           </p>
         </div>
-        <Button onClick={() => setUploadDialogOpen(true)}>
-          <Upload size={16} className="mr-2" />
-          Upload Images
-        </Button>
+        {activeTab === 'images' && (
+          <Button onClick={() => setUploadDialogOpen(true)}>
+            <Upload size={16} className="mr-2" />
+            Upload Images
+          </Button>
+        )}
       </div>
+
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="images" className="gap-2">
+            <Image size={16} />
+            Images
+          </TabsTrigger>
+          <TabsTrigger value="collections" className="gap-2">
+            <Folder size={16} />
+            Collections
+          </TabsTrigger>
+          <TabsTrigger value="ai-tagging" className="gap-2">
+            <Sparkles size={16} />
+            AI Tagging
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Images Tab */}
+        <TabsContent value="images" className="space-y-6 mt-6">
 
       {/* Stats Bar */}
       <div className="flex items-center gap-4 p-4 bg-muted rounded-lg">
@@ -175,6 +238,42 @@ export const GalleryManager = () => {
           </Button>
           <div className="h-4 w-px bg-border" />
           <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleBulkFeature(true)}
+          >
+            <Star size={16} className="mr-2" />
+            Feature
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleBulkFeature(false)}
+          >
+            <Star size={16} className="mr-2" />
+            Unfeature
+          </Button>
+          <div className="h-4 w-px bg-border" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Tag size={16} className="mr-2" />
+                Categorize
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {Object.entries(GALLERY_CATEGORY_LABELS).map(([value, label]) => (
+                <DropdownMenuItem
+                  key={value}
+                  onClick={() => handleBulkCategorize(value as GalleryCategory)}
+                >
+                  {label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="h-4 w-px bg-border" />
+          <Button
             variant="destructive"
             size="sm"
             onClick={handleBulkDelete}
@@ -204,12 +303,24 @@ export const GalleryManager = () => {
         onReorder={reorderImages}
       />
 
-      {/* Upload Dialog */}
-      <ImageUploader
-        open={uploadDialogOpen}
-        onClose={() => setUploadDialogOpen(false)}
-        onUploadComplete={refetch}
-      />
+        {/* Upload Dialog */}
+        <ImageUploader
+          open={uploadDialogOpen}
+          onClose={() => setUploadDialogOpen(false)}
+          onUploadComplete={refetch}
+        />
+        </TabsContent>
+
+        {/* Collections Tab */}
+        <TabsContent value="collections" className="mt-6">
+          <CollectionManager />
+        </TabsContent>
+
+        {/* AI Tagging Tab */}
+        <TabsContent value="ai-tagging" className="mt-6">
+          <AITaggingPanel />
+        </TabsContent>
+      </Tabs>
     </motion.div>
   );
 };

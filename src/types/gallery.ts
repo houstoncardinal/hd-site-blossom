@@ -96,6 +96,10 @@ export interface GalleryCollection {
   display_order: number;
   created_at: string;
   updated_at: string;
+
+  // Computed fields from joins
+  image_count?: number;
+  cover_image_path?: string | null;
 }
 
 export interface GalleryCollectionInsert {

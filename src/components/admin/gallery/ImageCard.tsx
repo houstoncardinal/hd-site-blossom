@@ -26,6 +26,7 @@ import {
 import type { GalleryImage } from '@/types/gallery';
 import { getImageUrl, GALLERY_CATEGORY_LABELS } from '@/types/gallery';
 import { cn } from '@/lib/utils';
+import { ImageDetailDialog } from './ImageDetailDialog';
 
 interface ImageCardProps {
   image: GalleryImage;
@@ -44,6 +45,7 @@ export const ImageCard = ({
 }: ImageCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
   const {
     attributes,
@@ -187,7 +189,7 @@ export const ImageCard = ({
                       <Copy size={16} className="mr-2" />
                       Copy URL
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setDetailDialogOpen(true)}>
                       <Edit size={16} className="mr-2" />
                       Edit Details
                     </DropdownMenuItem>
@@ -222,6 +224,14 @@ export const ImageCard = ({
           </div>
         </Card>
       </motion.div>
+
+      {/* Image Detail Dialog */}
+      <ImageDetailDialog
+        image={image}
+        open={detailDialogOpen}
+        onClose={() => setDetailDialogOpen(false)}
+        onUpdate={onUpdate}
+      />
     </div>
   );
 };

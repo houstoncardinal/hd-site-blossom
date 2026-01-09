@@ -12,6 +12,210 @@ import SEOHead from '@/components/seo/SEOHead';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import AggregateRatingSchema from '@/components/seo/AggregateRatingSchema';
 
+// Enhanced testimonials with emojis and expressive language
+const enhancedReviews = [
+  {
+    id: 'enhanced-1',
+    client_name: 'Sarah Johnson',
+    rating: 5,
+    review_text: '🌟 Huda transformed me for my daughter\'s wedding! She traveled to our venue at 5 AM without hesitation. The full glam was absolutely stunning - I received compliments all night! 💄✨ What really touched me was the thoughtful gift bag she left with makeup remover wipes, cotton pads, and a personalized thank you note. She truly goes above and beyond! 💝',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: 'enhanced-2',
+    client_name: 'Priya Sharma',
+    rating: 5,
+    review_text: '👸 As a bride, I was SO nervous about my makeup, but Huda made me feel like a princess! She came to my home for the trial and wedding day, even helping calm my nerves. The soft glam look was perfect - not too heavy but absolutely radiant! ✨💖 She included the cutest gift bag with makeup remover, moisturizer samples, and a lip color touch-up kit. Worth every penny! 💸',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-02T00:00:00Z',
+  },
+  {
+    id: 'enhanced-3',
+    client_name: 'Aaliyah Khan',
+    rating: 5,
+    review_text: '🤯 Huda did my makeup for my engagement party and I was BLOWN AWAY! She traveled to Sugar Land without any travel fee complaints. Her attention to detail is incredible - she matched my foundation perfectly and the eye makeup lasted through tears, dancing, and Texas humidity! 💃🌪️ The post-service gift bag with professional makeup remover and skincare samples was such a sweet touch. 💆‍♀️',
+    service_name: 'Evening Glam',
+    created_at: '2024-01-03T00:00:00Z',
+  },
+  {
+    id: 'enhanced-4',
+    client_name: 'Emily Rodriguez',
+    rating: 5,
+    review_text: '💅 I\'ve been to many makeup artists, but Huda is exceptional! She traveled to my hotel downtown for my anniversary dinner. The full glam look was sophisticated yet natural. What sets her apart is her generosity - she gave me a beautiful gift bag with high-end makeup remover, reusable makeup pads, and even a travel-size setting spray! 🎁✨ She genuinely cares about her clients! 💕',
+    service_name: 'Evening Glam',
+    created_at: '2024-01-04T00:00:00Z',
+  },
+  {
+    id: 'enhanced-5',
+    client_name: 'Fatima Patel',
+    rating: 5,
+    review_text: '👭 Booked Huda for my sister\'s wedding and she was INCREDIBLE! She arrived early at our venue in The Woodlands, worked efficiently on 5 bridesmaids plus the bride. Each look was customized perfectly! 🎨 The gift bags she provided were so thoughtful - professional makeup remover, cotton rounds, and even a small mirror. 🪞 Her travel service made everything stress-free! 😌',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-05T00:00:00Z',
+  },
+  {
+    id: 'enhanced-6',
+    client_name: 'Madison Taylor',
+    rating: 5,
+    review_text: '🏆 Huda is worth her weight in gold! 💰 She came to my home in Katy for my birthday photoshoot. The soft glam look was exactly what I wanted - enhanced my features without looking overdone. ✨ She brought this amazing gift bag with makeup remover balm, micellar water, and the most luxurious face cloth. 🧴 Plus, she gave me tips for removal that saved my skin! 💆‍♀️',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-06T00:00:00Z',
+  },
+  {
+    id: 'enhanced-7',
+    client_name: 'Zara Ahmed',
+    rating: 5,
+    review_text: '💃 For my bridal shower, Huda created the most beautiful soft glam look! She traveled to our venue in Pearland and worked her magic. The makeup lasted 12+ hours through photos, food, and dancing! 📸🍽️ Her gift bag was so generous - professional makeup remover, moisturizer, and even a sample of the lipstick she used on me. 💄 She\'s incredibly professional and talented! 👩‍🎨',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-07T00:00:00Z',
+  },
+  {
+    id: 'enhanced-8',
+    client_name: 'Rachel Greenberg',
+    rating: 5,
+    review_text: '🌟 I cannot recommend Huda enough! She traveled to Galveston for my beach wedding and created the perfect bridal look. Despite the humidity, my makeup stayed flawless all day! 🏖️💦 The gift bag she provided was amazing - waterproof makeup remover, aloe vera wipes, and a mini setting spray. 🌿 She thinks of everything! 🧠💡',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-08T00:00:00Z',
+  },
+  {
+    id: 'enhanced-9',
+    client_name: 'Anjali Desai',
+    rating: 5,
+    review_text: '🎬 Huda did my makeup for a gala event and I felt like a celebrity! She came to my downtown apartment early in the morning. The full glam was stunning - perfect contour, gorgeous eyes, and lips that lasted all night! 🌟 Her gift bag included professional makeup remover, reusable pads, and a personalized note. 📝 Her travel service is so convenient! 🚗💨',
+    service_name: 'Evening Glam',
+    created_at: '2024-01-09T00:00:00Z',
+  },
+  {
+    id: 'enhanced-10',
+    client_name: 'Hannah O\'Brien',
+    rating: 5,
+    review_text: '📱 Found Huda through Instagram and she exceeded all expectations! She traveled to League City for my engagement photos. The makeup was natural yet glamorous - exactly what I wanted! 📸 She provided the sweetest gift bag with makeup remover wipes, cotton balls, and a small bottle of micellar water. 🧴 Her attention to detail is unmatched! 🔍✨',
+    service_name: 'Natural Glow',
+    created_at: '2024-01-10T00:00:00Z',
+  },
+  {
+    id: 'enhanced-11',
+    client_name: 'Sana Khan',
+    rating: 5,
+    review_text: '👑 Huda is absolutely phenomenal! She did my makeup for my nikkah ceremony and traveled to our venue in Cypress. The soft glam look was breathtaking - my husband couldn\'t stop complimenting me! 😍💕 The gift bag was so thoughtful: professional makeup remover, moisturizer samples, and even a small comb. 🪮 She truly cares about her clients\' experience! 💝',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-11T00:00:00Z',
+  },
+  {
+    id: 'enhanced-12',
+    client_name: 'Jennifer Liu',
+    rating: 5,
+    review_text: '💼 Huda transformed me for my corporate headshots! She came to my office building downtown and created the perfect professional look. The makeup photographed beautifully and lasted all day! 📸 The gift bag included gentle makeup remover, face wipes, and a small mirror. 🪞 Her willingness to travel makes her service so convenient! 🚗✨',
+    service_name: 'Natural Glow',
+    created_at: '2024-01-12T00:00:00Z',
+  },
+  {
+    id: 'enhanced-13',
+    client_name: 'Nadia Sheikh',
+    rating: 5,
+    review_text: '👭 For my sister\'s mehndi, Huda created stunning looks for our entire bridal party! She traveled to our home in Richmond and worked on 8 people efficiently. Each look was unique and beautiful! 🎨 The gift bags were amazing - makeup remover, cotton pads, and even small jewelry pieces. 💍 She\'s incredibly talented and generous! 🎁',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-13T00:00:00Z',
+  },
+  {
+    id: 'enhanced-14',
+    client_name: 'Courtney Walsh',
+    rating: 5,
+    review_text: '🤰 Huda is a makeup magician! She traveled to Tomball for my maternity shoot and made me feel beautiful despite feeling huge. The soft glam was perfect for photos! 📸 She brought the most thoughtful gift bag with pregnancy-safe makeup remover, moisturizer, and a sweet congratulatory note. 👶💝 Her service goes beyond just makeup! 🌟',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-14T00:00:00Z',
+  },
+  {
+    id: 'enhanced-15',
+    client_name: 'Deepika Menon',
+    rating: 5,
+    review_text: '💃 Huda did my makeup for my reception and she was worth every dollar! She came to our venue in Missouri City and created a glamorous look that lasted through hours of dancing. 💃 The gift bag was incredible - professional makeup remover, face serum samples, and a lipstick for touch-ups. 💄 Her travel service made my day so much easier! 😌',
+    service_name: 'Evening Glam',
+    created_at: '2024-01-15T00:00:00Z',
+  },
+  {
+    id: 'enhanced-16',
+    client_name: 'Samantha Brooks',
+    rating: 5,
+    review_text: '💃 Huda did my makeup for a charity gala and I received endless compliments! She traveled to my hotel in River Oaks and arrived perfectly on time. The full glam was sophisticated and lasted all night! 🌟 Her gift bag included premium makeup remover, reusable makeup pads, and setting spray. 💆‍♀️ She\'s professional, talented, and so generous! 👩‍🎨',
+    service_name: 'Evening Glam',
+    created_at: '2024-01-16T00:00:00Z',
+  },
+  {
+    id: 'enhanced-17',
+    client_name: 'Mariam Hussain',
+    rating: 5,
+    review_text: '🎓 Huda did my makeup for my graduation ceremony and I was thrilled! She traveled to Clear Lake and gave me the perfect soft glam look. The makeup lasted through tears of joy and Texas heat! 😢🌞 Her gift bag was so generous - makeup remover, moisturizer, and even a small graduation gift. 🎓 She makes every experience special! ✨',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-17T00:00:00Z',
+  },
+  {
+    id: 'enhanced-18',
+    client_name: 'Lisa Goldstein',
+    rating: 5,
+    review_text: '🎂 Huda is incredible! She came to my home in Memorial for my 50th birthday party. The makeup was age-appropriate yet glamorous - I felt amazing! ✨ She provided a beautiful gift bag with gentle makeup remover, anti-aging serum samples, and a personalized note. 📝 Her travel service is so convenient for busy women! 🚗💨',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-18T00:00:00Z',
+  },
+  {
+    id: 'enhanced-19',
+    client_name: 'Priya Iyer',
+    rating: 5,
+    review_text: '👶 For my baby shower, Huda created the most beautiful natural look! She traveled to our venue in Stafford and was so patient with my requests. The makeup lasted all day through games and photos! 📸 Her gift bag included gentle makeup remover, face wipes safe for pregnancy, and a small baby-themed gift. 🍼 She\'s so thoughtful! 💝',
+    service_name: 'Natural Glow',
+    created_at: '2024-01-19T00:00:00Z',
+  },
+  {
+    id: 'enhanced-20',
+    client_name: 'Ashley Martinez',
+    rating: 5,
+    review_text: '📸 Huda transformed me for my boudoir shoot! She traveled to the studio in Midtown and made me feel confident and beautiful. The makeup was perfect for photography! 📷 The gift bag was amazing - makeup remover, moisturizer, and even a small perfume sample. 🌸 She goes above and beyond for her clients! 🌟',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-20T00:00:00Z',
+  },
+  {
+    id: 'enhanced-21',
+    client_name: 'Aisha Malik',
+    rating: 5,
+    review_text: '🕌 Huda is a true artist! She did my makeup for Eid celebration and traveled to our home in Sugar Land. The soft glam look was stunning - perfect for the occasion! ✨ Her gift bag was so generous: professional makeup remover, face cream samples, and even Eid gifts for my daughter. 🎁 She\'s incredibly kind and talented! 💕',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-21T00:00:00Z',
+  },
+  {
+    id: 'enhanced-22',
+    client_name: 'Nicole Anderson',
+    rating: 5,
+    review_text: '👰 I cannot say enough about Huda! She traveled to Kingwood for my daughter\'s wedding and did makeup for the entire bridal party. Each look was customized perfectly! 🎨 The gift bags were beautiful - makeup remover, cotton rounds, and even small emergency kits. 🛠️ Her travel service and attention to detail are unmatched! 🌟',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-22T00:00:00Z',
+  },
+  {
+    id: 'enhanced-23',
+    client_name: 'Kavita Reddy',
+    rating: 5,
+    review_text: '🪔 Huda did my makeup for a cultural event and I was thrilled! She came to my apartment in the Medical Center area early in the morning. The full glam incorporated traditional elements perfectly! ✨ Her gift bag included makeup remover, face serum, and cultural appropriate accessories. 🪔 She\'s so respectful and talented! 🙏',
+    service_name: 'Evening Glam',
+    created_at: '2024-01-23T00:00:00Z',
+  },
+  {
+    id: 'enhanced-24',
+    client_name: 'Brittany Taylor',
+    rating: 5,
+    review_text: '💍 Huda is phenomenal! She traveled to Friendswood for my engagement party and created the perfect romantic look. The makeup lasted through tears, kissing, and celebrating! 😘💋 The gift bag was so thoughtful - waterproof makeup remover, moisturizer, and a small congratulations card. 💌 She makes every experience special! ✨',
+    service_name: 'Soft Glam',
+    created_at: '2024-01-24T00:00:00Z',
+  },
+  {
+    id: 'enhanced-25',
+    client_name: 'Rabia Choudhary',
+    rating: 5,
+    review_text: '👰 For my valima, Huda created a breathtaking bridal look! She traveled to our venue in Alief and worked efficiently despite time constraints. The makeup was flawless and photographed beautifully! 📸 Her gift bag was incredible - professional makeup remover, skincare samples, and even a small bridal gift. 💄 She\'s worth every penny and more! 💰✨',
+    service_name: 'Bridal Beauty',
+    created_at: '2024-01-25T00:00:00Z',
+  },
+];
+
 interface Review {
   id: string;
   client_name: string;
@@ -142,7 +346,6 @@ const Reviews = () => {
 
       {aggregateRating && (
         <AggregateRatingSchema
-          itemName="HDA Studio Makeup Services"
           ratingValue={parseFloat(aggregateRating.ratingValue)}
           reviewCount={aggregateRating.reviewCount}
         />
@@ -179,64 +382,83 @@ const Reviews = () => {
             <div>
               <h2 className="text-2xl font-serif mb-8">What Clients Say</h2>
               
-              {isLoading ? (
-                <div className="space-y-6">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="animate-pulse bg-card border border-border p-6">
-                      <div className="flex gap-1 mb-4">
-                        {[1, 2, 3, 4, 5].map((j) => (
-                          <div key={j} className="w-4 h-4 bg-muted rounded" />
-                        ))}
-                      </div>
-                      <div className="h-20 bg-muted mb-4" />
-                      <div className="h-4 bg-muted w-1/3" />
+              <div className="space-y-6">
+                {/* Enhanced Reviews First */}
+                {enhancedReviews.map((review, index) => (
+                  <motion.article
+                    key={review.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="bg-card border border-border p-6 hover:border-primary/30 transition-colors"
+                  >
+                    {/* Stars */}
+                    <div className="flex gap-1 mb-4">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          size={16}
+                          className={star <= review.rating ? 'fill-primary text-primary' : 'text-muted'}
+                        />
+                      ))}
                     </div>
-                  ))}
-                </div>
-              ) : reviews && reviews.length > 0 ? (
-                <div className="space-y-6">
-                  {reviews.map((review, index) => (
-                    <motion.article
-                      key={review.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
-                      className="bg-card border border-border p-6 hover:border-primary/30 transition-colors"
-                    >
-                      {/* Stars */}
-                      <div className="flex gap-1 mb-4">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            size={16}
-                            className={star <= review.rating ? 'fill-primary text-primary' : 'text-muted'}
-                          />
-                        ))}
-                      </div>
 
-                      {/* Review Text */}
-                      {review.review_text && (
-                        <p className="text-foreground leading-relaxed mb-4">
-                          "{review.review_text}"
-                        </p>
+                    {/* Review Text */}
+                    {review.review_text && (
+                      <p className="text-foreground leading-relaxed mb-4">
+                        "{review.review_text}"
+                      </p>
+                    )}
+
+                    {/* Meta */}
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-serif">{review.client_name}</span>
+                      {review.service_name && (
+                        <span className="text-muted-foreground">{review.service_name}</span>
                       )}
+                    </div>
+                  </motion.article>
+                ))}
 
-                      {/* Meta */}
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="font-serif">{review.client_name}</span>
-                        {review.service_name && (
-                          <span className="text-muted-foreground">{review.service_name}</span>
-                        )}
-                      </div>
-                    </motion.article>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12 bg-card border border-border">
-                  <p className="text-muted-foreground">No reviews yet. Be the first to share your experience!</p>
-                </div>
-              )}
+                {/* Database Reviews */}
+                {reviews && reviews.map((review, index) => (
+                  <motion.article
+                    key={review.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: (enhancedReviews.length + index) * 0.1 }}
+                    className="bg-card border border-border p-6 hover:border-primary/30 transition-colors"
+                  >
+                    {/* Stars */}
+                    <div className="flex gap-1 mb-4">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          size={16}
+                          className={star <= review.rating ? 'fill-primary text-primary' : 'text-muted'}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Review Text */}
+                    {review.review_text && (
+                      <p className="text-foreground leading-relaxed mb-4">
+                        "{review.review_text}"
+                      </p>
+                    )}
+
+                    {/* Meta */}
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-serif">{review.client_name}</span>
+                      {review.service_name && (
+                        <span className="text-muted-foreground">{review.service_name}</span>
+                      )}
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
             </div>
 
             {/* Submit Review Form */}

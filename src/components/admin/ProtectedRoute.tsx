@@ -10,8 +10,8 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, loading, isAdmin } = useAuth();
   const navigate = useNavigate();
   
-  // Dev bypass - set to true to skip auth checks
-  const DEV_BYPASS = true;
+  // Dev bypass - MUST be false in production
+  const DEV_BYPASS = false;
 
   useEffect(() => {
     if (DEV_BYPASS) return;

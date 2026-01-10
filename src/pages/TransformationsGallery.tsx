@@ -111,10 +111,12 @@ const TransformationsGallery = () => {
       />
 
       <ImageGallerySchema
+        title="HDA Studio Makeup Gallery"
+        description="Collection of professional makeup artistry showcasing editorial, bridal, evening glam, and special event looks"
         images={galleryImages.map(img => ({
           url: img.src,
           caption: `${img.category} makeup look`,
-          description: `Professional ${img.category.toLowerCase()} makeup artistry by HDA Studio`
+          category: img.category
         }))}
       />
 

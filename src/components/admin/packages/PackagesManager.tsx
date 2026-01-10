@@ -201,9 +201,9 @@ export const PackagesManager = () => {
                   </p>
                 )}
 
-                {/* Services Count */}
+                {/* Package Info */}
                 <div className="text-sm text-muted-foreground">
-                  {pkg.service_count || 0} service{(pkg.service_count || 0) !== 1 ? 's' : ''} included
+                  Bundled package
                 </div>
 
                 {/* Pricing */}

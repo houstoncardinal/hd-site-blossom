@@ -103,7 +103,7 @@ const BridalServices = () => {
         description="Comprehensive bridal makeup and beauty packages for your wedding day"
         items={bridalServices.map(service => ({
           name: service.name,
-          description: service.seoDescription,
+          description: service.description,
           image: "/IMG_8900.JPG"
         }))}
       />

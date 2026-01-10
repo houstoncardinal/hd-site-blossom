@@ -56,17 +56,14 @@ const Team = () => {
         ]}
       />
 
-      {teamMembers && teamMembers.length > 0 && (
+      {teamMembers && teamMembers.length > 0 && teamMembers[0] && (
         <PersonSchema
-          people={teamMembers.map(member => ({
-            name: member.name,
-            jobTitle: member.role,
-            description: member.bio || `Professional makeup artist specializing in ${member.specialties?.join(', ') || 'beauty services'}`,
-            image: member.image_url || '/IMG_8915.JPG',
-            ...(member.instagram_handle && {
-              sameAs: [`https://instagram.com/${member.instagram_handle.replace('@', '')}`]
-            })
-          }))}
+          name={teamMembers[0].name}
+          jobTitle={teamMembers[0].role}
+          bio={teamMembers[0].bio || undefined}
+          image={teamMembers[0].image_url || '/IMG_8915.JPG'}
+          sameAs={teamMembers[0].instagram_handle ? [`https://instagram.com/${teamMembers[0].instagram_handle.replace('@', '')}`] : undefined}
+          isFounder={teamMembers[0].role.toLowerCase().includes('founder')}
         />
       )}
 

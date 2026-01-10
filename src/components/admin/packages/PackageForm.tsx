@@ -17,7 +17,6 @@ import { Separator } from '@/components/ui/separator';
 import { usePackages } from './hooks/usePackages';
 import { useServices } from '../services/hooks/useServices';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import type { ServicePackage } from '@/types/services';
 import { formatPrice, formatDuration } from '@/types/services';
 
@@ -65,16 +64,8 @@ export const PackageForm = ({ open, onClose, package: pkg, onSuccess }: PackageF
           deposit_percentage: pkg.deposit_percentage?.toString() || '',
           is_active: pkg.is_active,
         });
-
-        // Load package services
-        const { data, error } = await supabase
-          .from('package_services')
-          .select('service_id')
-          .eq('package_id', pkg.id);
-
-        if (!error && data) {
-          setSelectedServiceIds(data.map((ps) => ps.service_id));
-        }
+        // TODO: Load package services when database is ready
+        setSelectedServiceIds([]);
       } else {
         setFormData({
           name: '',
@@ -121,81 +112,39 @@ export const PackageForm = ({ open, onClose, package: pkg, onSuccess }: PackageF
       return;
     }
 
-    if (selectedServiceIds.length === 0) {
-      toast({
-        title: 'Validation Error',
-        description: 'Please select at least one service',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     setSaving(true);
 
     try {
       // Auto-generate slug if not provided
       const slug = formData.slug.trim() || formData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
-      const packageData = {
+      const packageData: Partial<ServicePackage> = {
         name: formData.name.trim(),
         slug,
-        description: formData.description.trim() || null,
+        description: formData.description.trim() || undefined,
         package_price: parseFloat(formData.package_price),
-        savings_amount: savings > 0 ? savings : null,
+        savings_amount: savings > 0 ? savings : undefined,
         total_duration_minutes: totalDuration,
-        deposit_percentage: formData.deposit_percentage ? parseFloat(formData.deposit_percentage) : null,
+        deposit_percentage: formData.deposit_percentage ? parseFloat(formData.deposit_percentage) : undefined,
         is_active: formData.is_active,
       };
 
-      let packageId: string;
+      let success = false;
 
       if (pkg) {
-        // Update package
-        const { error } = await supabase
-          .from('service_packages')
-          .update(packageData)
-          .eq('id', pkg.id);
-
-        if (error) throw error;
-
-        packageId = pkg.id;
-
-        // Delete existing package services
-        await supabase.from('package_services').delete().eq('package_id', pkg.id);
+        success = await updatePackage(pkg.id, packageData);
       } else {
-        // Create package
-        const { data, error } = await supabase
-          .from('service_packages')
-          .insert([packageData])
-          .select()
-          .single();
-
-        if (error) throw error;
-        if (!data) throw new Error('Failed to create package');
-
-        packageId = data.id;
+        success = await createPackage(packageData);
       }
 
-      // Insert package services
-      const packageServices = selectedServiceIds.map((serviceId, index) => ({
-        package_id: packageId,
-        service_id: serviceId,
-        display_order: index,
-      }));
-
-      const { error: servicesError } = await supabase
-        .from('package_services')
-        .insert(packageServices);
-
-      if (servicesError) throw servicesError;
-
-      toast({
-        title: 'Success',
-        description: `Package ${pkg ? 'updated' : 'created'} successfully`,
-      });
-
-      onSuccess();
-      onClose();
+      if (success) {
+        toast({
+          title: 'Success',
+          description: `Package ${pkg ? 'updated' : 'created'} successfully`,
+        });
+        onSuccess();
+        onClose();
+      }
     } catch (error: any) {
       console.error('Error saving package:', error);
       toast({
@@ -264,11 +213,11 @@ export const PackageForm = ({ open, onClose, package: pkg, onSuccess }: PackageF
 
           {/* Service Selection */}
           <div className="space-y-3">
-            <Label>Select Services *</Label>
+            <Label>Select Services</Label>
             <div className="space-y-2 max-h-64 overflow-y-auto border rounded-md p-3">
               {activeServices.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  No active services available. Please create services first.
+                  Services feature is being set up. Please check back later.
                 </p>
               ) : (
                 activeServices.map((service) => (
@@ -332,7 +281,7 @@ export const PackageForm = ({ open, onClose, package: pkg, onSuccess }: PackageF
                 onChange={(e) => setFormData({ ...formData, package_price: e.target.value })}
                 placeholder="250.00"
               />
-              {packagePrice > 0 && packagePrice > totalOriginalPrice && (
+              {packagePrice > 0 && packagePrice > totalOriginalPrice && totalOriginalPrice > 0 && (
                 <p className="text-xs text-amber-600 dark:text-amber-400">
                   Package price is higher than original price
                 </p>

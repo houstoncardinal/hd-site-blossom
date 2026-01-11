@@ -166,12 +166,12 @@ Respond ONLY with valid JSON in this exact format:
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error processing image:', error);
 
     const response: AITaggingResponse = {
       success: false,
-      error: error.message || 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
     };
 
     return new Response(JSON.stringify(response), {

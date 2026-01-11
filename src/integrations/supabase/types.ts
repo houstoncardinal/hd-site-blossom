@@ -103,6 +103,102 @@ export type Database = {
           },
         ]
       }
+      service_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_name: string
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_name: string
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          category: string
+          created_at: string
+          deposit: number | null
+          description: string | null
+          display_order: number | null
+          duration: string | null
+          duration_minutes: number | null
+          event_types: string[] | null
+          id: string
+          image_url: string | null
+          includes: string[] | null
+          is_active: boolean | null
+          is_popular: boolean | null
+          name: string
+          original_price: number | null
+          price: number
+          stripe_price_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          deposit?: number | null
+          description?: string | null
+          display_order?: number | null
+          duration?: string | null
+          duration_minutes?: number | null
+          event_types?: string[] | null
+          id?: string
+          image_url?: string | null
+          includes?: string[] | null
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          name: string
+          original_price?: number | null
+          price?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          deposit?: number | null
+          description?: string | null
+          display_order?: number | null
+          duration?: string | null
+          duration_minutes?: number | null
+          event_types?: string[] | null
+          id?: string
+          image_url?: string | null
+          includes?: string[] | null
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          name?: string
+          original_price?: number | null
+          price?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       team_members: {
         Row: {
           bio: string | null

@@ -29,9 +29,14 @@ const Auth = () => {
 
   useEffect(() => {
     if (!loading && user) {
-      if (isAdminLogin && isAdmin) {
-        navigate('/admin');
-      } else if (!isAdminLogin) {
+      // If admin login mode, wait for isAdmin to be determined before redirecting
+      if (isAdminLogin) {
+        if (isAdmin) {
+          navigate('/admin');
+        }
+        // Don't redirect yet if isAdmin is still false - it might be loading
+      } else {
+        // Regular user login - redirect to home immediately
         navigate('/');
       }
     }

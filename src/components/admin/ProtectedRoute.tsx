@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin, adminCheckComplete } = useAuth();
   const navigate = useNavigate();
   
   // Dev bypass - MUST be false in production
@@ -16,23 +16,25 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   useEffect(() => {
     if (DEV_BYPASS) return;
     
-    if (!loading) {
+    // Wait for both auth loading AND admin check to complete
+    if (!loading && adminCheckComplete) {
       if (!user) {
-        navigate('/auth');
+        navigate('/auth?admin=true');
       } else if (!isAdmin) {
         navigate('/');
       }
     }
-  }, [user, loading, isAdmin, navigate]);
+  }, [user, loading, isAdmin, adminCheckComplete, navigate]);
 
   if (DEV_BYPASS) {
     return <>{children}</>;
   }
 
-  if (loading) {
+  // Show loading while auth is loading OR admin check is pending
+  if (loading || (user && !adminCheckComplete)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="animate-pulse text-muted-foreground">Verifying access...</div>
       </div>
     );
   }

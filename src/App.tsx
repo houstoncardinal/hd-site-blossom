@@ -24,7 +24,33 @@ import BridalServices from "./pages/BridalServices";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+// Error Boundary Component
+const ErrorFallback = ({ error }: { error: Error }) => (
+  <div style={{
+    padding: '20px',
+    fontFamily: 'Arial, sans-serif',
+    color: 'red',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }}>
+    <h2>Application Error</h2>
+    <p>Something went wrong while loading the application.</p>
+    <details style={{ marginTop: '20px', textAlign: 'left' }}>
+      <summary>Error Details</summary>
+      <pre style={{ background: '#f5f5f5', padding: '10px', marginTop: '10px', overflow: 'auto' }}>
+        {error.message}
+        {'\n\n'}
+        {error.stack}
+      </pre>
+    </details>
+  </div>
+);
+
+// Main App Component with Error Boundary
+const AppContent = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -56,5 +82,15 @@ const App = () => (
     </QueryClientProvider>
   </HelmetProvider>
 );
+
+// App with Error Boundary
+const App = () => {
+  try {
+    return <AppContent />;
+  } catch (error) {
+    console.error('App Error:', error);
+    return <ErrorFallback error={error as Error} />;
+  }
+};
 
 export default App;

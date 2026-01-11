@@ -1,73 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Homepage -->
-  <url>
-    <loc>https://hdastudio.com/</loc>
-    <lastmod>2026-01-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://hdastudio.com/IMG_8915.JPG</image:loc>
-      <image:title>HDA Studio Luxury Makeup</image:title>
-    </image:image>
-  </url>
+  <!-- Main Pages Sitemap -->
+  <sitemap>
+    <loc>https://hdastudio.com/sitemap-main.xml</loc>
+    <lastmod>2026-01-11</lastmod>
+  </sitemap>
 
-  <!-- Services Page -->
-  <url>
-    <loc>https://hdastudio.com/services</loc>
-    <lastmod>2026-01-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://hdastudio.com/IMG_8900.JPG</image:loc>
-      <image:title>Professional Makeup Services</image:title>
-    </image:image>
-  </url>
+  <!-- Images Sitemap -->
+  <sitemap>
+    <loc>https://hdastudio.com/sitemap-images.xml</loc>
+    <lastmod>2026-01-11</lastmod>
+  </sitemap>
 
-  <!-- Gallery Page -->
-  <url>
-    <loc>https://hdastudio.com/gallery</loc>
-    <lastmod>2026-01-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://hdastudio.com/IMG_8915.JPG</image:loc>
-      <image:title>Makeup Artistry Gallery</image:title>
-    </image:image>
-  </url>
+  <!-- Services Sitemap -->
+  <sitemap>
+    <loc>https://hdastudio.com/sitemap-services.xml</loc>
+    <lastmod>2026-01-11</lastmod>
+  </sitemap>
 
-  <!-- Booking Page -->
-  <url>
-    <loc>https://hdastudio.com/booking</loc>
-    <lastmod>2026-01-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
+  <!-- Reviews Sitemap -->
+  <sitemap>
+    <loc>https://hdastudio.com/sitemap-reviews.xml</loc>
+    <lastmod>2026-01-11</lastmod>
+  </sitemap>
 
-  <!-- Team Page -->
-  <url>
-    <loc>https://hdastudio.com/team</loc>
-    <lastmod>2026-01-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Reviews Page -->
-  <url>
-    <loc>https://hdastudio.com/reviews</loc>
-    <lastmod>2026-01-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- FAQ Page -->
-  <url>
-    <loc>https://hdastudio.com/faq</loc>
-    <lastmod>2026-01-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-</urlset>
+</sitemapindex>

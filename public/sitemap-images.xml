@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Gallery Page with Sample Images -->
+  <url>
+    <loc>https://hdastudio.com/gallery</loc>
+    <lastmod>2026-01-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8900.JPG</image:loc>
+      <image:caption>Professional bridal makeup artistry by HDA Studio</image:caption>
+      <image:title>Bridal Makeup</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8901.JPG</image:loc>
+      <image:caption>Editorial makeup look by HDA Studio</image:caption>
+      <image:title>Editorial Glam</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8915.JPG</image:loc>
+      <image:caption>Evening glam makeup by HDA Studio Houston</image:caption>
+      <image:title>Evening Glam</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8916.JPG</image:loc>
+      <image:caption>Soft glam makeup transformation</image:caption>
+      <image:title>Soft Glam</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8957.JPG</image:loc>
+      <image:caption>Professional bridal hair and makeup</image:caption>
+      <image:title>Bridal Hair & Makeup</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8958.JPG</image:loc>
+      <image:caption>Special event makeup artistry</image:caption>
+      <image:title>Special Event Makeup</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8959.JPG</image:loc>
+      <image:caption>Editorial beauty photography</image:caption>
+      <image:title>Editorial Beauty</image:title>
+    </image:image>
+  </url>
+
+  <!-- Before/After Transformations Gallery -->
+  <url>
+    <loc>https://hdastudio.com/transformations</loc>
+    <lastmod>2026-01-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8900.JPG</image:loc>
+      <image:caption>Makeup transformation before and after</image:caption>
+      <image:title>Bridal Transformation</image:title>
+    </image:image>
+  </url>
+
+  <!-- Homepage with Featured Images -->
+  <url>
+    <loc>https://hdastudio.com/</loc>
+    <lastmod>2026-01-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8915.JPG</image:loc>
+      <image:caption>HDA Studio professional makeup artistry Houston</image:caption>
+      <image:title>HDA Studio Featured Work</image:title>
+    </image:image>
+  </url>
+
+  <!-- Bridal Services with Images -->
+  <url>
+    <loc>https://hdastudio.com/bridal</loc>
+    <lastmod>2026-01-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8900.JPG</image:loc>
+      <image:caption>Bridal makeup services by HDA Studio</image:caption>
+      <image:title>Bridal Makeup Services</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8957.JPG</image:loc>
+      <image:caption>Wedding day hair and makeup</image:caption>
+      <image:title>Wedding Makeup</image:title>
+    </image:image>
+  </url>
+
+  <!-- Team Page with Team Photos -->
+  <url>
+    <loc>https://hdastudio.com/about</loc>
+    <lastmod>2026-01-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://hdastudio.com/IMG_8915.JPG</image:loc>
+      <image:caption>HDA Studio founder and lead makeup artist</image:caption>
+      <image:title>Meet Our Team</image:title>
+    </image:image>
+  </url>
+
+</urlset>

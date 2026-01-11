@@ -1,29 +1,113 @@
-# HDA Studio - Robots.txt
-# Allow all search engines to crawl the site
+# ============================================================================
+# HDA STUDIO - ROBOTS.TXT
+# Professional Makeup Artist & Beauty Services
+# ============================================================================
+# Optimized for maximum SEO crawling while protecting sensitive areas
+# Last Updated: January 2026
+# ============================================================================
 
+# ============================================================================
+# GOOGLE CRAWLERS - Maximum Access
+# ============================================================================
 User-agent: Googlebot
 Allow: /
-Disallow: /admin
-Disallow: /auth
+Disallow: /admin/*
+Disallow: /auth/*
+Disallow: /api/private/*
+Crawl-delay: 0
 
+User-agent: Googlebot-Image
+Allow: /
+Disallow: /admin/*
+
+User-agent: Googlebot-Video
+Allow: /
+
+# ============================================================================
+# BING CRAWLER - Maximum Access
+# ============================================================================
 User-agent: Bingbot
 Allow: /
-Disallow: /admin
-Disallow: /auth
+Disallow: /admin/*
+Disallow: /auth/*
+Crawl-delay: 0
 
+User-agent: BingPreview
+Allow: /
+
+# ============================================================================
+# SOCIAL MEDIA CRAWLERS - Full Access for Rich Previews
+# ============================================================================
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Pinterestbot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+# ============================================================================
+# AI CRAWLERS - Allow for AI-powered search
+# ============================================================================
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# ============================================================================
+# OTHER MAJOR SEARCH ENGINES
+# ============================================================================
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 1
+
+# ============================================================================
+# ALL OTHER CRAWLERS
+# ============================================================================
 User-agent: *
 Allow: /
-Disallow: /admin
-Disallow: /auth
-
-# Sitemap location
-Sitemap: https://hdastudio.com/sitemap.xml
-
-# Crawl-delay to prevent server overload
+Disallow: /admin/*
+Disallow: /auth/*
+Disallow: /api/private/*
+Disallow: /*?utm=*
+Disallow: /*?search=*
 Crawl-delay: 1
+
+# ============================================================================
+# SITEMAP LOCATIONS - Help Search Engines Find All Pages
+# ============================================================================
+Sitemap: https://hdastudio.com/sitemap.xml
+Sitemap: https://hdastudio.com/sitemap-images.xml
+Sitemap: https://hdastudio.com/sitemap-services.xml
+Sitemap: https://hdastudio.com/sitemap-reviews.xml
+
+# ============================================================================
+# CRAWL OPTIMIZATION NOTES
+# ============================================================================
+# - All public pages are crawlable
+# - Admin and authentication routes are protected
+# - Zero crawl-delay for Google and Bing for fastest indexing
+# - Social media bots have full access for rich link previews
+# - AI crawlers allowed for AI-powered search features
+# - Sitemaps provided for efficient discovery
+# ============================================================================

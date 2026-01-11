@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { ServiceImageUploader } from './ServiceImageUploader';
 import { useServices } from './hooks/useServices';
 import { useToast } from '@/hooks/use-toast';
 import type { Service, ServiceCategory } from '@/types/services';
@@ -38,6 +39,7 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
     base_price: '',
     duration_minutes: '',
     deposit_percentage: '',
+    image_url: null as string | null,
     is_active: true,
   });
 
@@ -55,6 +57,7 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
         base_price: service.base_price.toString(),
         duration_minutes: service.duration_minutes.toString(),
         deposit_percentage: service.deposit_percentage?.toString() || '',
+        image_url: service.image_url || null,
         is_active: service.is_active,
       });
     } else {
@@ -66,6 +69,7 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
         base_price: '',
         duration_minutes: '',
         deposit_percentage: '',
+        image_url: null,
         is_active: true,
       });
     }
@@ -113,6 +117,7 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
       base_price: parseFloat(formData.base_price),
       duration_minutes: parseInt(formData.duration_minutes),
       deposit_percentage: formData.deposit_percentage ? parseFloat(formData.deposit_percentage) : null,
+      image_url: formData.image_url,
       is_active: formData.is_active,
     };
 
@@ -207,6 +212,13 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
               rows={3}
             />
           </div>
+
+          {/* Service Image */}
+          <ServiceImageUploader
+            currentImageUrl={formData.image_url}
+            onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+            onImageRemoved={() => setFormData({ ...formData, image_url: null })}
+          />
 
           {/* Pricing */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

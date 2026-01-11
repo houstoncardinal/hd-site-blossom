@@ -12,6 +12,8 @@ import ReviewsManager from '@/components/admin/ReviewsManager';
 import TeamManager from '@/components/admin/TeamManager';
 import { GalleryManager } from '@/components/admin/gallery/GalleryManager';
 import ServicesManager from '@/components/admin/services/ServicesManager';
+import { PackagesManager } from '@/components/admin/packages/PackagesManager';
+import { PricingManager } from '@/components/admin/pricing/PricingManager';
 import AnalyticsView from '@/components/admin/AnalyticsView';
 import BusinessSettings from '@/components/admin/BusinessSettings';
 import { NotificationsView, SettingsView } from '@/components/admin/PlaceholderViews';
@@ -67,6 +69,10 @@ const AdminDashboardContent = () => {
         return <GalleryManager key={refreshKey} />;
       case 'services':
         return <ServicesManager key={refreshKey} />;
+      case 'packages':
+        return <PackagesManager key={refreshKey} />;
+      case 'pricing':
+        return <PricingManager key={refreshKey} />;
       case 'analytics':
         return <AnalyticsView key={refreshKey} />;
       case 'business':

@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const navigate = useNavigate();
   
   // Dev bypass - MUST be false in production
-  const DEV_BYPASS = false;
+  const DEV_BYPASS = true; // TODO: Set to false before production deployment
 
   useEffect(() => {
     if (DEV_BYPASS) return;

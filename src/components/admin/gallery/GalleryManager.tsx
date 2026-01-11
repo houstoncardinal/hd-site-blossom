@@ -15,8 +15,9 @@ import { ImageGrid } from './ImageGrid';
 import { CategoryFilter } from './CategoryFilter';
 import { CollectionManager } from './CollectionManager';
 import { AITaggingPanel } from './AITaggingPanel';
+import { BeforeAfterManager } from './BeforeAfterManager';
 import { useGalleryImages } from './hooks/useGalleryImages';
-import { Image, Upload, Search, RefreshCw, Trash2, Eye, EyeOff, Tag, Star, Folder, Sparkles } from 'lucide-react';
+import { Image, Upload, Search, RefreshCw, Trash2, Eye, EyeOff, Tag, Star, Folder, Sparkles, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { GALLERY_CATEGORY_LABELS, type GalleryCategory } from '@/types/gallery';
 
@@ -142,18 +143,22 @@ export const GalleryManager = () => {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="images" className="gap-2">
             <Image size={16} />
-            Images
+            <span className="hidden sm:inline">Images</span>
+          </TabsTrigger>
+          <TabsTrigger value="before-after" className="gap-2">
+            <ArrowRight size={16} />
+            <span className="hidden sm:inline">Before/After</span>
           </TabsTrigger>
           <TabsTrigger value="collections" className="gap-2">
             <Folder size={16} />
-            Collections
+            <span className="hidden sm:inline">Collections</span>
           </TabsTrigger>
           <TabsTrigger value="ai-tagging" className="gap-2">
             <Sparkles size={16} />
-            AI Tagging
+            <span className="hidden sm:inline">AI Tagging</span>
           </TabsTrigger>
         </TabsList>
 
@@ -309,6 +314,11 @@ export const GalleryManager = () => {
           onClose={() => setUploadDialogOpen(false)}
           onUploadComplete={refetch}
         />
+        </TabsContent>
+
+        {/* Before/After Tab */}
+        <TabsContent value="before-after" className="mt-6">
+          <BeforeAfterManager />
         </TabsContent>
 
         {/* Collections Tab */}

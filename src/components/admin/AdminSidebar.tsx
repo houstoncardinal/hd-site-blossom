@@ -14,6 +14,8 @@ import {
   ChevronRight,
   Building2,
   Image,
+  Package,
+  DollarSign,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -31,6 +33,8 @@ const menuItems = [
   { id: 'team', label: 'Team', icon: Users, section: 'main' },
   { id: 'gallery', label: 'Gallery', icon: Image, section: 'business' },
   { id: 'services', label: 'Services', icon: Sparkles, section: 'business' },
+  { id: 'packages', label: 'Packages', icon: Package, section: 'business' },
+  { id: 'pricing', label: 'Pricing', icon: DollarSign, section: 'business' },
   { id: 'analytics', label: 'Analytics', icon: TrendingUp, section: 'business' },
   { id: 'business', label: 'Business', icon: Building2, section: 'settings' },
   { id: 'notifications', label: 'Notifications', icon: Bell, section: 'settings' },

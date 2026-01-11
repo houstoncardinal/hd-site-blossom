@@ -183,8 +183,24 @@ export const BUSINESS_CONFIG = {
     // Service area (for local SEO)
     serviceArea: {
       primary: 'Houston, TX',
-      radius: 25, // Miles
-      regions: ['Houston', 'The Woodlands', 'Sugar Land', 'Katy', 'Pearland'],
+      radius: 30, // Miles
+      regions: [
+        'Houston',
+        'Sugar Land',
+        'Katy',
+        'Pearland',
+        'The Woodlands',
+        'Cypress',
+        'Spring',
+        'Humble',
+        'Missouri City',
+        'Stafford',
+        'League City',
+        'Friendswood',
+        'Pasadena',
+        'Baytown',
+        'Galveston',
+      ],
     },
 
     // Ratings (update with real data)
@@ -195,13 +211,13 @@ export const BUSINESS_CONFIG = {
     },
 
     // Price range for Schema
-    priceRange: '$90-$480',
+    priceRange: '$$',
 
     // Accepts
     accepts: {
       reservations: true,
       walkins: false,
-      paymentMethods: ['Credit Card', 'Debit Card', 'Cash', 'Apple Pay', 'Google Pay'],
+      paymentMethods: ['Cash', 'Credit Card', 'Debit Card', 'Venmo', 'Zelle', 'CashApp', 'Apple Pay', 'Google Pay'],
     },
   },
 

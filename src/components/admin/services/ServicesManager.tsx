@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ServiceForm } from './ServiceForm';
 import { useServices } from './hooks/useServices';
-import { Paintbrush, Plus, MoreVertical, Edit, Trash2, Search, Eye, EyeOff, DollarSign, Clock } from 'lucide-react';
+import { Paintbrush, Plus, MoreVertical, Edit, Trash2, Search, Eye, EyeOff, DollarSign, Clock, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Service } from '@/types/services';
 import { formatPrice, formatDuration } from '@/types/services';
@@ -56,6 +56,16 @@ export const ServicesManager = () => {
     }
   };
 
+  const handleTogglePopular = async (service: Service) => {
+    const success = await updateService(service.id, { is_popular: !service.is_popular });
+    if (success) {
+      toast({
+        title: 'Success',
+        description: `Service ${service.is_popular ? 'unmarked' : 'marked'} as popular`,
+      });
+    }
+  };
+
   const handleDelete = async (service: Service) => {
     if (
       !confirm(
@@ -89,7 +99,7 @@ export const ServicesManager = () => {
     combo: 'Makeup & Hair Combos',
     bridal: 'Bridal Services',
     event: 'Event Services',
-    bundle: 'Service Bundles',
+    addon: 'Add-on Services',
   };
 
   return (
@@ -183,8 +193,12 @@ export const ServicesManager = () => {
                         {/* Header */}
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium truncate">{service.name}</h4>
-                            <p className="text-xs text-muted-foreground">/{service.slug}</p>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-medium truncate">{service.name}</h4>
+                              {service.is_popular && (
+                                <Star size={14} className="text-yellow-500 fill-yellow-500 flex-shrink-0" />
+                              )}
+                            </div>
                           </div>
                           <div className="flex items-center gap-1">
                             {!service.is_active && (
@@ -216,6 +230,10 @@ export const ServicesManager = () => {
                                     </>
                                   )}
                                 </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleTogglePopular(service)}>
+                                  <Star size={16} className="mr-2" />
+                                  {service.is_popular ? 'Unmark Popular' : 'Mark as Popular'}
+                                </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   onClick={() => handleDelete(service)}
@@ -230,28 +248,30 @@ export const ServicesManager = () => {
                         </div>
 
                         {/* Description */}
-                      {service.description && (
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {service.description}
-                        </p>
-                      )}
+                        {service.description && (
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {service.description}
+                          </p>
+                        )}
 
-                      {/* Pricing and Duration */}
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-1">
-                          <DollarSign size={14} className="text-muted-foreground" />
-                          <span className="font-medium">{formatPrice(service.base_price)}</span>
+                        {/* Pricing and Duration */}
+                        <div className="flex items-center gap-4 text-sm">
+                          <div className="flex items-center gap-1">
+                            <DollarSign size={14} className="text-muted-foreground" />
+                            <span className="font-medium">{formatPrice(service.price)}</span>
+                          </div>
+                          {(service.duration || service.duration_minutes) && (
+                            <div className="flex items-center gap-1">
+                              <Clock size={14} className="text-muted-foreground" />
+                              <span>{service.duration || formatDuration(service.duration_minutes)}</span>
+                            </div>
+                          )}
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Clock size={14} className="text-muted-foreground" />
-                          <span>{formatDuration(service.duration_minutes)}</span>
-                        </div>
-                      </div>
 
                         {/* Deposit */}
-                        {service.deposit_percentage && service.deposit_percentage > 0 && (
+                        {service.deposit && service.deposit > 0 && (
                           <div className="text-xs text-muted-foreground">
-                            {service.deposit_percentage}% deposit required
+                            ${service.deposit} deposit required
                           </div>
                         )}
                       </div>

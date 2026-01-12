@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import type { Service } from '@/types/services';
+import type { Service, ServiceInsert, ServiceUpdate } from '@/types/services';
 
 interface UseServicesReturn {
   services: Service[];
   loading: boolean;
-  createService: (data: Partial<Service>) => Promise<boolean>;
-  updateService: (id: string, updates: Partial<Service>) => Promise<boolean>;
+  createService: (data: ServiceInsert) => Promise<boolean>;
+  updateService: (id: string, updates: ServiceUpdate) => Promise<boolean>;
   deleteService: (id: string) => Promise<boolean>;
   refetch: () => Promise<void>;
 }
@@ -29,7 +29,7 @@ export function useServices(): UseServicesReturn {
 
       if (error) throw error;
 
-      setServices(data || []);
+      setServices((data || []) as Service[]);
     } catch (error: any) {
       console.error('Error fetching services:', error);
       toast({
@@ -46,7 +46,7 @@ export function useServices(): UseServicesReturn {
     fetchServices();
   }, []);
 
-  const createService = async (data: Partial<Service>): Promise<boolean> => {
+  const createService = async (data: ServiceInsert): Promise<boolean> => {
     try {
       const { error } = await supabase.from('services').insert([data]);
 
@@ -65,7 +65,7 @@ export function useServices(): UseServicesReturn {
     }
   };
 
-  const updateService = async (id: string, updates: Partial<Service>): Promise<boolean> => {
+  const updateService = async (id: string, updates: ServiceUpdate): Promise<boolean> => {
     try {
       const { error } = await supabase.from('services').update(updates).eq('id', id);
 

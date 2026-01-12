@@ -21,7 +21,7 @@ import { Switch } from '@/components/ui/switch';
 import { ServiceImageUploader } from './ServiceImageUploader';
 import { useServices } from './hooks/useServices';
 import { useToast } from '@/hooks/use-toast';
-import type { Service, ServiceCategory } from '@/types/services';
+import type { Service } from '@/types/services';
 
 interface ServiceFormProps {
   open: boolean;
@@ -33,14 +33,15 @@ interface ServiceFormProps {
 export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormProps) => {
   const [formData, setFormData] = useState({
     name: '',
-    slug: '',
     description: '',
-    category: 'makeup' as ServiceCategory,
-    base_price: '',
+    category: 'makeup',
+    price: '',
+    duration: '',
     duration_minutes: '',
-    deposit_percentage: '',
+    deposit: '',
     image_url: null as string | null,
     is_active: true,
+    is_popular: false,
   });
 
   const [saving, setSaving] = useState(false);
@@ -51,26 +52,28 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
     if (service) {
       setFormData({
         name: service.name,
-        slug: service.slug,
         description: service.description || '',
         category: service.category,
-        base_price: service.base_price.toString(),
-        duration_minutes: service.duration_minutes.toString(),
-        deposit_percentage: service.deposit_percentage?.toString() || '',
+        price: service.price.toString(),
+        duration: service.duration || '',
+        duration_minutes: service.duration_minutes?.toString() || '',
+        deposit: service.deposit?.toString() || '',
         image_url: service.image_url || null,
-        is_active: service.is_active,
+        is_active: service.is_active ?? true,
+        is_popular: service.is_popular ?? false,
       });
     } else {
       setFormData({
         name: '',
-        slug: '',
         description: '',
         category: 'makeup',
-        base_price: '',
+        price: '',
+        duration: '',
         duration_minutes: '',
-        deposit_percentage: '',
+        deposit: '',
         image_url: null,
         is_active: true,
+        is_popular: false,
       });
     }
   }, [service, open]);
@@ -86,19 +89,10 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
       return;
     }
 
-    if (!formData.base_price || parseFloat(formData.base_price) <= 0) {
+    if (!formData.price || parseFloat(formData.price) <= 0) {
       toast({
         title: 'Validation Error',
-        description: 'Valid base price is required',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    if (!formData.duration_minutes || parseInt(formData.duration_minutes) <= 0) {
-      toast({
-        title: 'Validation Error',
-        description: 'Valid duration is required',
+        description: 'Valid price is required',
         variant: 'destructive',
       });
       return;
@@ -106,19 +100,17 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
 
     setSaving(true);
 
-    // Auto-generate slug if not provided
-    const slug = formData.slug.trim() || formData.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-
     const data = {
       name: formData.name.trim(),
-      slug,
       description: formData.description.trim() || null,
       category: formData.category,
-      base_price: parseFloat(formData.base_price),
-      duration_minutes: parseInt(formData.duration_minutes),
-      deposit_percentage: formData.deposit_percentage ? parseFloat(formData.deposit_percentage) : null,
+      price: parseFloat(formData.price),
+      duration: formData.duration.trim() || null,
+      duration_minutes: formData.duration_minutes ? parseInt(formData.duration_minutes) : null,
+      deposit: formData.deposit ? parseFloat(formData.deposit) : null,
       image_url: formData.image_url,
       is_active: formData.is_active,
+      is_popular: formData.is_popular,
     };
 
     let success = false;
@@ -159,33 +151,12 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
             />
           </div>
 
-          {/* Slug */}
-          <div className="space-y-2">
-            <Label htmlFor="slug">
-              Slug
-              <span className="text-xs text-muted-foreground ml-2">
-                (auto-generated if empty)
-              </span>
-            </Label>
-            <Input
-              id="slug"
-              value={formData.slug}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  slug: e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-                })
-              }
-              placeholder="bridal-makeup"
-            />
-          </div>
-
           {/* Category */}
           <div className="space-y-2">
             <Label htmlFor="category">Category *</Label>
             <Select
               value={formData.category}
-              onValueChange={(value) => setFormData({ ...formData, category: value as ServiceCategory })}
+              onValueChange={(value) => setFormData({ ...formData, category: value })}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -196,7 +167,7 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
                 <SelectItem value="combo">Combo (Makeup & Hair)</SelectItem>
                 <SelectItem value="bridal">Bridal</SelectItem>
                 <SelectItem value="event">Event</SelectItem>
-                <SelectItem value="bundle">Bundle</SelectItem>
+                <SelectItem value="addon">Add-on</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -223,55 +194,77 @@ export const ServiceForm = ({ open, onClose, service, onSuccess }: ServiceFormPr
           {/* Pricing */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="base_price">Base Price * ($)</Label>
+              <Label htmlFor="price">Price * ($)</Label>
               <Input
-                id="base_price"
+                id="price"
                 type="number"
                 step="0.01"
                 min="0"
-                value={formData.base_price}
-                onChange={(e) => setFormData({ ...formData, base_price: e.target.value })}
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                 placeholder="150.00"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="deposit_percentage">Deposit % (optional)</Label>
+              <Label htmlFor="deposit">Deposit Amount ($)</Label>
               <Input
-                id="deposit_percentage"
+                id="deposit"
                 type="number"
-                step="1"
+                step="0.01"
                 min="0"
-                max="100"
-                value={formData.deposit_percentage}
-                onChange={(e) => setFormData({ ...formData, deposit_percentage: e.target.value })}
-                placeholder="20"
+                value={formData.deposit}
+                onChange={(e) => setFormData({ ...formData, deposit: e.target.value })}
+                placeholder="50.00"
               />
             </div>
           </div>
 
           {/* Duration */}
-          <div className="space-y-2">
-            <Label htmlFor="duration_minutes">Duration * (minutes)</Label>
-            <Input
-              id="duration_minutes"
-              type="number"
-              step="15"
-              min="0"
-              value={formData.duration_minutes}
-              onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
-              placeholder="90"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="duration">Duration Display</Label>
+              <Input
+                id="duration"
+                value={formData.duration}
+                onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                placeholder="e.g., 1-2 hours"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="duration_minutes">Duration (minutes)</Label>
+              <Input
+                id="duration_minutes"
+                type="number"
+                step="15"
+                min="0"
+                value={formData.duration_minutes}
+                onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
+                placeholder="90"
+              />
+            </div>
           </div>
 
-          {/* Active Status */}
-          <div className="flex items-center justify-between">
-            <Label htmlFor="is_active">Active Status</Label>
-            <Switch
-              id="is_active"
-              checked={formData.is_active}
-              onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
-            />
+          {/* Status Toggles */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="is_active">Active</Label>
+              <Switch
+                id="is_active"
+                checked={formData.is_active}
+                onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="is_popular">Mark as Popular</Label>
+              <Switch
+                id="is_popular"
+                checked={formData.is_popular}
+                onCheckedChange={(checked) => setFormData({ ...formData, is_popular: checked })}
+              />
+            </div>
           </div>
         </div>
 

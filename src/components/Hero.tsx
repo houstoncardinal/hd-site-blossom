@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useRef } from 'react';
 
-const heroImage = '/IMG_8865.JPG';
+const heroImage = '/huda-main.jpg';
 
 const Hero = () => {
   const ref = useRef(null);

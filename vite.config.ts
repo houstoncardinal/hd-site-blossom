@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: mode === 'production', // Remove console.logs in production
+        drop_console: mode === 'production',
         drop_debugger: true,
       },
     },
@@ -28,7 +28,6 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'animation': ['framer-motion'],
           'ui': ['@radix-ui/react-accordion', '@radix-ui/react-dialog', '@radix-ui/react-tabs'],
@@ -38,12 +37,9 @@ export default defineConfig(({ mode }) => ({
         },
       },
     },
-    // Increase chunk size warning limit
     chunkSizeWarningLimit: 1000,
-    // Enable source maps in development only
     sourcemap: mode === 'development',
   },
-  // Optimize dependencies pre-bundling
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
   },

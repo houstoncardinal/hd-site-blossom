@@ -6,6 +6,7 @@ import ScrollProgress from '@/components/ScrollProgress';
 import SEOHead from '@/components/seo/SEOHead';
 import AdvancedSchemas from '@/components/seo/AdvancedSchemas';
 import Analytics from '@/components/Analytics';
+import { VoiceAgent } from '@/components/VoiceAgent';
 
 // Lazy load below-the-fold components for 70% faster initial load
 const About = lazy(() => import('@/components/About'));
@@ -55,6 +56,7 @@ const Index = () => {
         <VerticalGuidedNav />
         <InfoWidget />
         <CookieConsent />
+        <VoiceAgent />
       </Suspense>
     </main>
   );

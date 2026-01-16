@@ -195,11 +195,11 @@ export function VoiceAgentWidget() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed right-0 top-1/2 -translate-y-1/2 z-[90] w-80 sm:w-96"
+              className="fixed right-0 top-0 z-[90] h-screen w-full sm:w-96 sm:h-auto sm:top-1/2 sm:-translate-y-1/2 sm:max-h-[90vh]"
             >
-              <div className="bg-background/95 backdrop-blur-xl border-l border-y border-border rounded-l-3xl shadow-2xl overflow-hidden">
+              <div className="h-full sm:h-auto bg-background/95 backdrop-blur-xl border-l border-y border-border sm:rounded-l-3xl shadow-2xl flex flex-col overflow-hidden">
                 {/* Header with gradient */}
-                <div className="relative bg-gradient-to-br from-primary/20 via-primary/10 to-transparent px-6 py-5 border-b border-border/50">
+                <div className="relative flex-shrink-0 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent px-6 py-5 border-b border-border/50">
                   {/* Decorative corner */}
                   <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-bl-full" />
                   
@@ -243,10 +243,10 @@ export function VoiceAgentWidget() {
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="flex-1 overflow-y-auto p-6 flex items-center">
                   {!isConnected ? (
-                    <motion.div 
-                      className="text-center space-y-6"
+                    <motion.div
+                      className="text-center space-y-6 w-full"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                     >
@@ -312,8 +312,8 @@ export function VoiceAgentWidget() {
                       </Button>
                     </motion.div>
                   ) : (
-                    <motion.div 
-                      className="text-center space-y-6"
+                    <motion.div
+                      className="text-center space-y-6 w-full"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
@@ -412,7 +412,7 @@ export function VoiceAgentWidget() {
                 </div>
 
                 {/* Footer */}
-                <div className="px-6 py-4 bg-muted/30 border-t border-border/50">
+                <div className="flex-shrink-0 px-6 py-4 bg-muted/30 border-t border-border/50">
                   <p className="text-xs text-center text-muted-foreground flex items-center justify-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                     AI-Powered • Available 24/7

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { toast } from 'sonner';
 import {
   Calendar,
   Star,
@@ -130,6 +131,10 @@ const DashboardWidgets = ({ onNavigate }: DashboardWidgetsProps) => {
       setRecentReviews(revs.slice(0, 3));
     } catch (error) {
       console.error('Error fetching stats:', error);
+      toast.error('Failed to load dashboard data', {
+        description: error instanceof Error ? error.message : 'Please check your database connection and permissions',
+        duration: 5000,
+      });
     } finally {
       setLoading(false);
     }

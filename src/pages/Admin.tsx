@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from '@/components/admin/ProtectedRoute';
+import { AdminErrorBoundary } from '@/components/admin/ErrorBoundary';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import DashboardWidgets from '@/components/admin/DashboardWidgets';
 import AppointmentsManager from '@/components/admin/AppointmentsManager';
@@ -184,9 +185,11 @@ const AdminDashboardContent = () => {
 
 const Admin = () => {
   return (
-    <ProtectedRoute>
-      <AdminDashboardContent />
-    </ProtectedRoute>
+    <AdminErrorBoundary>
+      <ProtectedRoute>
+        <AdminDashboardContent />
+      </ProtectedRoute>
+    </AdminErrorBoundary>
   );
 };
 

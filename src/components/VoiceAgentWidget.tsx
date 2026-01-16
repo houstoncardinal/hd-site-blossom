@@ -45,27 +45,53 @@ export function VoiceAgentWidget() {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-conversation-token`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-        }
-      );
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error("Supabase configuration missing. Please check environment variables.");
+      }
+
+      const functionUrl = `${supabaseUrl}/functions/v1/elevenlabs-conversation-token`;
+      console.log("Fetching token from:", functionUrl);
+
+      const response = await fetch(functionUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+      });
+
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to connect");
+        const contentType = response.headers.get("content-type");
+        let errorMessage = "Failed to connect";
+
+        if (contentType?.includes("application/json")) {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } else {
+          const textResponse = await response.text();
+          console.error("Non-JSON response:", textResponse.substring(0, 200));
+
+          if (response.status === 404) {
+            errorMessage = "Voice agent not configured yet. Please follow the setup guide in ELEVENLABS_SETUP.md";
+          } else {
+            errorMessage = `Server error (${response.status}). Check console for details.`;
+          }
+        }
+
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
 
       if (!data?.token) {
-        throw new Error("No token received");
+        throw new Error("No token received from server");
       }
 
       await conversation.startSession({
@@ -74,7 +100,8 @@ export function VoiceAgentWidget() {
       });
     } catch (error) {
       console.error("Failed to start conversation:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to connect");
+      const errorMessage = error instanceof Error ? error.message : "Failed to connect";
+      toast.error(errorMessage, { duration: 5000 });
     } finally {
       setIsConnecting(false);
     }

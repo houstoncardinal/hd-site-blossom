@@ -59,6 +59,293 @@ export type Database = {
         }
         Relationships: []
       }
+      before_after_pairs: {
+        Row: {
+          after_image_id: string
+          before_image_id: string
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          is_published: boolean | null
+          service_type: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          after_image_id: string
+          before_image_id: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_published?: boolean | null
+          service_type?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          after_image_id?: string
+          before_image_id?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_published?: boolean | null
+          service_type?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "before_after_pairs_after_image_id_fkey"
+            columns: ["after_image_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_images"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "before_after_pairs_before_image_id_fkey"
+            columns: ["before_image_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_settings: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      gallery_collection_images: {
+        Row: {
+          added_at: string
+          collection_id: string
+          display_order: number | null
+          id: string
+          image_id: string
+        }
+        Insert: {
+          added_at?: string
+          collection_id: string
+          display_order?: number | null
+          id?: string
+          image_id: string
+        }
+        Update: {
+          added_at?: string
+          collection_id?: string
+          display_order?: number | null
+          id?: string
+          image_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gallery_collection_images_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gallery_collection_images_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gallery_collections: {
+        Row: {
+          cover_image_id: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          is_published: boolean | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          cover_image_id?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_published?: boolean | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          cover_image_id?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_published?: boolean | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gallery_collections_cover_image_id_fkey"
+            columns: ["cover_image_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gallery_images: {
+        Row: {
+          ai_confidence: number | null
+          ai_description: string | null
+          ai_processed_at: string | null
+          ai_tags: string[] | null
+          alt_text: string
+          aspect_ratio: number | null
+          category: string
+          created_at: string
+          description: string | null
+          display_order: number | null
+          file_name: string
+          file_size: number
+          height: number | null
+          id: string
+          is_featured: boolean | null
+          is_published: boolean | null
+          mime_type: string
+          storage_path: string
+          tags: string[] | null
+          thumbnail_path: string | null
+          title: string | null
+          updated_at: string
+          uploaded_by: string | null
+          width: number | null
+        }
+        Insert: {
+          ai_confidence?: number | null
+          ai_description?: string | null
+          ai_processed_at?: string | null
+          ai_tags?: string[] | null
+          alt_text?: string
+          aspect_ratio?: number | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          file_name: string
+          file_size?: number
+          height?: number | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          mime_type?: string
+          storage_path: string
+          tags?: string[] | null
+          thumbnail_path?: string | null
+          title?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+          width?: number | null
+        }
+        Update: {
+          ai_confidence?: number | null
+          ai_description?: string | null
+          ai_processed_at?: string | null
+          ai_tags?: string[] | null
+          alt_text?: string
+          aspect_ratio?: number | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          file_name?: string
+          file_size?: number
+          height?: number | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          mime_type?: string
+          storage_path?: string
+          tags?: string[] | null
+          thumbnail_path?: string | null
+          title?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+          width?: number | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          metadata: Json | null
+          title: string
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          metadata?: Json | null
+          title: string
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          metadata?: Json | null
+          title?: string
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       reviews: {
         Row: {
           appointment_id: string | null
@@ -258,6 +545,42 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          dashboard_layout: Json | null
+          email_notifications: boolean | null
+          id: string
+          preferences: Json | null
+          push_notifications: boolean | null
+          theme: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dashboard_layout?: Json | null
+          email_notifications?: boolean | null
+          id?: string
+          preferences?: Json | null
+          push_notifications?: boolean | null
+          theme?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dashboard_layout?: Json | null
+          email_notifications?: boolean | null
+          id?: string
+          preferences?: Json | null
+          push_notifications?: boolean | null
+          theme?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []

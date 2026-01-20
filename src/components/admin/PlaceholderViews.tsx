@@ -1,45 +1,78 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Bell,
   Settings,
-  Mail,
-  Smartphone,
   Shield,
   Palette,
   Globe,
   Database,
   Calendar,
   Star,
-  AlertCircle,
   CheckCircle2,
+  Smartphone,
+  Loader2,
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useNotifications, type Notification } from '@/hooks/useNotifications';
+import { useUserSettings } from '@/hooks/useUserSettings';
 
 export const NotificationsView = () => {
-  const { toast } = useToast();
-  const [notifications, setNotifications] = useState([
-    { id: 1, type: 'appointment', message: 'New appointment request from Sarah M.', time: '2 hours ago', unread: true },
-    { id: 2, type: 'review', message: 'New 5-star review received!', time: '5 hours ago', unread: true },
-    { id: 3, type: 'appointment', message: 'Appointment confirmed for tomorrow', time: '1 day ago', unread: false },
-    { id: 4, type: 'system', message: 'Weekly analytics report ready', time: '2 days ago', unread: false },
-  ]);
+  const { notifications, loading, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
-  const markAllRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, unread: false })));
-    toast({ title: 'All notifications marked as read' });
+  const getNotificationIcon = (type: Notification['type']) => {
+    switch (type) {
+      case 'appointment':
+        return <Calendar className="h-5 w-5 text-blue-500" />;
+      case 'review':
+        return <Star className="h-5 w-5 text-amber-500" />;
+      default:
+        return <Settings className="h-5 w-5 text-muted-foreground" />;
+    }
   };
 
-  const markAsRead = (id: number) => {
-    setNotifications(notifications.map(n => 
-      n.id === id ? { ...n, unread: false } : n
-    ));
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 60) return `${diffMins} minutes ago`;
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    return `${diffDays} days ago`;
   };
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Card key={i}>
+              <CardContent className="p-4">
+                <div className="flex items-start gap-4">
+                  <Skeleton className="h-10 w-10 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/4" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -54,9 +87,9 @@ export const NotificationsView = () => {
         </h2>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="bg-primary/10">
-            {notifications.filter(n => n.unread).length} unread
+            {unreadCount} unread
           </Badge>
-          <Button variant="outline" size="sm" onClick={markAllRead}>
+          <Button variant="outline" size="sm" onClick={markAllAsRead} disabled={unreadCount === 0}>
             Mark All Read
           </Button>
         </div>
@@ -66,8 +99,10 @@ export const NotificationsView = () => {
         {notifications.map((notif) => (
           <Card 
             key={notif.id}
-            className={`cursor-pointer transition-all hover:border-primary/30 ${notif.unread ? 'border-primary/50 bg-primary/5' : ''}`}
-            onClick={() => markAsRead(notif.id)}
+            className={`cursor-pointer transition-all hover:border-primary/30 ${
+              !notif.is_read ? 'border-primary/50 bg-primary/5' : ''
+            }`}
+            onClick={() => !notif.is_read && markAsRead(notif.id)}
           >
             <CardContent className="p-4">
               <div className="flex items-start gap-4">
@@ -75,18 +110,19 @@ export const NotificationsView = () => {
                   notif.type === 'appointment' ? 'bg-blue-500/10' : 
                   notif.type === 'review' ? 'bg-amber-500/10' : 'bg-muted'
                 }`}>
-                  {notif.type === 'appointment' ? <Calendar className="h-5 w-5 text-blue-500" /> :
-                   notif.type === 'review' ? <Star className="h-5 w-5 text-amber-500" /> :
-                   <Settings className="h-5 w-5 text-muted-foreground" />}
+                  {getNotificationIcon(notif.type)}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">{notif.message}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{notif.time}</p>
+                  <p className="text-sm font-medium">{notif.title}</p>
+                  <p className="text-sm text-muted-foreground">{notif.message}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formatTimeAgo(notif.created_at)}
+                  </p>
                 </div>
-                {notif.unread ? (
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                ) : (
+                {notif.is_read ? (
                   <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <div className="h-2 w-2 rounded-full bg-primary" />
                 )}
               </div>
             </CardContent>
@@ -107,16 +143,34 @@ export const NotificationsView = () => {
 };
 
 export const SettingsView = () => {
+  const { settings, saving, updateSettings } = useUserSettings();
+
+  const handleToggle = (key: keyof typeof settings, value: boolean) => {
+    updateSettings({ [key]: value });
+  };
+
+  const handleThemeToggle = (darkMode: boolean) => {
+    updateSettings({ theme: darkMode ? 'dark' : 'light' });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6"
     >
-      <h2 className="text-2xl font-serif font-light flex items-center gap-2">
-        <Settings className="h-6 w-6" />
-        Settings
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-serif font-light flex items-center gap-2">
+          <Settings className="h-6 w-6" />
+          Settings
+        </h2>
+        {saving && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Saving...
+          </div>
+        )}
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         {/* Notifications Settings */}
@@ -133,21 +187,22 @@ export const SettingsView = () => {
                 <p className="font-medium">Email Notifications</p>
                 <p className="text-sm text-muted-foreground">Receive booking confirmations via email</p>
               </Label>
-              <Switch id="email-notifs" defaultChecked />
+              <Switch 
+                id="email-notifs" 
+                checked={settings.email_notifications}
+                onCheckedChange={(checked) => handleToggle('email_notifications', checked)}
+              />
             </div>
             <div className="flex items-center justify-between">
               <Label htmlFor="sms-notifs" className="flex-1">
-                <p className="font-medium">SMS Reminders</p>
-                <p className="text-sm text-muted-foreground">Send appointment reminders to clients</p>
+                <p className="font-medium">Push Notifications</p>
+                <p className="text-sm text-muted-foreground">Send push notifications for updates</p>
               </Label>
-              <Switch id="sms-notifs" />
-            </div>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="review-notifs" className="flex-1">
-                <p className="font-medium">Review Alerts</p>
-                <p className="text-sm text-muted-foreground">Get notified about new reviews</p>
-              </Label>
-              <Switch id="review-notifs" defaultChecked />
+              <Switch 
+                id="sms-notifs" 
+                checked={settings.push_notifications}
+                onCheckedChange={(checked) => handleToggle('push_notifications', checked)}
+              />
             </div>
           </CardContent>
         </Card>
@@ -166,7 +221,7 @@ export const SettingsView = () => {
                 <p className="font-medium">Two-Factor Auth</p>
                 <p className="text-sm text-muted-foreground">Add an extra layer of security</p>
               </Label>
-              <Switch id="2fa" />
+              <Switch id="2fa" disabled />
             </div>
             <Button variant="outline" className="w-full">
               Change Password
@@ -191,14 +246,11 @@ export const SettingsView = () => {
                 <p className="font-medium">Dark Mode</p>
                 <p className="text-sm text-muted-foreground">Use dark theme for dashboard</p>
               </Label>
-              <Switch id="dark-mode" defaultChecked />
-            </div>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="compact" className="flex-1">
-                <p className="font-medium">Compact View</p>
-                <p className="text-sm text-muted-foreground">Reduce spacing in tables</p>
-              </Label>
-              <Switch id="compact" />
+              <Switch 
+                id="dark-mode" 
+                checked={settings.theme === 'dark'}
+                onCheckedChange={handleThemeToggle}
+              />
             </div>
           </CardContent>
         </Card>
@@ -208,7 +260,7 @@ export const SettingsView = () => {
           <CardHeader>
             <CardTitle className="text-lg font-medium flex items-center gap-2">
               <Globe className="h-5 w-5" />
-              Business
+              Quick Actions
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">

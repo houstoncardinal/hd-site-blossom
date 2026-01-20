@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Settings,
   Clock,
@@ -17,63 +16,55 @@ import {
   Instagram,
   Save,
   Building2,
+  Loader2,
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-
-const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-interface BusinessHours {
-  day: string;
-  isOpen: boolean;
-  open: string;
-  close: string;
-}
+import { useBusinessSettings } from '@/hooks/useBusinessSettings';
 
 const BusinessSettings = () => {
-  const { toast } = useToast();
-  
-  const [businessInfo, setBusinessInfo] = useState({
-    name: 'HDA Studio',
-    tagline: 'Professional Makeup Artistry',
-    email: 'hello@hdastudio.com',
-    phone: '+1 (555) 123-4567',
-    address: '123 Beauty Lane, Suite 100',
-    city: 'Houston, TX 77001',
-    website: 'https://hdastudio.com',
-    instagram: '@hdastudio',
-  });
+  const {
+    businessInfo,
+    setBusinessInfo,
+    hours,
+    updateHours,
+    bookingSettings,
+    setBookingSettings,
+    loading,
+    saving,
+    saveSettings,
+  } = useBusinessSettings();
 
-  const [hours, setHours] = useState<BusinessHours[]>([
-    { day: 'Monday', isOpen: true, open: '09:00', close: '18:00' },
-    { day: 'Tuesday', isOpen: true, open: '09:00', close: '18:00' },
-    { day: 'Wednesday', isOpen: true, open: '09:00', close: '18:00' },
-    { day: 'Thursday', isOpen: true, open: '09:00', close: '20:00' },
-    { day: 'Friday', isOpen: true, open: '09:00', close: '20:00' },
-    { day: 'Saturday', isOpen: true, open: '10:00', close: '17:00' },
-    { day: 'Sunday', isOpen: false, open: '10:00', close: '16:00' },
-  ]);
-
-  const [bookingSettings, setBookingSettings] = useState({
-    allowOnlineBooking: true,
-    requireDeposit: true,
-    depositAmount: 50,
-    cancellationHours: 24,
-    maxAdvanceBookingDays: 90,
-    autoConfirmBookings: false,
-  });
-
-  const updateHours = (index: number, field: keyof BusinessHours, value: any) => {
-    const updated = [...hours];
-    updated[index] = { ...updated[index], [field]: value };
-    setHours(updated);
-  };
-
-  const handleSave = () => {
-    toast({
-      title: 'Settings saved',
-      description: 'Your business settings have been updated.',
-    });
-  };
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-40" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-10 w-full" />
+              ))}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-40" />
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {Array.from({ length: 7 }).map((_, i) => (
+                <Skeleton key={i} className="h-8 w-full" />
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -86,9 +77,18 @@ const BusinessSettings = () => {
           <Settings className="h-6 w-6" />
           Business Settings
         </h2>
-        <Button onClick={handleSave}>
-          <Save size={16} className="mr-2" />
-          Save Changes
+        <Button onClick={saveSettings} disabled={saving}>
+          {saving ? (
+            <>
+              <Loader2 size={16} className="mr-2 animate-spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save size={16} className="mr-2" />
+              Save Changes
+            </>
+          )}
         </Button>
       </div>
 

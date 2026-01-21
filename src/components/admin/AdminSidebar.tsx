@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Building2,
   Image,
+  UserCircle,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -27,6 +28,7 @@ interface AdminSidebarProps {
 const menuItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard, section: 'main' },
   { id: 'appointments', label: 'Appointments', icon: Calendar, section: 'main' },
+  { id: 'clients', label: 'Clients', icon: UserCircle, section: 'main' },
   { id: 'reviews', label: 'Reviews', icon: Star, section: 'main' },
   { id: 'team', label: 'Team', icon: Users, section: 'main' },
   { id: 'gallery', label: 'Gallery', icon: Image, section: 'business' },

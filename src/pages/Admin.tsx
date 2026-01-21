@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from '@/components/admin/ProtectedRoute';
@@ -13,11 +14,12 @@ import ReviewsManager from '@/components/admin/ReviewsManager';
 import TeamManager from '@/components/admin/TeamManager';
 import { GalleryManager } from '@/components/admin/gallery/GalleryManager';
 import ServicesManager from '@/components/admin/services/ServicesManager';
-
+import ClientsManager from '@/components/admin/clients/ClientsManager';
 import AnalyticsView from '@/components/admin/AnalyticsView';
 import BusinessSettings from '@/components/admin/BusinessSettings';
 import { NotificationsView, SettingsView } from '@/components/admin/PlaceholderViews';
-import { LogOut, ArrowLeft, Menu, RefreshCw } from 'lucide-react';
+import { useRealtimeSubscriptions } from '@/hooks/useRealtimeSubscriptions';
+import { LogOut, ArrowLeft, Menu, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const AdminDashboardContent = () => {
@@ -26,20 +28,44 @@ const AdminDashboardContent = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
 
-  useEffect(() => {
-    fetchPendingCount();
-  }, [refreshKey]);
-
-  const fetchPendingCount = async () => {
+  const fetchPendingCount = useCallback(async () => {
     const { count } = await supabase
       .from('appointments')
       .select('*', { count: 'exact', head: true })
       .or('status.eq.pending,status.is.null');
     setPendingCount(count || 0);
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchPendingCount();
+  }, [fetchPendingCount, refreshKey]);
+
+  // Real-time subscriptions
+  const { isConnected } = useRealtimeSubscriptions({
+    enabled: true,
+    onNewAppointment: useCallback(() => {
+      setRefreshKey(prev => prev + 1);
+      fetchPendingCount();
+    }, [fetchPendingCount]),
+    onAppointmentUpdate: useCallback(() => {
+      setRefreshKey(prev => prev + 1);
+      fetchPendingCount();
+    }, [fetchPendingCount]),
+    onNewReview: useCallback(() => {
+      setRefreshKey(prev => prev + 1);
+    }, []),
+    onReviewUpdate: useCallback(() => {
+      setRefreshKey(prev => prev + 1);
+    }, []),
+  });
+
+  useEffect(() => {
+    setIsRealtimeConnected(isConnected);
+  }, [isConnected]);
 
   const handleRefresh = () => {
     setRefreshKey(prev => prev + 1);
@@ -69,7 +95,8 @@ const AdminDashboardContent = () => {
         return <GalleryManager key={refreshKey} />;
       case 'services':
         return <ServicesManager key={refreshKey} />;
-
+      case 'clients':
+        return <ClientsManager key={refreshKey} />;
       case 'analytics':
         return <AnalyticsView key={refreshKey} />;
       case 'business':
@@ -151,6 +178,21 @@ const AdminDashboardContent = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {/* Realtime Status Indicator */}
+              <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground">
+                {isRealtimeConnected ? (
+                  <>
+                    <Wifi className="h-3.5 w-3.5 text-green-500" />
+                    <span>Live</span>
+                  </>
+                ) : (
+                  <>
+                    <WifiOff className="h-3.5 w-3.5" />
+                    <span>Offline</span>
+                  </>
+                )}
+              </div>
+              
               <Button 
                 variant="ghost" 
                 size="icon" 
@@ -194,4 +236,3 @@ const Admin = () => {
 };
 
 export default Admin;
-

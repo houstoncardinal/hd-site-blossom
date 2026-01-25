@@ -280,7 +280,7 @@ const Team = () => {
               Book a session with one of our talented artists and experience the HDA difference.
             </p>
             <a
-              href="/booking"
+              href="/services"
               className="inline-flex h-12 px-8 items-center justify-center bg-primary text-primary-foreground font-medium tracking-wider uppercase text-sm hover:bg-primary/90 transition-colors rounded-lg"
             >
               Book Your Appointment

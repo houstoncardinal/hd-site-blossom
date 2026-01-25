@@ -18,8 +18,7 @@ const navLinks = [
   { name: 'Services', href: '/services' },
   { name: 'Gallery', href: '/gallery' },
   { name: 'About', href: '/about' },
-  { name: 'Reviews', href: '/reviews' },
-  { name: 'Booking', href: '/booking' },
+  { name: 'FAQ', href: '/faq' },
 ];
 
 const Navbar = () => {
@@ -173,11 +172,11 @@ const Navbar = () => {
               )}
 
               {/* Book Now Button */}
-              <Link to="/booking">
-                <Button variant="hero" size="lg">
+              <Button variant="hero" size="lg" asChild>
+                <Link to="/services">
                   Book Now
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -295,11 +294,11 @@ const Navbar = () => {
                 )}
 
                 <motion.div variants={itemVariants} className="mt-6 space-y-3">
-                  <Link to="/booking" onClick={() => setIsOpen(false)}>
-                    <Button variant="hero" size="lg" className="w-full">
+                  <Button variant="hero" size="lg" className="w-full" asChild>
+                    <Link to="/services" onClick={() => setIsOpen(false)}>
                       Book Now
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                   
                   {user ? (
                     <Button

@@ -82,14 +82,14 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Link to="/booking">
+            <Link to="/services">
               <Button variant="hero" size="xl">
                 Schedule Your Time
               </Button>
             </Link>
-            <Link to="/services">
+            <Link to="/gallery">
               <Button variant="heroOutline" size="xl">
-                Explore Services
+                View Our Work
               </Button>
             </Link>
           </motion.div>

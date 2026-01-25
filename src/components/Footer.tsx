@@ -62,13 +62,10 @@ const Footer = () => {
               <Link to="/gallery" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Gallery
               </Link>
-              <Link to="/team" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
-                Our Team
+              <Link to="/about" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+                About Us
               </Link>
-              <Link to="/reviews" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
-                Reviews
-              </Link>
-              <Link to="/booking" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
+              <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors text-sm">
                 Book Now
               </Link>
               <Link to="/faq" className="block text-muted-foreground hover:text-primary transition-colors text-sm">

@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { BUSINESS_CONFIG } from '@/config/business';
 
 interface SchemaMarkupProps {
   type:
@@ -30,8 +31,8 @@ export const SchemaMarkup = ({ type, data }: SchemaMarkupProps) => {
             data.description ||
             'Professional makeup artist and beauty services in Los Angeles. Specializing in bridal, editorial, and special event makeup with over 10 years of experience.',
           url: baseUrl,
-          telephone: data.phone || '+1-XXX-XXX-XXXX',
-          email: data.email || 'info@hdastudio.com',
+          telephone: data.phone || BUSINESS_CONFIG.contact.phone.raw,
+          email: data.email || BUSINESS_CONFIG.contact.email.primary,
           address: {
             '@type': 'PostalAddress',
             streetAddress: data.address?.street || '123 Beauty Lane',

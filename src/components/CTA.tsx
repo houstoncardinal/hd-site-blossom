@@ -30,14 +30,14 @@ const CTA = () => {
             Let us help you feel confident and radiant.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/booking">
+            <Link to="/services">
               <Button variant="gold" size="xl">
-                Schedule Your Time
+                Book Your Appointment
               </Button>
             </Link>
-            <Link to="/services">
+            <Link to="/gallery">
               <Button variant="heroOutline" size="xl">
-                View All Services
+                View Our Work
               </Button>
             </Link>
           </div>

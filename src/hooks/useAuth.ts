@@ -8,6 +8,7 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminCheckComplete, setAdminCheckComplete] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -15,7 +16,7 @@ export const useAuth = () => {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         // Defer role check to avoid deadlock
         if (session?.user) {
           setTimeout(() => {
@@ -23,19 +24,33 @@ export const useAuth = () => {
           }, 0);
         } else {
           setIsAdmin(false);
+          setAdminCheckComplete(true);
         }
       }
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        checkAdminRole(session.user.id);
-      }
-      setLoading(false);
-    });
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
+        if (error) {
+          console.error('Error getting session:', error);
+          setError(error.message);
+        }
+        setSession(session);
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          checkAdminRole(session.user.id);
+        } else {
+          setAdminCheckComplete(true);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to get session:', err);
+        setError(err instanceof Error ? err.message : 'Failed to connect to auth service');
+        setLoading(false);
+        setAdminCheckComplete(true);
+      });
 
     return () => subscription.unsubscribe();
   }, []);
@@ -43,28 +58,6 @@ export const useAuth = () => {
   const checkAdminRole = async (userId: string) => {
     setAdminCheckComplete(false);
     try {
-      // Check if this is the default admin user
-      if (userId === 'dcb25cb5-9a53-4e80-be27-111fe63be517') {
-        setIsAdmin(true);
-        setAdminCheckComplete(true);
-
-        // Ensure the user has admin role in database
-        const { error: upsertError } = await supabase
-          .from('user_roles')
-          .upsert({
-            user_id: userId,
-            role: 'admin'
-          }, {
-            onConflict: 'user_id,role'
-          });
-
-        if (upsertError) {
-          console.warn('Could not update admin role in database:', upsertError);
-        }
-
-        return;
-      }
-
       const { data, error } = await supabase
         .from('user_roles')
         .select('role')
@@ -122,6 +115,7 @@ export const useAuth = () => {
     loading,
     isAdmin,
     adminCheckComplete,
+    error,
     signIn,
     signUp,
     signOut,

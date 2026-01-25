@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, addDays, startOfWeek, isSameDay, addWeeks, subWeeks } from 'date-fns';
-import { ChevronLeft, ChevronRight, Clock, Check, CalendarDays, CreditCard, AlertCircle, Sparkles, Scissors, MapPin, ChevronDown, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, Check, CalendarDays, CreditCard, AlertCircle, Sparkles, Users, MessageCircle, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useDepositCheckout } from '@/hooks/useDepositCheckout';
@@ -10,53 +10,13 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { getAllServices, ADDONS, ServiceConfig, AddOnService, formatCurrency } from '@/config/services';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { GLAM_SERVICES, GROUP_GLAM_INFO, ServiceConfig, formatCurrency } from '@/config/services';
+import { BUSINESS_CONFIG } from '@/config/business';
 
 const timeSlots = [
   '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
   '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM',
 ];
-
-// Compact add-on item component
-const AddOnItem = ({ 
-  addon, 
-  isSelected, 
-  onToggle 
-}: { 
-  addon: AddOnService; 
-  isSelected: boolean; 
-  onToggle: () => void;
-}) => (
-  <button
-    onClick={onToggle}
-    className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all text-left ${
-      isSelected
-        ? 'border-primary bg-primary/10'
-        : 'border-border hover:border-primary/50 bg-card'
-    }`}
-  >
-    <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
-      isSelected ? 'bg-primary border-primary' : 'border-muted-foreground/50'
-    }`}>
-      {isSelected && <Check size={10} className="text-primary-foreground" />}
-    </div>
-    <div className="flex-1 min-w-0">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-medium truncate">{addon.name}</span>
-        <span className="text-sm font-semibold text-primary flex-shrink-0">
-          +{formatCurrency(addon.price)}
-        </span>
-      </div>
-      <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{addon.description}</p>
-    </div>
-  </button>
-);
 
 const Booking = () => {
   const { toast } = useToast();
@@ -64,19 +24,16 @@ const Booking = () => {
   const { initiateCheckout, isLoading: isCheckoutLoading } = useDepositCheckout();
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState<ServiceConfig | null>(null);
-  const [selectedAddOns, setSelectedAddOns] = useState<AddOnService[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
-  const [showMobileSummary, setShowMobileSummary] = useState(false);
+  const [showGroupContact, setShowGroupContact] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     notes: '',
   });
-
-  const allServices = getAllServices();
 
   // Check for canceled booking
   useEffect(() => {
@@ -98,27 +55,14 @@ const Booking = () => {
     return date < now;
   };
 
-  // Calculate totals with add-ons
-  const addOnsTotal = selectedAddOns.reduce((sum, addon) => sum + addon.price, 0);
-  const serviceTotal = (selectedService?.price || 0) + addOnsTotal;
-  const depositTotal = (selectedService?.deposit || 0) + (addOnsTotal * 0.5);
+  // Calculate totals (no add-ons)
+  const serviceTotal = selectedService?.price || 0;
+  const depositTotal = selectedService?.deposit || 0;
   const remainingBalance = serviceTotal - depositTotal;
 
   const handleServiceSelect = (service: ServiceConfig) => {
     setSelectedService(service);
-    setSelectedAddOns([]);
-    setStep(2);
-  };
-
-  const handleAddOnToggle = (addon: AddOnService) => {
-    setSelectedAddOns(prev => {
-      const isSelected = prev.some(a => a.id === addon.id);
-      if (isSelected) {
-        return prev.filter(a => a.id !== addon.id);
-      } else {
-        return [...prev, addon];
-      }
-    });
+    setStep(2); // Go directly to calendar
   };
 
   const handleDateSelect = (date: Date) => {
@@ -137,12 +81,12 @@ const Booking = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedService || !selectedDate || !selectedTime) return;
 
     const result = await initiateCheckout({
       service: selectedService,
-      addOns: selectedAddOns,
+      addOns: [],
       customerEmail: formData.email,
       customerName: formData.name,
       customerPhone: formData.phone || undefined,
@@ -164,11 +108,6 @@ const Booking = () => {
       });
     }
   };
-
-  // Group add-ons by category
-  const makeupAddOns = ADDONS.filter(a => a.category === 'makeup');
-  const hairAddOns = ADDONS.filter(a => a.category === 'hair');
-  const generalAddOns = ADDONS.filter(a => a.category === 'general');
 
   return (
     <main className="min-h-screen bg-background">
@@ -233,7 +172,7 @@ const Booking = () => {
       </section>
 
       {/* Booking Content */}
-      <section className="py-8 md:py-16 pb-32 lg:pb-16">
+      <section className="py-8 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
           {/* Step 1: Select Service */}
           {step === 1 && (
@@ -243,59 +182,160 @@ const Booking = () => {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-2xl md:text-3xl font-serif text-center mb-10">
-                Select a Service
+                Select Your Glam
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 max-w-6xl mx-auto">
-                {allServices.map((service) => (
-                  <button
+
+              {/* Service Cards - Text-based, minimal */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                {GLAM_SERVICES.map((service, index) => (
+                  <motion.button
                     key={service.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
                     onClick={() => handleServiceSelect(service)}
-                    className={`group text-left bg-card border transition-all duration-300 hover:border-primary/50 rounded-lg overflow-hidden ${
-                      selectedService?.id === service.id ? 'border-primary' : 'border-border'
-                    }`}
+                    className="group text-left bg-card border border-border hover:border-primary transition-all duration-300 p-6 relative"
                   >
-                    <div className="aspect-square overflow-hidden">
-                      <img
-                        src={service.image}
-                        alt={service.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="p-3 md:p-4">
-                      <h3 className="font-serif text-sm md:text-lg mb-1 line-clamp-1">{service.name}</h3>
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between text-xs md:text-sm mb-2 gap-1">
-                        <div>
-                          <span className="text-muted-foreground line-through text-xs mr-1">
-                            {formatCurrency(service.originalPrice)}
-                          </span>
-                          <span className="text-primary font-semibold">{formatCurrency(service.price)}</span>
-                        </div>
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <Clock size={10} />
-                          {service.duration}
+                    {service.popular && (
+                      <div className="absolute -top-3 left-4 bg-primary text-primary-foreground text-xs tracking-wider uppercase px-3 py-1 flex items-center gap-1">
+                        <Sparkles size={10} />
+                        Popular
+                      </div>
+                    )}
+
+                    <h3 className="font-serif text-xl mb-2 group-hover:text-primary transition-colors">
+                      {service.name}
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                      {service.description}
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-2xl font-serif text-primary">
+                          {formatCurrency(service.price)}
+                        </span>
+                        <span className="text-xs text-muted-foreground ml-2 line-through">
+                          {formatCurrency(service.originalPrice)}
                         </span>
                       </div>
-                      <div className="bg-primary/10 rounded px-2 py-1 text-xs text-primary">
-                        <CreditCard size={10} className="inline mr-1" />
-                        {formatCurrency(service.deposit)} deposit
+                      <div className="flex items-center gap-1 text-muted-foreground text-sm">
+                        <Clock size={14} />
+                        {service.duration}
                       </div>
                     </div>
-                  </button>
+
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">50% Deposit</span>
+                        <span className="text-primary font-medium">{formatCurrency(service.deposit)}</span>
+                      </div>
+                    </div>
+                  </motion.button>
                 ))}
+
+                {/* GROUP GLAM Card - Contact Trigger */}
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: GLAM_SERVICES.length * 0.1 }}
+                  onClick={() => setShowGroupContact(true)}
+                  className="group text-left bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-dashed border-primary/30 hover:border-primary transition-all duration-300 p-6"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <Users size={20} className="text-primary" />
+                    <h3 className="font-serif text-xl group-hover:text-primary transition-colors">
+                      {GROUP_GLAM_INFO.name}
+                    </h3>
+                  </div>
+
+                  <p className="text-xs tracking-widest uppercase text-primary mb-3">
+                    {GROUP_GLAM_INFO.subtitle}
+                  </p>
+
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {GROUP_GLAM_INFO.description}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-primary text-sm font-medium">
+                    <MessageCircle size={14} />
+                    Contact for Custom Quote
+                  </div>
+                </motion.button>
               </div>
             </motion.div>
           )}
 
-          {/* Step 2: Select Date, Time & Add-ons */}
+          {/* Group Contact Modal */}
+          <AnimatePresence>
+            {showGroupContact && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+                onClick={() => setShowGroupContact(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-card border border-border p-8 max-w-md w-full"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <Users size={24} className="text-primary" />
+                    <h3 className="font-serif text-2xl">{GROUP_GLAM_INFO.name}</h3>
+                  </div>
+
+                  <p className="text-xs tracking-widest uppercase text-primary mb-4">
+                    {GROUP_GLAM_INFO.subtitle}
+                  </p>
+
+                  <p className="text-muted-foreground mb-6">
+                    {GROUP_GLAM_INFO.description}
+                  </p>
+
+                  <div className="space-y-3">
+                    <a
+                      href={`sms:${BUSINESS_CONFIG.contact.phone.raw}`}
+                      className="flex items-center justify-center gap-2 w-full bg-primary text-primary-foreground py-3 px-6 hover:bg-primary/90 transition-colors"
+                    >
+                      <MessageCircle size={18} />
+                      Text Us
+                    </a>
+
+                    <a
+                      href={`mailto:${BUSINESS_CONFIG.contact.email.primary}?subject=Group Glam Inquiry`}
+                      className="flex items-center justify-center gap-2 w-full border border-primary text-primary py-3 px-6 hover:bg-primary/10 transition-colors"
+                    >
+                      <Mail size={18} />
+                      Email Us
+                    </a>
+                  </div>
+
+                  <button
+                    onClick={() => setShowGroupContact(false)}
+                    className="w-full mt-4 text-muted-foreground hover:text-foreground text-sm py-2 transition-colors"
+                  >
+                    Close
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Step 2: Select Date & Time */}
           {step === 2 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="max-w-6xl mx-auto"
+              className="max-w-3xl mx-auto"
             >
               {/* Header */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
                 <button
                   onClick={() => setStep(1)}
                   className="text-muted-foreground hover:text-foreground transition-colors text-sm self-start"
@@ -303,280 +343,103 @@ const Booking = () => {
                   ← Back to Services
                 </button>
                 <div className="text-center flex-1">
-                  <h2 className="text-xl md:text-3xl font-serif">Customize Your Booking</h2>
+                  <h2 className="text-xl md:text-3xl font-serif">Choose Date & Time</h2>
                   {selectedService && (
                     <p className="text-muted-foreground text-sm mt-1">
-                      {selectedService.name} - {formatCurrency(selectedService.price)}
+                      {selectedService.name} • {formatCurrency(selectedService.price)}
                     </p>
                   )}
                 </div>
                 <div className="hidden md:block w-24" />
               </div>
 
-              {/* Main Content Grid */}
-              <div className="flex flex-col lg:grid lg:grid-cols-5 gap-6">
-                {/* Left Column: Calendar & Time (takes 3 cols on lg) */}
-                <div className="lg:col-span-3 space-y-4">
-                  {/* Calendar */}
-                  <div className="bg-card border border-border p-4 md:p-6 rounded-lg">
-                    <div className="flex items-center justify-between mb-4">
-                      <button
-                        onClick={() => setWeekStart(subWeeks(weekStart, 1))}
-                        className="p-2 hover:bg-muted rounded transition-colors"
-                      >
-                        <ChevronLeft size={20} />
-                      </button>
-                      <h3 className="font-serif text-base md:text-lg">
-                        {format(weekStart, 'MMMM yyyy')}
-                      </h3>
-                      <button
-                        onClick={() => setWeekStart(addWeeks(weekStart, 1))}
-                        className="p-2 hover:bg-muted rounded transition-colors"
-                      >
-                        <ChevronRight size={20} />
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2">
-                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                        <div key={day} className="text-center text-xs text-muted-foreground uppercase tracking-wider py-2">
-                          {day.slice(0, 1)}
-                          <span className="hidden md:inline">{day.slice(1)}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="grid grid-cols-7 gap-1 md:gap-2">
-                      {weekDays.map((date) => {
-                        const isSelected = selectedDate && isSameDay(date, selectedDate);
-                        const isPast = isPastDate(date);
-                        const isToday = isSameDay(date, today);
-
-                        return (
-                          <button
-                            key={date.toISOString()}
-                            onClick={() => handleDateSelect(date)}
-                            disabled={isPast}
-                            className={`p-2 md:p-4 text-center transition-all duration-200 rounded-lg ${
-                              isPast
-                                ? 'opacity-30 cursor-not-allowed'
-                                : isSelected
-                                ? 'bg-primary text-primary-foreground'
-                                : 'hover:bg-muted'
-                            } ${isToday && !isSelected ? 'ring-1 ring-primary' : ''}`}
-                          >
-                            <span className="text-sm md:text-lg font-medium">{format(date, 'd')}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Time Slots */}
-                  {selectedDate && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-card border border-border p-4 md:p-6 rounded-lg"
-                    >
-                      <h3 className="font-serif text-base md:text-lg mb-4 flex items-center gap-2">
-                        <CalendarDays size={18} className="text-primary" />
-                        <span className="truncate">Times for {format(selectedDate, 'EEE, MMM d')}</span>
-                      </h3>
-                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                        {timeSlots.map((time) => {
-                          const isSelected = selectedTime === time;
-
-                          return (
-                            <button
-                              key={time}
-                              onClick={() => handleTimeSelect(time)}
-                              className={`py-2.5 px-2 text-xs md:text-sm transition-all duration-200 rounded-lg ${
-                                isSelected
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'border border-border hover:border-primary hover:text-primary'
-                              }`}
-                            >
-                              {time}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  )}
+              {/* Calendar */}
+              <div className="bg-card border border-border p-4 md:p-6 rounded-lg mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    onClick={() => setWeekStart(subWeeks(weekStart, 1))}
+                    className="p-2 hover:bg-muted rounded transition-colors"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <h3 className="font-serif text-base md:text-lg">
+                    {format(weekStart, 'MMMM yyyy')}
+                  </h3>
+                  <button
+                    onClick={() => setWeekStart(addWeeks(weekStart, 1))}
+                    className="p-2 hover:bg-muted rounded transition-colors"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
                 </div>
 
-                {/* Right Column: Add-ons (takes 2 cols on lg) */}
-                <div className="lg:col-span-2 space-y-4">
-                  {/* Add-ons Section */}
-                  <div className="bg-card border border-border rounded-lg overflow-hidden">
-                    <div className="p-4 border-b border-border">
-                      <h3 className="font-serif text-lg flex items-center gap-2">
-                        <ShoppingBag size={18} className="text-primary" />
-                        Enhance Your Look
-                      </h3>
-                      <p className="text-muted-foreground text-xs mt-1">Optional add-ons (50% deposit applies)</p>
+                <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2">
+                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
+                    <div key={day} className="text-center text-xs text-muted-foreground uppercase tracking-wider py-2">
+                      {day.slice(0, 1)}
+                      <span className="hidden md:inline">{day.slice(1)}</span>
                     </div>
+                  ))}
+                </div>
 
-                    <Accordion type="multiple" defaultValue={["makeup"]} className="w-full">
-                      {/* Makeup Add-ons */}
-                      <AccordionItem value="makeup" className="border-b border-border">
-                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
-                          <div className="flex items-center gap-2 text-sm font-medium">
-                            <Sparkles size={14} className="text-primary" />
-                            Makeup Enhancements
-                            <span className="text-xs text-muted-foreground ml-1">({makeupAddOns.length})</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4 pt-0">
-                          <div className="space-y-2">
-                            {makeupAddOns.map((addon) => (
-                              <AddOnItem
-                                key={addon.id}
-                                addon={addon}
-                                isSelected={selectedAddOns.some(a => a.id === addon.id)}
-                                onToggle={() => handleAddOnToggle(addon)}
-                              />
-                            ))}
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
+                <div className="grid grid-cols-7 gap-1 md:gap-2">
+                  {weekDays.map((date) => {
+                    const isSelected = selectedDate && isSameDay(date, selectedDate);
+                    const isPast = isPastDate(date);
+                    const isToday = isSameDay(date, today);
 
-                      {/* Hair Add-ons */}
-                      <AccordionItem value="hair" className="border-b border-border">
-                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
-                          <div className="flex items-center gap-2 text-sm font-medium">
-                            <Scissors size={14} className="text-primary" />
-                            Hair Enhancements
-                            <span className="text-xs text-muted-foreground ml-1">({hairAddOns.length})</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4 pt-0">
-                          <div className="space-y-2">
-                            {hairAddOns.map((addon) => (
-                              <AddOnItem
-                                key={addon.id}
-                                addon={addon}
-                                isSelected={selectedAddOns.some(a => a.id === addon.id)}
-                                onToggle={() => handleAddOnToggle(addon)}
-                              />
-                            ))}
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-
-                      {/* General Add-ons */}
-                      <AccordionItem value="general" className="border-0">
-                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50">
-                          <div className="flex items-center gap-2 text-sm font-medium">
-                            <MapPin size={14} className="text-primary" />
-                            Travel & Extras
-                            <span className="text-xs text-muted-foreground ml-1">({generalAddOns.length})</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4 pt-0">
-                          <div className="space-y-2">
-                            {generalAddOns.map((addon) => (
-                              <AddOnItem
-                                key={addon.id}
-                                addon={addon}
-                                isSelected={selectedAddOns.some(a => a.id === addon.id)}
-                                onToggle={() => handleAddOnToggle(addon)}
-                              />
-                            ))}
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </div>
-
-                  {/* Desktop Running Total */}
-                  <div className="hidden lg:block bg-primary/5 border border-primary/20 p-4 rounded-lg">
-                    <h4 className="font-medium mb-3 flex items-center gap-2">
-                      <CreditCard size={16} className="text-primary" />
-                      Your Selection
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="truncate pr-2">{selectedService?.name}</span>
-                        <span className="flex-shrink-0">{formatCurrency(selectedService?.price || 0)}</span>
-                      </div>
-                      {selectedAddOns.map(addon => (
-                        <div key={addon.id} className="flex justify-between text-muted-foreground">
-                          <span className="truncate pr-2">+ {addon.name}</span>
-                          <span className="flex-shrink-0">{formatCurrency(addon.price)}</span>
-                        </div>
-                      ))}
-                      <div className="border-t border-border pt-2 mt-2 space-y-1">
-                        <div className="flex justify-between font-medium">
-                          <span>Total</span>
-                          <span>{formatCurrency(serviceTotal)}</span>
-                        </div>
-                        <div className="flex justify-between text-primary font-semibold">
-                          <span>Deposit (50%)</span>
-                          <span>{formatCurrency(depositTotal)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    return (
+                      <button
+                        key={date.toISOString()}
+                        onClick={() => handleDateSelect(date)}
+                        disabled={isPast}
+                        className={`p-3 md:p-4 text-center transition-all duration-200 rounded-lg ${
+                          isPast
+                            ? 'opacity-30 cursor-not-allowed'
+                            : isSelected
+                            ? 'bg-primary text-primary-foreground'
+                            : 'hover:bg-muted'
+                        } ${isToday && !isSelected ? 'ring-1 ring-primary' : ''}`}
+                      >
+                        <span className="text-sm md:text-lg font-medium">{format(date, 'd')}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Mobile Sticky Summary Bar */}
-              <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border p-4 z-50 shadow-lg">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <button
-                      onClick={() => setShowMobileSummary(!showMobileSummary)}
-                      className="flex items-center gap-2 text-left w-full"
-                    >
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          {selectedAddOns.length > 0 ? `${selectedAddOns.length} add-on${selectedAddOns.length > 1 ? 's' : ''} selected` : 'No add-ons'}
-                        </p>
-                        <p className="font-semibold text-primary">{formatCurrency(depositTotal)} deposit</p>
-                      </div>
-                      <ChevronDown 
-                        size={16} 
-                        className={`text-muted-foreground transition-transform ${showMobileSummary ? 'rotate-180' : ''}`} 
-                      />
-                    </button>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-muted-foreground">Total</p>
-                    <p className="font-semibold">{formatCurrency(serviceTotal)}</p>
-                  </div>
-                </div>
+              {/* Time Slots */}
+              {selectedDate && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-card border border-border p-4 md:p-6 rounded-lg"
+                >
+                  <h3 className="font-serif text-base md:text-lg mb-4 flex items-center gap-2">
+                    <CalendarDays size={18} className="text-primary" />
+                    <span className="truncate">Available Times for {format(selectedDate, 'EEE, MMM d')}</span>
+                  </h3>
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                    {timeSlots.map((time) => {
+                      const isSelected = selectedTime === time;
 
-                {/* Expandable Summary */}
-                <AnimatePresence>
-                  {showMobileSummary && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-4 mt-4 border-t border-border space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span>{selectedService?.name}</span>
-                          <span>{formatCurrency(selectedService?.price || 0)}</span>
-                        </div>
-                        {selectedAddOns.map(addon => (
-                          <div key={addon.id} className="flex justify-between text-muted-foreground">
-                            <span>+ {addon.name}</span>
-                            <span>{formatCurrency(addon.price)}</span>
-                          </div>
-                        ))}
-                        <div className="flex justify-between text-muted-foreground pt-2 border-t border-border">
-                          <span>Remaining (due in person)</span>
-                          <span>{formatCurrency(remainingBalance)}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                      return (
+                        <button
+                          key={time}
+                          onClick={() => handleTimeSelect(time)}
+                          className={`py-3 px-2 text-sm transition-all duration-200 rounded-lg ${
+                            isSelected
+                              ? 'bg-primary text-primary-foreground'
+                              : 'border border-border hover:border-primary hover:text-primary'
+                          }`}
+                        >
+                          {time}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
           )}
 
@@ -607,11 +470,6 @@ const Booking = () => {
                     Booking Summary
                   </h4>
                   <p className="font-serif text-lg">{selectedService?.name}</p>
-                  {selectedAddOns.length > 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      + {selectedAddOns.map(a => a.name).join(', ')}
-                    </p>
-                  )}
                   <p className="text-sm text-muted-foreground mt-1">
                     {selectedDate && format(selectedDate, 'EEEE, MMMM d, yyyy')} at {selectedTime}
                   </p>
@@ -626,25 +484,15 @@ const Booking = () => {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span>{selectedService?.name}</span>
-                      <span>{formatCurrency(selectedService?.price || 0)}</span>
+                      <span>{formatCurrency(serviceTotal)}</span>
                     </div>
-                    {selectedAddOns.map(addon => (
-                      <div key={addon.id} className="flex justify-between text-muted-foreground">
-                        <span>+ {addon.name}</span>
-                        <span>{formatCurrency(addon.price)}</span>
-                      </div>
-                    ))}
                     <div className="border-t border-border pt-2 mt-2">
-                      <div className="flex justify-between">
-                        <span>Service Total</span>
-                        <span>{formatCurrency(serviceTotal)}</span>
+                      <div className="flex justify-between text-primary font-medium">
+                        <span>50% Deposit (Due Now)</span>
+                        <span>{formatCurrency(depositTotal)}</span>
                       </div>
                     </div>
-                    <div className="flex justify-between text-primary font-medium">
-                      <span>50% Deposit (Due Now)</span>
-                      <span>{formatCurrency(depositTotal)}</span>
-                    </div>
-                    <div className="flex justify-between text-muted-foreground border-t border-border pt-2 mt-2">
+                    <div className="flex justify-between text-muted-foreground">
                       <span>Remaining Balance (In Person)</span>
                       <span>{formatCurrency(remainingBalance)}</span>
                     </div>
@@ -657,7 +505,7 @@ const Booking = () => {
                   <div className="text-xs md:text-sm">
                     <p className="font-medium text-amber-500 mb-1">Deposit Policy</p>
                     <p className="text-muted-foreground">
-                      A 50% deposit is required to secure your booking. Deposits are non-refundable 
+                      A 50% deposit is required to secure your booking. Deposits are non-refundable
                       for cancellations within 24 hours.
                     </p>
                   </div>

@@ -24,12 +24,12 @@ const ServiceSchema = ({ services }: ServiceSchemaProps) => {
     "url": "https://hdastudio.com",
     "image": "https://hdastudio.com/IMG_8900.JPG",
     "priceRange": "$75-$400",
-    "telephone": "+1-XXX-XXX-XXXX",
+    "telephone": BUSINESS_CONFIG.contact.phone.raw,
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "City",
-      "addressRegion": "State",
-      "addressCountry": "US"
+      "addressLocality": BUSINESS_CONFIG.contact.address.city,
+      "addressRegion": BUSINESS_CONFIG.contact.address.state,
+      "addressCountry": BUSINESS_CONFIG.contact.address.countryCode
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",

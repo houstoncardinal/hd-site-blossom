@@ -20,6 +20,51 @@ interface TeamMember {
   years_experience: number | null;
 }
 
+// Fallback data for when database is unavailable
+const fallbackFounder: TeamMember = {
+  id: 'huda-javed-founder',
+  name: 'Huda Javed',
+  role: 'Founder/Owner',
+  bio: 'Huda brings over 8 years of experience in bridal and editorial makeup. Her passion for enhancing natural beauty has made her a sought-after artist for weddings and special occasions.',
+  specialties: ['Bridal', 'Editorial', 'Soft Glam', 'HD Makeup'],
+  image_url: '/huda-main.jpg',
+  instagram_handle: null,
+  years_experience: 8,
+};
+
+const fallbackTeam: TeamMember[] = [
+  {
+    id: 'rehana',
+    name: 'Rehana Qureshi',
+    role: 'Licensed Cosmetologist & Senior Makeup Artist',
+    bio: null,
+    specialties: ['Special Events', 'Party Makeup', 'Natural Beauty', 'Airbrush'],
+    image_url: null,
+    instagram_handle: null,
+    years_experience: null,
+  },
+  {
+    id: 'stella',
+    name: 'Stella',
+    role: 'Licensed Cosmetologist & Senior Makeup Artist',
+    bio: null,
+    specialties: ['Glam Makeup', 'Editorial', 'Party Makeup', 'Soft Glam'],
+    image_url: null,
+    instagram_handle: null,
+    years_experience: null,
+  },
+  {
+    id: 'sheraz',
+    name: 'Sheraz',
+    role: 'Licensed Cosmetologist & Senior Makeup Artist',
+    bio: null,
+    specialties: ['Hair Styling', 'Bridal', 'Special Events', "Men's Grooming"],
+    image_url: null,
+    instagram_handle: null,
+    years_experience: null,
+  },
+];
+
 const Team = () => {
   const { data: teamMembers, isLoading } = useQuery({
     queryKey: ['team-members'],
@@ -28,16 +73,20 @@ const Team = () => {
         .from('team_members')
         .select('*')
         .eq('is_active', true)
-        .order('years_experience', { ascending: false });
+        .order('years_experience', { ascending: false, nullsFirst: false });
       
       if (error) throw error;
       return data as TeamMember[];
     },
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
   });
 
-  // Separate founder from other team members
-  const founder = teamMembers?.find(m => m.role.toLowerCase().includes('founder'));
-  const artists = teamMembers?.filter(m => !m.role.toLowerCase().includes('founder')) || [];
+  // Separate founder from other team members - use fallback if not found
+  const dbFounder = teamMembers?.find(m => m.role.toLowerCase().includes('founder'));
+  const founder = dbFounder || fallbackFounder;
+  
+  const dbArtists = teamMembers?.filter(m => !m.role.toLowerCase().includes('founder')) || [];
+  const artists = dbArtists.length > 0 ? dbArtists : fallbackTeam;
 
   return (
     <main className="min-h-screen bg-background">
@@ -92,90 +141,88 @@ const Team = () => {
         </div>
       </section>
 
-      {/* Founder Section */}
-      {founder && (
-        <section className="py-16 border-b border-border">
-          <div className="container mx-auto px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="max-w-4xl mx-auto"
-            >
-              <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-2 text-primary text-sm tracking-[0.2em] uppercase mb-4">
-                  <Crown size={16} />
-                  Leadership
-                </span>
-              </div>
+      {/* Founder Section - Always shows */}
+      <section className="py-16 border-b border-border">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="text-center mb-8">
+              <span className="inline-flex items-center gap-2 text-primary text-sm tracking-[0.2em] uppercase mb-4">
+                <Crown size={16} />
+                Leadership
+              </span>
+            </div>
 
-              <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                {/* Founder Image */}
-                {founder.image_url && (
-                  <div className="w-64 md:w-80 flex-shrink-0">
-                    <div className="relative">
-                      <div className="aspect-[3/4] overflow-hidden">
-                        <img
-                          src={founder.image_url}
-                          alt={founder.name}
-                          className="w-full h-full object-cover border border-primary/30"
-                        />
-                      </div>
-                      <div className="absolute -bottom-3 -right-3 w-full h-full border border-primary/30 -z-10" />
+            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+              {/* Founder Image */}
+              {founder.image_url && (
+                <div className="w-64 md:w-80 flex-shrink-0">
+                  <div className="relative">
+                    <div className="aspect-[3/4] overflow-hidden">
+                      <img
+                        src={founder.image_url}
+                        alt={founder.name}
+                        className="w-full h-full object-cover border border-primary/30"
+                      />
                     </div>
+                    <div className="absolute -bottom-3 -right-3 w-full h-full border border-primary/30 -z-10" />
                   </div>
+                </div>
+              )}
+
+              {/* Founder Info */}
+              <div className="flex-1 text-center md:text-left">
+                {founder.instagram_handle && (
+                  <a
+                    href={`https://instagram.com/${founder.instagram_handle.replace('@', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-3"
+                  >
+                    <Instagram size={16} />
+                    <span className="text-sm">{founder.instagram_handle}</span>
+                  </a>
                 )}
 
-                {/* Founder Info */}
-                <div className="flex-1 text-center md:text-left">
-                  {founder.instagram_handle && (
-                    <a
-                      href={`https://instagram.com/${founder.instagram_handle.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-3"
-                    >
-                      <Instagram size={16} />
-                      <span className="text-sm">{founder.instagram_handle}</span>
-                    </a>
-                  )}
+                <h2 className="text-3xl md:text-4xl font-serif mb-2">{founder.name}</h2>
+                <p className="text-primary text-sm tracking-widest uppercase mb-4">
+                  {founder.role}
+                </p>
 
-                  <h2 className="text-3xl md:text-4xl font-serif mb-2">{founder.name}</h2>
-                  <p className="text-primary text-sm tracking-widest uppercase mb-4">
-                    {founder.role}
+                {founder.years_experience && (
+                  <p className="text-muted-foreground text-sm mb-4">
+                    {founder.years_experience}+ years of experience
                   </p>
+                )}
 
-                  {founder.years_experience && (
-                    <p className="text-muted-foreground text-sm mb-4">
-                      {founder.years_experience}+ years of experience
-                    </p>
-                  )}
+                {founder.bio && (
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    {founder.bio}
+                  </p>
+                )}
 
-                  {founder.bio && (
-                    <p className="text-muted-foreground leading-relaxed mb-6">
-                      {founder.bio}
-                    </p>
-                  )}
-
-                  {founder.specialties && founder.specialties.length > 0 && (
-                    <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                      {founder.specialties.map((specialty) => (
-                        <span
-                          key={specialty}
-                          className="text-xs tracking-wider uppercase px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-full"
-                        >
-                          {specialty}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                {founder.specialties && founder.specialties.length > 0 && (
+                  <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                    {founder.specialties.map((specialty) => (
+                      <span
+                        key={specialty}
+                        className="text-xs tracking-wider uppercase px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-full"
+                      >
+                        {specialty}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
-            </motion.div>
-          </div>
-        </section>
-      )}
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Team Grid */}
       <section className="py-20">

@@ -7,6 +7,7 @@ interface ServicesMegamenuProps {
   onClose: () => void;
 }
 
+// The five core services (matching Services page)
 const services = [
   {
     id: 'basic-soft-glam',
@@ -31,7 +32,18 @@ const services = [
     popular: true,
   },
   {
-    id: 'event-ready-combo',
+    id: 'signature-glam',
+    title: 'Signature Glam',
+    description: 'Premium show-stopping glamour',
+    price: '$216',
+    originalPrice: '$246',
+    duration: '90 min',
+    image: '/signature-glam.jpeg',
+    icon: Crown,
+    popular: false,
+  },
+  {
+    id: 'hair-makeup-combo',
     title: 'Hair + Makeup Combo',
     description: 'Complete transformation package',
     price: '$245',
@@ -62,26 +74,7 @@ const addOns = [
   { name: 'Touch-Up Kit', price: '$25' },
 ];
 
-const bundles = [
-  {
-    name: 'Bridal Party Package',
-    description: 'Bride $200 + $100 per person',
-    price: 'From $200',
-    highlight: 'Weddings',
-  },
-  {
-    name: 'Quinceañera Glam',
-    description: 'Hair + Makeup for XV años',
-    price: '$225',
-    highlight: 'Popular',
-  },
-  {
-    name: 'VIP Experience',
-    description: 'Private luxury session',
-    price: '$480',
-    highlight: 'Exclusive',
-  },
-];
+// Removed bundles - only showing core services and add-ons
 
 const ServicesMegamenu = ({ isOpen, onClose }: ServicesMegamenuProps) => {
   const containerVariants = {
@@ -229,44 +222,6 @@ const ServicesMegamenu = ({ isOpen, onClose }: ServicesMegamenuProps) => {
                           <span className="text-foreground">{addOn.name}</span>
                           <span className="text-primary font-medium">{addOn.price}</span>
                         </div>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  {/* Bundles Section */}
-                  <motion.div variants={itemVariants}>
-                    <h3 className="text-xs tracking-[0.3em] uppercase text-primary mb-4 font-sans">
-                      Package Bundles
-                    </h3>
-                    <div className="space-y-3">
-                      {bundles.map((bundle, index) => (
-                        <Link
-                          key={index}
-                          to="/booking"
-                          onClick={onClose}
-                          className="group block bg-background/50 hover:bg-background rounded-lg border border-border hover:border-primary transition-all duration-300 p-4"
-                        >
-                          <div className="flex items-start justify-between mb-2">
-                            <h4 className="font-serif text-sm leading-tight flex-1">
-                              {bundle.name}
-                            </h4>
-                            <span className="inline-block bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full ml-2">
-                              {bundle.highlight}
-                            </span>
-                          </div>
-                          <p className="text-xs text-muted-foreground mb-2">
-                            {bundle.description}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-primary font-semibold text-sm">
-                              {bundle.price}
-                            </span>
-                            <ChevronRight
-                              size={14}
-                              className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-300"
-                            />
-                          </div>
-                        </Link>
                       ))}
                     </div>
                   </motion.div>

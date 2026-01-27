@@ -26,13 +26,12 @@ const CTA = () => {
             Your Beauty Journey <span className="italic">Starts Here</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-            Schedule your appointment today and discover the art of personalized beauty. 
-            Let us help you feel confident and radiant.
+            Discover the art of personalized beauty and let us help you feel confident and radiant.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/services">
               <Button variant="gold" size="xl">
-                Book Your Appointment
+                Explore Our Services
               </Button>
             </Link>
             <Link to="/gallery">

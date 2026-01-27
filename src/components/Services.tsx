@@ -63,7 +63,7 @@ const Services = () => {
               transition={{ duration: 0.6, delay: index * 0.15 }}
               className="group cursor-pointer"
             >
-              <Link to="/booking">
+              <Link to="/services">
                 {/* Image Container */}
                 <div className="relative overflow-hidden mb-6 aspect-[3/4]">
                   <img
@@ -76,7 +76,7 @@ const Services = () => {
                   {/* Hover Overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                     <span className="inline-block bg-primary text-primary-foreground text-xs tracking-widest uppercase px-4 py-2">
-                      Book Now
+                      Learn More
                     </span>
                   </div>
                 </div>

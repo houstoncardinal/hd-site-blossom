@@ -7,8 +7,7 @@ import SEOHead from '@/components/seo/SEOHead';
 import FAQSchema from '@/components/seo/FAQSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import FAQContactForm from '@/components/FAQContactForm';
 
 const faqs = [
   {
@@ -233,35 +232,25 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Contact Form Section */}
       <section className="py-20 bg-charcoal-light">
-        <div className="container mx-auto px-6 text-center">
+        <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="max-w-2xl mx-auto"
+            className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-serif font-light mb-6">
+            <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
               Still Have Questions?
             </h2>
-            <p className="text-muted-foreground mb-8">
-              We're here to help! Contact us directly or book a free consultation to discuss your beauty needs.
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Can't find the answer you're looking for? Submit your question below and we'll get back to you within 24 hours.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/booking">
-                <Button variant="hero" size="xl">
-                  Book Consultation
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button variant="heroOutline" size="xl">
-                  Contact Us
-                </Button>
-              </Link>
-            </div>
           </motion.div>
+          
+          <FAQContactForm />
         </div>
       </section>
 

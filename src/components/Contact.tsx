@@ -33,6 +33,22 @@ const Contact = () => {
 
       if (error) throw error;
 
+      // Send email notification
+      try {
+        await supabase.functions.invoke('send-form-notification', {
+          body: {
+            formType: 'contact',
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone?.trim() || null,
+            message: message.trim(),
+          },
+        });
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+        // Don't fail the submission if email fails
+      }
+
       toast({
         title: "Message Sent!",
         description: "We'll get back to you within 24 hours.",

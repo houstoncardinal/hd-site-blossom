@@ -20,7 +20,7 @@ import {
   Eye,
   Sparkles,
 } from 'lucide-react';
-import { format, startOfMonth, endOfMonth, subMonths, isToday, parseISO } from 'date-fns';
+import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 
 interface DashboardWidgetsProps {
   onNavigate: (tab: string) => void;

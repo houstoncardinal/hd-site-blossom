@@ -6,12 +6,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { getServicesForEvent, formatCurrency, ADDONS } from '@/config/services';
+import { GLAM_SERVICES, formatCurrency, ADDONS } from '@/config/services';
 
 const PromServices = () => {
-  const promServices = getServicesForEvent('prom');
-  const seniorServices = getServicesForEvent('senior portraits');
-  const allEventServices = [...promServices, ...seniorServices];
+  // Use GLAM_SERVICES directly
+  const allEventServices = GLAM_SERVICES;
   
   const galleryImages = [
     '/IMG_8964.JPG',
@@ -149,7 +148,7 @@ const PromServices = () => {
               >
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src={service.image}
+                    src={service.image || '/IMG_8964.JPG'}
                     alt={service.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />

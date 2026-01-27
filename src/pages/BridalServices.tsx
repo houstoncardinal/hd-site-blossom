@@ -9,10 +9,11 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import HowToSchema from '@/components/seo/HowToSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import ItemListSchema from '@/components/seo/ItemListSchema';
-import { getServicesForEvent, formatCurrency, ADDONS } from '@/config/services';
+import { GLAM_SERVICES, formatCurrency, ADDONS } from '@/config/services';
 
 const BridalServices = () => {
-  const bridalServices = getServicesForEvent('wedding');
+  // Use GLAM_SERVICES directly since getServicesForEvent now returns all services
+  const bridalServices = GLAM_SERVICES;
   
   const galleryImages = [
     '/IMG_8900.JPG',
@@ -214,7 +215,7 @@ const BridalServices = () => {
                 )}
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src={service.image}
+                    src={service.image || '/IMG_8900.JPG'}
                     alt={service.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />

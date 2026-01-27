@@ -20,6 +20,7 @@ export interface ServiceConfig {
   category: ServiceCategory;
   includes?: string[];
   popular?: boolean;
+  image?: string;
 }
 
 // ============================================
@@ -37,6 +38,7 @@ export const GLAM_SERVICES: ServiceConfig[] = [
     duration: '45 min',
     stripePriceId: 'price_1SnNAfEmDDtU2eufx8NGpPKj',
     category: 'makeup',
+    image: '/IMG_8863.JPG',
     includes: [
       'Professional skin preparation',
       'Full coverage base application',
@@ -59,6 +61,7 @@ export const GLAM_SERVICES: ServiceConfig[] = [
     duration: '60 min',
     stripePriceId: 'price_1SnNArEmDDtU2eufipMNyOov',
     category: 'makeup',
+    image: '/softglam.jpg',
     includes: [
       'Full coverage base with skin perfection',
       'Soft contour & bronzer application',
@@ -82,6 +85,7 @@ export const GLAM_SERVICES: ServiceConfig[] = [
     stripePriceId: 'price_1SnNFGEmDDtU2eufmIHr1CUH',
     category: 'makeup',
     popular: true,
+    image: '/fullglam.jpeg',
     includes: [
       'Flawless full coverage base',
       'Professional contour & blush sculpting',
@@ -104,6 +108,7 @@ export const GLAM_SERVICES: ServiceConfig[] = [
     duration: '90 min',
     stripePriceId: 'price_1SnNGcEmDDtU2eufzbO51FUU',
     category: 'makeup',
+    image: '/signatureglam.jpeg',
     includes: [
       'High-coverage flawless base',
       'Full facial contouring & sculpting',
@@ -153,6 +158,9 @@ export const formatCurrency = (amount: number): string => {
 export const getAllServices = (): ServiceConfig[] => GLAM_SERVICES;
 export const MAKEUP_SERVICES = GLAM_SERVICES;
 export const SERVICES = GLAM_SERVICES;
+
+// Get services for a specific event type (legacy compatibility - returns all glam services)
+export const getServicesForEvent = (_eventType: string): ServiceConfig[] => GLAM_SERVICES;
 
 // ============================================
 // ADD-ONS (Optional enhancements)

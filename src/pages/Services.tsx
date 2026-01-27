@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion';
-import { Check, Clock, Sparkles, Crown, Star, Heart, ChevronRight } from 'lucide-react';
+import { Clock, Sparkles, Crown, Star, Heart, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import { formatCurrency } from '@/config/services';
 
 // The five core services
@@ -212,19 +211,6 @@ const ServiceCard = ({ service, index }: { service: typeof CORE_SERVICES[0]; ind
 };
 
 const ServicesCatalog = () => {
-  // Services for SEO schema
-  const allServicesForSchema = CORE_SERVICES.map(s => ({
-    id: s.id,
-    title: s.name,
-    description: s.description,
-    price: s.price,
-    image: s.image,
-    duration: s.duration,
-    keywords: s.category,
-    seoDescription: s.description,
-    includes: s.includes || [],
-  }));
-
   return (
     <main className="min-h-screen bg-background">
       <SEOHead

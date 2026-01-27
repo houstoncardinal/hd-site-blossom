@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Save, X, Tag, Star, Eye, Calendar } from 'lucide-react';
+import { Save, X, Tag, Star, Eye } from 'lucide-react';
 import type { GalleryImage, GalleryCategory } from '@/types/gallery';
 import { GALLERY_CATEGORY_LABELS, getImageUrl } from '@/types/gallery';
 import { useToast } from '@/hooks/use-toast';

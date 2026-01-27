@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { X, Plus, DollarSign, Clock, Image, Star, Tag } from 'lucide-react';
+import { X, Plus, DollarSign, Clock, Star, Tag } from 'lucide-react';
 import { Service, ServiceFormData, ServiceCategory } from './hooks/useServicesData';
 
 interface ServiceFormDialogProps {

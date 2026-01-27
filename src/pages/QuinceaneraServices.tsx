@@ -1,15 +1,16 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Crown, Sparkles, Camera, Clock, Star, Check, Heart } from 'lucide-react';
+import { Crown, Sparkles, Clock, Star, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { getServicesForEvent, formatCurrency, ADDONS } from '@/config/services';
+import { GLAM_SERVICES, formatCurrency, ADDONS } from '@/config/services';
 
 const QuinceaneraServices = () => {
-  const quinceaneraServices = getServicesForEvent('quinceanera');
+  // Use GLAM_SERVICES directly
+  const quinceaneraServices = GLAM_SERVICES;
   
   const galleryImages = [
     '/IMG_8960.JPG',
@@ -121,7 +122,7 @@ const QuinceaneraServices = () => {
               >
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src={service.image}
+                    src={service.image || '/IMG_8960.JPG'}
                     alt={service.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />

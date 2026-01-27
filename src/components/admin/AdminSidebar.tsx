@@ -152,8 +152,8 @@ const AdminSidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, pen
       {!collapsed && (
         <div className="p-4 border-t border-border">
           <div className="text-xs text-muted-foreground">
-            <p>Glamour Studio</p>
-            <p>© 2024</p>
+            <p>HDA Studio</p>
+            <p>© 2026</p>
           </div>
         </div>
       )}

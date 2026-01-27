@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Table,
   TableBody,
@@ -192,21 +192,7 @@ const AppointmentsManager = () => {
       title: 'Reminders Sent',
       description: `Reminders sent to ${selectedIds.size} clients`,
     });
-    setBulkLoading(false);
-  };
-
-  const getStatusBadge = (status: string | null) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      pending: 'outline',
-      confirmed: 'default',
-      completed: 'secondary',
-      cancelled: 'destructive',
-    };
-    return (
-      <Badge variant={variants[status || 'pending'] || 'outline'}>
-        {status || 'pending'}
-      </Badge>
-    );
+  setBulkLoading(false);
   };
 
   const isAllSelected = useMemo(

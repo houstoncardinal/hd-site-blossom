@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Calendar, Clock, DollarSign, Mail, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,20 +6,10 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
-import { formatCurrency } from '@/config/services';
 
 const BookingSuccess = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
-  const [bookingDetails, setBookingDetails] = useState<{
-    serviceName?: string;
-    depositPaid?: number;
-    remainingBalance?: number;
-    customerName?: string;
-    customerEmail?: string;
-    appointmentDate?: string;
-    appointmentTime?: string;
-  } | null>(null);
 
   useEffect(() => {
     // Scroll to top on mount

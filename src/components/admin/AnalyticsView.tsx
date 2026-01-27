@@ -7,9 +7,7 @@ import {
   TrendingUp,
   Calendar,
   DollarSign,
-  Users,
   Star,
-  BarChart3,
 } from 'lucide-react';
 import { format, subDays, startOfDay, endOfDay } from 'date-fns';
 

@@ -30,12 +30,6 @@ interface BookingSettings {
   autoConfirmBookings: boolean;
 }
 
-interface BusinessSettingsData {
-  businessInfo: BusinessInfo;
-  hours: BusinessHours[];
-  bookingSettings: BookingSettings;
-}
-
 const DEFAULT_BUSINESS_INFO: BusinessInfo = {
   name: 'HDA Studio',
   tagline: 'Professional Makeup Artistry',

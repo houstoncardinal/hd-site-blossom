@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import Compressor from 'compressorjs';
 
 interface ServiceImageUploaderProps {
@@ -77,7 +77,7 @@ export const ServiceImageUploader = ({
       const filePath = `services/${fileName}`;
 
       // Upload to Supabase Storage
-      const { error: uploadError, data } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('service-images')
         .upload(filePath, compressedFile, {
           cacheControl: '3600',

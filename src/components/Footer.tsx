@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Mail } from 'lucide-react';
-import { BUSINESS_CONFIG, getActiveSocialLinks } from '@/config/business';
+import { BUSINESS_CONFIG } from '@/config/business';
 
 const Footer = () => {
   return (

@@ -6,7 +6,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Sparkles, Calendar, Image, Star, Users, HelpCircle, X } from 'lucide-react';
+import { Home, Sparkles, Image, Star, Users, HelpCircle } from 'lucide-react';
 
 interface NavSection {
   id: string;

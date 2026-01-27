@@ -14,7 +14,6 @@ import {
 import { useGalleryImages } from './hooks/useGalleryImages';
 import { useAITagging } from './hooks/useAITagging';
 import { Sparkles, Play, Square, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import type { GalleryCategory } from '@/types/gallery';
 import { GALLERY_CATEGORY_LABELS } from '@/types/gallery';
 
 export const AITaggingPanel = () => {

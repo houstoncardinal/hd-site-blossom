@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
@@ -8,7 +8,6 @@ import ImageLightbox from '@/components/ImageLightbox';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import { usePublicGallery } from '@/hooks/usePublicGallery';
 import { Loader2, Play, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 // Before/After transformation data
 const beforeAfterImages = [

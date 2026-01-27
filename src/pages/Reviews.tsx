@@ -255,7 +255,7 @@ const Reviews = () => {
   const [hoverRating, setHoverRating] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { data: reviews, isLoading } = useQuery({
+  const { data: reviews } = useQuery({
     queryKey: ['reviews'],
     queryFn: async () => {
       const { data, error } = await supabase

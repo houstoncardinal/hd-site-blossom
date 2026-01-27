@@ -171,12 +171,6 @@ const Navbar = () => {
                 </Link>
               )}
 
-              {/* Book Now Button */}
-              <Button variant="hero" size="lg" asChild>
-                <Link to="/services">
-                  Book Now
-                </Link>
-              </Button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -294,11 +288,6 @@ const Navbar = () => {
                 )}
 
                 <motion.div variants={itemVariants} className="mt-6 space-y-3">
-                  <Button variant="hero" size="lg" className="w-full" asChild>
-                    <Link to="/services" onClick={() => setIsOpen(false)}>
-                      Book Now
-                    </Link>
-                  </Button>
                   
                   {user ? (
                     <Button

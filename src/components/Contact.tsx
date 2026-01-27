@@ -42,12 +42,12 @@ const Contact = () => {
               Get In Touch
             </span>
             <h2 className="text-4xl md:text-5xl font-serif font-light mb-8">
-              Book Your <span className="italic">Appointment</span>
+              Contact <span className="italic">Us</span>
             </h2>
             
             <p className="text-muted-foreground leading-relaxed mb-12">
-              Ready to experience luxury beauty? Contact us to schedule your appointment 
-              or consultation. We'd love to help you look and feel your absolute best.
+              Ready to experience luxury beauty? Reach out to learn more about our services. 
+              We'd love to help you look and feel your absolute best.
             </p>
 
             <div className="space-y-6">

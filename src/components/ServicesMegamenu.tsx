@@ -143,7 +143,7 @@ const ServicesMegamenu = ({ isOpen, onClose }: ServicesMegamenuProps) => {
                           variants={itemVariants}
                         >
                           <Link
-                            to="/booking"
+                            to="/services"
                             onClick={onClose}
                             className="group block relative overflow-hidden rounded-lg border border-border hover:border-primary transition-all duration-300 bg-background/50 hover:bg-background"
                           >
@@ -232,14 +232,14 @@ const ServicesMegamenu = ({ isOpen, onClose }: ServicesMegamenuProps) => {
                       <Sparkles className="mx-auto mb-3 text-primary" size={24} />
                       <h4 className="font-serif text-lg mb-2">Not Sure Which Service?</h4>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Our experts will help you choose the perfect glam experience
+                        Explore our services to find the perfect glam experience
                       </p>
                       <Link
-                        to="/booking"
+                        to="/services"
                         onClick={onClose}
                         className="inline-block w-full bg-primary text-primary-foreground text-sm tracking-widest uppercase px-6 py-3 rounded hover:bg-primary/90 transition-colors duration-300"
                       >
-                        Book Consultation
+                        View All Services
                       </Link>
                     </div>
                   </motion.div>

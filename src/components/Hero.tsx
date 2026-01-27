@@ -84,7 +84,7 @@ const Hero = () => {
           >
             <Link to="/services">
               <Button variant="hero" size="xl">
-                Schedule Your Time
+                View Our Services
               </Button>
             </Link>
             <Link to="/gallery">

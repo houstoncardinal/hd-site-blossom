@@ -14,6 +14,7 @@ import TeamManager from '@/components/admin/TeamManager';
 import { GalleryManager } from '@/components/admin/gallery/GalleryManager';
 import ServicesManager from '@/components/admin/services/ServicesManager';
 import ClientsManager from '@/components/admin/clients/ClientsManager';
+import FormSubmissionsManager from '@/components/admin/submissions/FormSubmissionsManager';
 import AnalyticsView from '@/components/admin/AnalyticsView';
 import BusinessSettings from '@/components/admin/BusinessSettings';
 import { NotificationsView, SettingsView } from '@/components/admin/PlaceholderViews';
@@ -26,6 +27,7 @@ const AdminDashboardContent = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const [newSubmissionsCount, setNewSubmissionsCount] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
   const navigate = useNavigate();
@@ -39,9 +41,18 @@ const AdminDashboardContent = () => {
     setPendingCount(count || 0);
   }, []);
 
+  const fetchNewSubmissionsCount = useCallback(async () => {
+    const { count } = await supabase
+      .from('form_submissions')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'new');
+    setNewSubmissionsCount(count || 0);
+  }, []);
+
   useEffect(() => {
     fetchPendingCount();
-  }, [fetchPendingCount, refreshKey]);
+    fetchNewSubmissionsCount();
+  }, [fetchPendingCount, fetchNewSubmissionsCount, refreshKey]);
 
   // Real-time subscriptions
   const { isConnected } = useRealtimeSubscriptions({
@@ -91,6 +102,9 @@ const AdminDashboardContent = () => {
       case 'team':
         return <TeamManager key={refreshKey} />;
       case 'gallery':
+      case 'submissions':
+        return <FormSubmissionsManager key={refreshKey} />;
+      case 'gallery':
         return <GalleryManager key={refreshKey} />;
       case 'services':
         return <ServicesManager key={refreshKey} />;
@@ -119,6 +133,7 @@ const AdminDashboardContent = () => {
           collapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
           pendingCount={pendingCount}
+          newSubmissionsCount={newSubmissionsCount}
         />
       </div>
 
@@ -141,6 +156,7 @@ const AdminDashboardContent = () => {
           collapsed={false}
           onToggleCollapse={() => setMobileMenuOpen(false)}
           pendingCount={pendingCount}
+          newSubmissionsCount={newSubmissionsCount}
         />
       </div>
 

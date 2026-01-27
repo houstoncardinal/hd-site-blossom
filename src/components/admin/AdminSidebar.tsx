@@ -15,6 +15,7 @@ import {
   Building2,
   Image,
   UserCircle,
+  MessageSquare,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -23,11 +24,13 @@ interface AdminSidebarProps {
   collapsed: boolean;
   onToggleCollapse: () => void;
   pendingCount?: number;
+  newSubmissionsCount?: number;
 }
 
 const menuItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard, section: 'main' },
   { id: 'appointments', label: 'Appointments', icon: Calendar, section: 'main' },
+  { id: 'submissions', label: 'Form Submissions', icon: MessageSquare, section: 'main' },
   { id: 'clients', label: 'Clients', icon: UserCircle, section: 'main' },
   { id: 'reviews', label: 'Reviews', icon: Star, section: 'main' },
   { id: 'team', label: 'Team', icon: Users, section: 'main' },
@@ -39,7 +42,7 @@ const menuItems = [
   { id: 'settings', label: 'Settings', icon: Settings, section: 'settings' },
 ];
 
-const AdminSidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, pendingCount = 0 }: AdminSidebarProps) => {
+const AdminSidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, pendingCount = 0, newSubmissionsCount = 0 }: AdminSidebarProps) => {
   const mainItems = menuItems.filter(item => item.section === 'main');
   const businessItems = menuItems.filter(item => item.section === 'business');
   const settingsItems = menuItems.filter(item => item.section === 'settings');
@@ -93,6 +96,11 @@ const AdminSidebar = ({ activeTab, onTabChange, collapsed, onToggleCollapse, pen
               {item.id === 'appointments' && pendingCount > 0 && (
                 <Badge className="ml-auto h-5 w-5 p-0 flex items-center justify-center text-xs bg-primary">
                   {pendingCount}
+                </Badge>
+              )}
+              {item.id === 'submissions' && newSubmissionsCount > 0 && (
+                <Badge className="ml-auto h-5 w-5 p-0 flex items-center justify-center text-xs bg-blue-500">
+                  {newSubmissionsCount}
                 </Badge>
               )}
             </Button>

@@ -83,7 +83,7 @@ const QuinceaneraServices = () => {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="min-w-[200px]">
-                <Link to="/booking">Book Your Glam Session</Link>
+                <Link to="/#contact">Get In Touch</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link to="/gallery">View Gallery</Link>
@@ -163,7 +163,7 @@ const QuinceaneraServices = () => {
                   </ul>
                   
                   <Button asChild className="w-full">
-                    <Link to="/booking">Book Now</Link>
+                    <Link to="/#contact">Get In Touch</Link>
                   </Button>
                 </div>
               </motion.div>
@@ -297,7 +297,7 @@ const QuinceaneraServices = () => {
               for quinceañera services.
             </p>
             <Button asChild size="lg">
-              <Link to="/booking">Book Your Quinceañera Glam</Link>
+              <Link to="/#contact">Contact Us</Link>
             </Button>
           </motion.div>
         </div>

@@ -148,7 +148,7 @@ const BridalServices = () => {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="min-w-[200px]">
-                <Link to="/booking">Book Your Bridal Consultation</Link>
+                <Link to="/#contact">Schedule a Consultation</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link to="/gallery">View Bridal Gallery</Link>
@@ -261,7 +261,7 @@ const BridalServices = () => {
                   </ul>
                   
                   <Button asChild className="w-full" size="sm">
-                    <Link to="/booking">Book Now</Link>
+                    <Link to="/#contact">Get In Touch</Link>
                   </Button>
                 </div>
               </motion.div>
@@ -461,7 +461,7 @@ const BridalServices = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg">
-                <Link to="/booking">Book Your Bridal Consultation</Link>
+                <Link to="/#contact">Schedule a Consultation</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <a href="tel:+18329070199">Call to Discuss</a>

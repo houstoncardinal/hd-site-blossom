@@ -15,7 +15,6 @@ import {
   Clock,
   Instagram,
   Facebook,
-  Calendar,
   Sparkles,
   Star,
   Crown,
@@ -256,11 +255,11 @@ const InfoWidget = () => {
                         </div>
                       </div>
 
-                      {/* Book Now CTA */}
-                      <Link to="/booking" onClick={toggleWidget}>
+                      {/* Contact CTA */}
+                      <Link to="/#contact" onClick={toggleWidget}>
                         <button className="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2 font-medium">
-                          <Calendar size={16} />
-                          Book Appointment
+                          <MessageCircle size={16} />
+                          Contact Us
                           <ChevronRight size={16} />
                         </button>
                       </Link>

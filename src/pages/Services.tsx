@@ -200,9 +200,9 @@ const ServiceCard = ({ service, index }: { service: typeof CORE_SERVICES[0]; ind
           {service.duration}
         </div>
 
-        <Link to="/#contact">
+        <Link to="/booking">
           <Button variant="default" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-            Get In Touch
+            Book Now
           </Button>
         </Link>
       </div>
@@ -351,9 +351,9 @@ const ServicesCatalog = () => {
             <p className="text-muted-foreground mb-8">
               Contact us to discuss your service and schedule your appointment.
             </p>
-            <Link to="/#contact">
+            <Link to="/booking">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg tracking-widest uppercase">
-                Contact Us
+                Book Now
                 <ChevronRight className="ml-2" size={20} />
               </Button>
             </Link>

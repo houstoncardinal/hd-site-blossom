@@ -83,7 +83,7 @@ const PromServices = () => {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="min-w-[200px]">
-                <Link to="/booking">Book Your Prom Look</Link>
+                <Link to="/#contact">Get In Touch</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link to="/gallery">View Gallery</Link>
@@ -189,7 +189,7 @@ const PromServices = () => {
                   </ul>
                   
                   <Button asChild className="w-full">
-                    <Link to="/booking">Book Now</Link>
+                    <Link to="/#contact">Get In Touch</Link>
                   </Button>
                 </div>
               </motion.div>
@@ -323,7 +323,7 @@ const PromServices = () => {
               We recommend booking at least 2 weeks in advance.
             </p>
             <Button asChild size="lg">
-              <Link to="/booking">Book Your Prom Glam</Link>
+              <Link to="/#contact">Contact Us</Link>
             </Button>
           </motion.div>
         </div>

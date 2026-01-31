@@ -200,9 +200,9 @@ const ServiceCard = ({ service, index }: { service: typeof CORE_SERVICES[0]; ind
           {service.duration}
         </div>
 
-        <Link to="/booking">
+        <Link to="/#contact">
           <Button variant="default" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-            Book Now • {formatCurrency(service.deposit)} deposit
+            Get In Touch
           </Button>
         </Link>
       </div>
@@ -346,15 +346,14 @@ const ServicesCatalog = () => {
           >
             <Sparkles className="w-12 h-12 text-primary mx-auto mb-6" />
             <h2 className="text-3xl md:text-4xl font-serif font-light mb-4">
-              Ready to Book?
+              Ready to Get Started?
             </h2>
             <p className="text-muted-foreground mb-8">
-              Choose your service and schedule your appointment today.
-              A 50% deposit secures your booking.
+              Contact us to discuss your service and schedule your appointment.
             </p>
-            <Link to="/booking">
+            <Link to="/#contact">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg tracking-widest uppercase">
-                Book Your Appointment
+                Contact Us
                 <ChevronRight className="ml-2" size={20} />
               </Button>
             </Link>

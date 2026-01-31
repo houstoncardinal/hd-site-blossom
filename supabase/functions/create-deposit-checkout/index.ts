@@ -172,7 +172,7 @@ serve(async (req) => {
       ],
       mode: "payment",
       success_url: `${origin}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/booking?canceled=true`,
+      cancel_url: `${origin}/services?canceled=true`,
       metadata,
       payment_intent_data: {
         metadata,

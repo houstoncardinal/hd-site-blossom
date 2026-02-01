@@ -12,11 +12,15 @@ const ALLOWED_ORIGINS = [
   "http://localhost:3000",
 ];
 
-// Also allow any lovable.app preview domain
+// Also allow Lovable preview domains (these can change per session)
 const isAllowedOrigin = (origin: string | null): boolean => {
   if (!origin) return false;
   if (ALLOWED_ORIGINS.includes(origin)) return true;
+
+  // Preview domains
   if (origin.endsWith('.lovable.app')) return true;
+  if (origin.endsWith('.lovableproject.com')) return true;
+
   return false;
 };
 
@@ -25,6 +29,7 @@ const getCorsHeaders = (origin: string | null) => {
   return {
     "Access-Control-Allow-Origin": allowedOrigin!,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 };
 

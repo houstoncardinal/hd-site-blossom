@@ -102,14 +102,13 @@ const AdminDashboardContent = () => {
       case 'team':
         return <TeamManager key={refreshKey} />;
       case 'gallery':
-      case 'submissions':
-        return <FormSubmissionsManager key={refreshKey} />;
-      case 'gallery':
         return <GalleryManager key={refreshKey} />;
       case 'services':
         return <ServicesManager key={refreshKey} />;
       case 'clients':
         return <ClientsManager key={refreshKey} />;
+      case 'submissions':
+        return <FormSubmissionsManager key={refreshKey} />;
       case 'analytics':
         return <AnalyticsView key={refreshKey} />;
       case 'business':

@@ -21,9 +21,10 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
-import { Trash2, List, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
+import { Trash2, List, Calendar as CalendarIcon, Loader2, Plus } from 'lucide-react';
 import AppointmentCalendar from './appointments/AppointmentCalendar';
 import BulkActionsToolbar from './appointments/BulkActionsToolbar';
+import { CreateAppointmentDialog } from './appointments/CreateAppointmentDialog';
 
 interface Appointment {
   id: string;
@@ -45,6 +46,7 @@ const AppointmentsManager = () => {
   const [bulkLoading, setBulkLoading] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const { toast } = useToast();
 
   const fetchAppointments = useCallback(async () => {
@@ -213,6 +215,10 @@ const AppointmentsManager = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-serif font-light">Appointments</h2>
         <div className="flex items-center gap-2">
+          <Button onClick={() => setCreateDialogOpen(true)}>
+            <Plus size={16} className="mr-2" />
+            New Appointment
+          </Button>
           <Badge variant="secondary">{appointments.length} total</Badge>
           <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as 'list' | 'calendar')}>
             <TabsList className="h-9">
@@ -340,6 +346,13 @@ const AppointmentsManager = () => {
           )}
         </>
       )}
+
+      {/* Create Appointment Dialog */}
+      <CreateAppointmentDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        onSuccess={fetchAppointments}
+      />
     </div>
   );
 };

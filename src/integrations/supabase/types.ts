@@ -19,6 +19,7 @@ export type Database = {
           appointment_date: string
           appointment_time: string
           client_email: string
+          client_id: string | null
           client_name: string
           client_phone: string | null
           created_at: string
@@ -33,6 +34,7 @@ export type Database = {
           appointment_date: string
           appointment_time: string
           client_email: string
+          client_id?: string | null
           client_name: string
           client_phone?: string | null
           created_at?: string
@@ -47,6 +49,7 @@ export type Database = {
           appointment_date?: string
           appointment_time?: string
           client_email?: string
+          client_id?: string | null
           client_name?: string
           client_phone?: string | null
           created_at?: string
@@ -57,7 +60,15 @@ export type Database = {
           status?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       before_after_pairs: {
         Row: {
@@ -143,6 +154,57 @@ export type Database = {
           setting_value?: Json
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      clients: {
+        Row: {
+          address: string | null
+          birthday: string | null
+          city: string | null
+          created_at: string
+          email: string
+          id: string
+          is_vip: boolean | null
+          name: string
+          notes: string | null
+          phone: string | null
+          preferred_contact_method: string | null
+          referral_source: string | null
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          birthday?: string | null
+          city?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          is_vip?: boolean | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          preferred_contact_method?: string | null
+          referral_source?: string | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          birthday?: string | null
+          city?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          is_vip?: boolean | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          preferred_contact_method?: string | null
+          referral_source?: string | null
+          tags?: string[] | null
+          updated_at?: string
         }
         Relationships: []
       }

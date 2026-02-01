@@ -118,19 +118,19 @@ export const ImageCard = ({
           </div>
 
           {/* Image */}
-          <div className="aspect-square relative bg-muted">
+          <div className="aspect-square relative bg-muted overflow-hidden">
             {!imageLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/10 animate-pulse" />
             )}
             <img
               src={imageUrl}
               alt={image.alt_text}
               className={cn(
-                'w-full h-full object-cover transition-opacity duration-300',
+                'w-full h-full object-cover transition-opacity duration-200',
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               )}
+              loading="lazy"
+              decoding="async"
               onLoad={() => setImageLoaded(true)}
             />
 

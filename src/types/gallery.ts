@@ -196,9 +196,27 @@ export const GALLERY_CATEGORY_LABELS: Record<GalleryCategory, string> = {
 
 // Helper Functions
 export function getImageUrl(storagePath: string): string {
-  // For fallback images in public folder, use relative URL
-  if (storagePath.startsWith('IMG_') || storagePath.startsWith('image') || storagePath.includes('.jpg') || storagePath.includes('.jpeg')) {
-    return `/${storagePath}`;
+  // For local images in public folder, use relative URL
+  // Check for common image formats and known prefixes
+  const isLocalImage = 
+    storagePath.startsWith('IMG_') || 
+    storagePath.startsWith('image') || 
+    storagePath.startsWith('full-') ||
+    storagePath.startsWith('soft-') ||
+    storagePath.startsWith('basic-') ||
+    storagePath.startsWith('signature-') ||
+    storagePath.startsWith('bridesmaid') ||
+    storagePath.startsWith('smokey') ||
+    storagePath.includes('.jpg') || 
+    storagePath.includes('.jpeg') ||
+    storagePath.includes('.JPG') ||
+    storagePath.includes('.png') ||
+    // UUID pattern for Supabase storage images
+    !storagePath.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+
+  if (isLocalImage) {
+    // Ensure path starts with /
+    return storagePath.startsWith('/') ? storagePath : `/${storagePath}`;
   }
 
   // For Supabase storage images

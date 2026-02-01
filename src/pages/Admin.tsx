@@ -19,7 +19,7 @@ import AnalyticsView from '@/components/admin/AnalyticsView';
 import BusinessSettings from '@/components/admin/BusinessSettings';
 import { NotificationsView, SettingsView } from '@/components/admin/PlaceholderViews';
 import { useRealtimeSubscriptions } from '@/hooks/useRealtimeSubscriptions';
-import { LogOut, ArrowLeft, Menu, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { LogOut, ArrowLeft, Menu, RefreshCw, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const AdminDashboardContent = () => {
@@ -165,43 +165,47 @@ const AdminDashboardContent = () => {
         sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
       )}>
         {/* Header */}
-        <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-          <div className="px-4 md:px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <header className="sticky top-0 z-20 border-b border-border bg-card/80 backdrop-blur-md supports-[backdrop-filter]:bg-card/60">
+          <div className="px-4 md:px-6 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
               {/* Mobile Menu Toggle */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileMenuOpen(true)}
-                className="lg:hidden"
+                className="lg:hidden h-9 w-9"
               >
-                <Menu size={20} />
+                <Menu size={18} />
               </Button>
 
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate('/')}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground h-9 w-9"
               >
-                <ArrowLeft size={20} />
+                <ArrowLeft size={18} />
               </Button>
+              
+              <div className="hidden sm:block h-6 w-px bg-border" />
+              
               <div>
-                <h1 className="text-xl font-serif font-light">Admin Dashboard</h1>
-                <p className="text-sm text-muted-foreground hidden sm:block">{user?.email}</p>
+                <h1 className="text-lg font-serif font-medium tracking-tight">Dashboard</h1>
+                <p className="text-xs text-muted-foreground hidden md:block">{user?.email}</p>
               </div>
             </div>
+            
             <div className="flex items-center gap-2">
               {/* Realtime Status Indicator */}
-              <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground">
+              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/50 text-xs text-muted-foreground">
                 {isRealtimeConnected ? (
                   <>
-                    <Wifi className="h-3.5 w-3.5 text-green-500" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
                     <span>Live</span>
                   </>
                 ) : (
                   <>
-                    <WifiOff className="h-3.5 w-3.5" />
+                    <WifiOff className="h-3 w-3" />
                     <span>Offline</span>
                   </>
                 )}
@@ -211,12 +215,18 @@ const AdminDashboardContent = () => {
                 variant="ghost" 
                 size="icon" 
                 onClick={handleRefresh}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground h-9 w-9"
               >
-                <RefreshCw size={18} />
+                <RefreshCw size={16} />
               </Button>
-              <Button variant="outline" onClick={handleSignOut} className="gap-2">
-                <LogOut size={16} />
+              
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleSignOut} 
+                className="gap-2 h-9"
+              >
+                <LogOut size={14} />
                 <span className="hidden sm:inline">Sign Out</span>
               </Button>
             </div>

@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +23,7 @@ import {
   Copy,
 } from 'lucide-react';
 import type { GalleryImage } from '@/types/gallery';
-import { getImageUrl, GALLERY_CATEGORY_LABELS } from '@/types/gallery';
+import { getImageUrl } from '@/types/gallery';
 import { cn } from '@/lib/utils';
 import { ImageDetailDialog } from './ImageDetailDialog';
 
@@ -44,7 +43,6 @@ export const ImageCard = ({
   onDelete,
 }: ImageCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
   const {
@@ -119,19 +117,15 @@ export const ImageCard = ({
 
           {/* Image */}
           <div className="aspect-square relative bg-muted overflow-hidden">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/10 animate-pulse" />
-            )}
             <img
               src={imageUrl}
               alt={image.alt_text}
-              className={cn(
-                'w-full h-full object-cover transition-opacity duration-200',
-                imageLoaded ? 'opacity-100' : 'opacity-0'
-              )}
+              className="w-full h-full object-cover"
               loading="lazy"
               decoding="async"
-              onLoad={() => setImageLoaded(true)}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
             />
 
             {/* Overlay on Hover */}
@@ -139,88 +133,59 @@ export const ImageCard = ({
               <p className="text-white text-sm font-medium text-center line-clamp-2">
                 {image.title || image.file_name}
               </p>
-              {image.ai_description && (
-                <p className="text-white/80 text-xs text-center line-clamp-2">
-                  {image.ai_description}
-                </p>
-              )}
             </div>
           </div>
 
-          {/* Info Bar */}
-          <div className="p-2 space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <Badge variant="secondary" className="text-xs">
-                {GALLERY_CATEGORY_LABELS[image.category]}
-              </Badge>
-
-              <div className="flex items-center gap-1">
-                {image.is_featured && (
-                  <Star size={14} className="text-yellow-500 fill-yellow-500" />
-                )}
-                {!image.is_published && (
-                  <EyeOff size={14} className="text-muted-foreground" />
-                )}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <MoreVertical size={14} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={handleToggleFeatured}>
-                      <Star size={16} className="mr-2" />
-                      {image.is_featured ? 'Unfeature' : 'Feature'}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleTogglePublished}>
-                      {image.is_published ? (
-                        <>
-                          <EyeOff size={16} className="mr-2" />
-                          Unpublish
-                        </>
-                      ) : (
-                        <>
-                          <Eye size={16} className="mr-2" />
-                          Publish
-                        </>
-                      )}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleCopyUrl}>
-                      <Copy size={16} className="mr-2" />
-                      Copy URL
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setDetailDialogOpen(true)}>
-                      <Edit size={16} className="mr-2" />
-                      Edit Details
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={handleDelete}
-                      className="text-destructive focus:text-destructive"
-                    >
-                      <Trash2 size={16} className="mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-
-            {/* Tags */}
-            {(image.tags.length > 0 || image.ai_tags.length > 0) && (
-              <div className="flex flex-wrap gap-1">
-                {[...new Set([...image.tags, ...image.ai_tags])].slice(0, 3).map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-[10px] px-1 py-0">
-                    {tag}
-                  </Badge>
-                ))}
-                {[...new Set([...image.tags, ...image.ai_tags])].length > 3 && (
-                  <Badge variant="outline" className="text-[10px] px-1 py-0">
-                    +{[...new Set([...image.tags, ...image.ai_tags])].length - 3}
-                  </Badge>
-                )}
-              </div>
+          {/* Simple Info Bar - No labels or tags */}
+          <div className="p-2 flex items-center justify-end gap-1">
+            {image.is_featured && (
+              <Star size={14} className="text-yellow-500 fill-yellow-500" />
             )}
+            {!image.is_published && (
+              <EyeOff size={14} className="text-muted-foreground" />
+            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                  <MoreVertical size={14} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleToggleFeatured}>
+                  <Star size={16} className="mr-2" />
+                  {image.is_featured ? 'Unfeature' : 'Feature'}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleTogglePublished}>
+                  {image.is_published ? (
+                    <>
+                      <EyeOff size={16} className="mr-2" />
+                      Unpublish
+                    </>
+                  ) : (
+                    <>
+                      <Eye size={16} className="mr-2" />
+                      Publish
+                    </>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleCopyUrl}>
+                  <Copy size={16} className="mr-2" />
+                  Copy URL
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setDetailDialogOpen(true)}>
+                  <Edit size={16} className="mr-2" />
+                  Edit Details
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleDelete}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 size={16} className="mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </Card>
       </motion.div>

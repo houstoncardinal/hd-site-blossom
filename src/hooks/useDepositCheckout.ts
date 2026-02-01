@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { getPublicSupabaseClient } from '@/integrations/supabase/publicClient';
 import { ServiceConfig, AddOnService } from '@/config/services';
 
 interface CheckoutData {
@@ -22,6 +22,8 @@ export const useDepositCheckout = () => {
     setError(null);
 
     try {
+      const supabase = getPublicSupabaseClient();
+
       // Calculate totals with add-ons
       const addOnsTotal = data.addOns?.reduce((sum, addon) => sum + addon.price, 0) || 0;
       const fullPrice = data.service.price + addOnsTotal;
